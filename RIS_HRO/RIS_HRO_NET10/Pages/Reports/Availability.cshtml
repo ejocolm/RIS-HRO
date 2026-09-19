@@ -1,0 +1,151 @@
+@page
+@model RIS_HRO.Pages.Reports.AvailabilityModel
+@{
+    ViewData["Title"] = "Disponibilidad";
+}
+
+<section class="page-heading">
+    <div>
+        <h1>Calendario de disponibilidad</h1>
+        <p>Consulta mensual de cupos utilizados por examen</p>
+    </div>
+</section>
+
+<section class="ris-card availability-filter-card">
+    <div class="availability-filter-grid">
+        <div class="form-group-ris">
+            <label>Estudio</label>
+            <select id="availabilityStudy">
+                <option value="">Seleccione un estudio</option>
+                @foreach (var s in Model.Studies)
+                {
+                    <option value="@s.IdPrueba">@s.IdPrueba - @s.NombrePrueba</option>
+                }
+            </select>
+        </div>
+        <div class="form-group-ris">
+            <label>Mes</label>
+            <input id="availabilityMonth" type="month" value="@Model.CurrentMonthValue" />
+        </div>
+        <div class="filter-actions">
+            <button type="button" class="btn-ris-primary" id="btnAvailability">
+                <i class="bi bi-search"></i> Consultar
+            </button>
+        </div>
+    </div>
+</section>
+
+<div class="availability-report-layout">
+    <section class="ris-card big-calendar-card">
+        <header class="card-heading">
+            <i class="bi bi-calendar3"></i>
+            <div><h2 id="availabilityTitle">Disponibilidad mensual</h2><span id="availabilitySubtitle">Seleccione un estudio</span></div>
+        </header>
+
+        <div class="calendar-week big-week">
+            <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+        </div>
+        <div id="availabilityCalendar" class="calendar-grid big-calendar"></div>
+
+        <div class="calendar-legend big-legend">
+            <span><i class="legend-dot green"></i> Alta disponibilidad</span>
+            <span><i class="legend-dot yellow"></i> Disponibilidad limitada</span>
+            <span><i class="legend-dot red"></i> Sin cupos</span>
+            <span><i class="legend-dot gray"></i> Sin configuración</span>
+        </div>
+    </section>
+
+    <section class="ris-card availability-side">
+        <header class="card-heading"><i class="bi bi-info-circle"></i><h2>Detalle del día</h2></header>
+        <div id="availabilityDayDetail" class="availability-day-placeholder">
+            Seleccione un día del calendario.
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+<script>
+(() => {
+    const study = document.getElementById('availabilityStudy');
+    const month = document.getElementById('availabilityMonth');
+    const button = document.getElementById('btnAvailability');
+    const grid = document.getElementById('availabilityCalendar');
+    const title = document.getElementById('availabilityTitle');
+    const subtitle = document.getElementById('availabilitySubtitle');
+    const detail = document.getElementById('availabilityDayDetail');
+    let response = { days: [], details: [] };
+
+    button.addEventListener('click', load);
+
+    async function load() {
+        if (!study.value || !month.value) return;
+        const [year, mon] = month.value.split('-').map(Number);
+        const url = `?handler=Month&year=${year}&month=${mon}&study=${encodeURIComponent(study.value)}`;
+        const res = await fetch(url);
+        response = await res.json();
+        render(year, mon);
+    }
+
+    function render(year, mon) {
+        const option = study.options[study.selectedIndex];
+        const names = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+        title.textContent = `${names[mon - 1]} ${year}`;
+        subtitle.textContent = option.text;
+        grid.innerHTML = '';
+
+        const first = new Date(year, mon - 1, 1);
+        const count = new Date(year, mon, 0).getDate();
+        const offset = (first.getDay() + 6) % 7;
+
+        for (let i=0; i<offset; i++) {
+            const blank = document.createElement('div');
+            blank.className = 'calendar-day outside';
+            grid.appendChild(blank);
+        }
+
+        for (let day=1; day<=count; day++) {
+            const date = new Date(year, mon - 1, day);
+            const iso = localDate(date);
+            const info = response.days.find(x => x.fecha.substring(0,10) === iso);
+            const d = response.details.find(x => x.fecha.substring(0,10) === iso);
+
+            const cell = document.createElement('button');
+            cell.type = 'button';
+            cell.className = `calendar-day big-day ${state(info?.estado)}`;
+            cell.innerHTML = `<strong>${day}</strong><small>${d?.disponibles == null ? '—' : d.disponibles + ' disp.'}</small>`;
+            cell.addEventListener('click', () => showDetail(iso, d));
+            grid.appendChild(cell);
+        }
+    }
+
+    function showDetail(iso, d) {
+        if (!d) {
+            detail.innerHTML = '<div class="availability-message warning"><i class="bi bi-exclamation-triangle"></i><span>Sin información configurada para este día.</span></div>';
+            return;
+        }
+        const date = new Date(`${iso}T00:00:00`).toLocaleDateString('es-GT');
+        detail.innerHTML = `
+            <div class="availability-side-date">${date}</div>
+            <div class="availability-side-study">${escapeHtml(d.nombrePrueba)}</div>
+            <div class="availability-stat"><span>Capacidad</span><strong>${d.capacidad ?? '—'}</strong></div>
+            <div class="availability-stat"><span>Utilizados</span><strong>${d.utilizados}</strong></div>
+            <div class="availability-stat"><span>Disponibles</span><strong>${d.disponibles ?? '—'}</strong></div>`;
+    }
+
+    function state(s) {
+        switch ((s || '').toUpperCase()) {
+            case 'HIGH': return 'high';
+            case 'LOW': return 'low';
+            case 'FULL': return 'full';
+            default: return 'none';
+        }
+    }
+    function localDate(d) {
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+    function escapeHtml(v) {
+        return String(v ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+    }
+})();
+</script>
+}

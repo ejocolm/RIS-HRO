@@ -1,0 +1,53 @@
+@page
+@model RIS_HRO.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Iniciar sesión";
+    Layout = "_LoginLayout";
+}
+<div class="login-wrapper">
+    <section class="login-hero"></section>
+    <section class="login-panel-area">
+        <div class="login-card">
+            <div class="login-icon"><img src="~/images/ris-logo.png" alt="RIS HRO" /></div>
+            <h1>RIS HRO</h1>
+            <p class="login-subtitle">Sistema de Citas de Radiología</p>
+            <div class="login-accent"></div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+            {
+                <div class="login-error"><i class="bi bi-exclamation-circle"></i><span>@Model.ErrorMessage</span></div>
+            }
+
+            <form method="post">
+                <div class="form-group-ris">
+                    <label asp-for="IdUsuario">Usuario</label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-person"></i>
+                        <input asp-for="IdUsuario" autocomplete="username" placeholder="Ingrese su usuario" />
+                    </div>
+                </div>
+                <div class="form-group-ris">
+                    <label asp-for="Password">Contraseña</label>
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-lock"></i>
+                        <input asp-for="Password" type="password" autocomplete="current-password" placeholder="Ingrese su contraseña" />
+                    </div>
+                </div>
+                <div style="text-align:right;
+                    margin-top:-8px;
+                    margin-bottom:16px">
+                    <a asp-page="/Account/ForgotPassword"
+                       style="color:#0a56be;
+                        text-decoration:none;
+                        font-size:.88rem">
+                        ¿Olvidó su contraseña?
+                    </a>
+                </div>
+                <button type="submit" class="btn-ris-primary login-submit">Iniciar sesión</button>
+            </form>
+
+            <div class="login-info"><i class="bi bi-info-circle"></i><span>Ingrese su usuario y contraseña para acceder al sistema.</span></div>
+            <div class="login-hospital"><i class="bi bi-buildings"></i><span>Hospital Regional de Occidente</span></div>
+        </div>
+    </section>
+</div>

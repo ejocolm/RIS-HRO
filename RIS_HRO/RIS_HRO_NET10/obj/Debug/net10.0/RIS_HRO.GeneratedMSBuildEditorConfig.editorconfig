@@ -1,0 +1,112 @@
+is_global = true
+build_property.TargetFramework = net10.0
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v10.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EntryPointFilePath = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = RIS_HRO
+build_property.RootNamespace = RIS_HRO
+build_property.ProjectDir = C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 10.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 10.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Account/AccessDenied.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Account/ChangePassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxDaGFuZ2VQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Account/ForgotPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Account/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWNjb3VudFxMb2dvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Admin/EmailSettings.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cRW1haWxTZXR0aW5ncy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Admin/Users.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cVXNlcnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Appointments/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwb2ludG1lbnRzXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Appointments/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwb2ludG1lbnRzXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Appointments/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXBwb2ludG1lbnRzXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Capacity/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2FwYWNpdHlcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Catalogs/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2F0YWxvZ3NcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Dashboard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Patients/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF0aWVudHNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Reports/Availability.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xBdmFpbGFiaWxpdHkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Reports/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/Shared/_LoginLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Mb2dpbkxheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/ejocol/Mi unidad/Universidad Edgar/Universidad Mariano Galvez/Decimo Semestre II/RIS/RIS_HRO/RIS_HRO_NET10/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

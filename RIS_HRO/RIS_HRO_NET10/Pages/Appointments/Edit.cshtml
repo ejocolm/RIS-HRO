@@ -1,0 +1,201 @@
+@page "{id:int}"
+@model RIS_HRO.Pages.Appointments.EditModel
+@{
+    ViewData["Title"] = "Modificar cita";
+}
+
+<section class="page-heading">
+    <div>
+        <h1>Modificar cita</h1>
+        <p>@Model.Number - actualización de fecha, hora y estudios</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-page="/Appointments/Edit" asp-page-handler="Pdf" asp-route-id="@Model.Id"
+           class="btn-ris-outline"><i class="bi bi-file-earmark-pdf"></i> Constancia</a>
+        <button type="submit" form="appointmentForm" class="btn-ris-primary">
+            <i class="bi bi-check-lg"></i> Guardar cambios
+        </button>
+    </div>
+</section>
+
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="ris-alert error"><i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage</div>
+}
+
+<form method="post" id="appointmentForm">
+    <input type="hidden" asp-for="Id" />
+    <input asp-for="StudyIdsCsv" type="hidden" id="studyIdsCsv" />
+
+    <div class="appointment-layout">
+        <div class="appointment-left">
+            <section class="ris-card">
+                <header class="card-heading">
+                    <i class="bi bi-calendar2-check"></i><h2>Datos generales de la cita</h2>
+                </header>
+
+                <div class="appointment-top-grid">
+                    <div class="form-group-ris">
+                        <label>Número de cita</label>
+                        <input value="@Model.Number" readonly />
+                    </div>
+                    <div class="form-group-ris">
+                        <label asp-for="AppointmentDate">Fecha de cita</label>
+                        <input asp-for="AppointmentDate" type="date" id="appointmentDate" />
+                    </div>
+                    <div class="form-group-ris">
+                        <label asp-for="AppointmentTime">Hora de cita</label>
+                        <input asp-for="AppointmentTime" type="time" />
+                    </div>
+                </div>
+
+                <div class="form-group-ris">
+                    <label>Paciente</label>
+                    <input value="@Model.PatientId - @Model.PatientName" readonly />
+                    <input asp-for="PatientId" type="hidden" id="patientId" />
+                </div>
+
+                <div class="form-group-ris">
+                    <label asp-for="DoctorId">Médico solicitante</label>
+                    <select asp-for="DoctorId">
+                        @foreach (var doctor in Model.Doctors)
+                        {
+                            <option value="@doctor.IdMedico">@doctor.IdMedico - @doctor.NombreCompleto</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group-ris">
+                    <label asp-for="ServiceId">Servicio hospitalario</label>
+                    <select asp-for="ServiceId">
+                        @foreach (var service in Model.Services)
+                        {
+                            <option value="@service.IdServicio">@service.IdServicio - @service.NombreServicio</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group-ris">
+                    <label asp-for="Observations">Observaciones</label>
+                    <textarea asp-for="Observations" rows="3" maxlength="500"></textarea>
+                </div>
+
+                <div class="form-group-ris">
+                    <label>Estado actual</label>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <span class="status-pill status-@Model.Status.ToLowerInvariant()">@Model.Status</span>
+                        @if (Model.Status == "PROGRAMADA")
+                        {
+                            <button formaction="?handler=ChangeStatus&id=@Model.Id&status=ATENDIDA" formmethod="post" class="btn-ris-outline" type="submit">
+                                Marcar atendida
+                            </button>
+                            <button formaction="?handler=ChangeStatus&id=@Model.Id&status=NO_ASISTIO" formmethod="post" class="btn-ris-outline" type="submit">
+                                No asistió
+                            </button>
+                            <button formaction="?handler=ChangeStatus&id=@Model.Id&status=CANCELADA" formmethod="post" class="btn-danger-soft" type="submit">
+                                Cancelar cita
+                            </button>
+                        }
+                    </div>
+                </div>
+            </section>
+
+            <section class="ris-card studies-card">
+                <header class="card-heading studies-heading">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-file-earmark-medical"></i><h2>Estudios solicitados</h2>
+                    </div>
+                    <div class="study-actions">
+                        <input type="text" id="studyCode" placeholder="Código del estudio" />
+                        <button type="button" class="btn-ris-outline" id="btnAddStudyCode"><i class="bi bi-plus-lg"></i> Agregar</button>
+                        <button type="button" class="btn-ris-outline" data-bs-toggle="modal" data-bs-target="#studyModal">
+                            <i class="bi bi-search"></i> Buscar estudio
+                        </button>
+                    </div>
+                </header>
+
+                <div class="table-responsive">
+                    <table class="ris-table">
+                        <thead><tr><th>Código</th><th>Estudio</th><th>Categoría</th><th>Técnico</th><th>Acción</th></tr></thead>
+                        <tbody id="studiesBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="capacity-note">
+                    <i class="bi bi-info-circle"></i>
+                    Al cambiar la fecha o los estudios, la disponibilidad se vuelve a validar.
+                </div>
+
+                <div class="form-bottom-actions">
+                    <a asp-page="/Appointments/Index" class="btn-ris-cancel">Volver</a>
+                    <button type="submit" class="btn-ris-primary"><i class="bi bi-check-lg"></i> Guardar cambios</button>
+                </div>
+            </section>
+        </div>
+
+        <div class="appointment-right">
+            <section class="ris-card calendar-card">
+                <header class="card-heading">
+                    <i class="bi bi-calendar2-plus"></i>
+                    <div><h2>Disponibilidad de citas</h2><span>El cálculo excluye la cita que se está editando</span></div>
+                </header>
+
+                <div class="calendar-toolbar">
+                    <button type="button" id="prevMonth"><i class="bi bi-chevron-left"></i></button>
+                    <strong id="calendarMonthTitle"></strong>
+                    <button type="button" id="nextMonth"><i class="bi bi-chevron-right"></i></button>
+                </div>
+                <div class="calendar-week">
+                    <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+                </div>
+                <div id="calendarGrid" class="calendar-grid"></div>
+                <div class="calendar-legend">
+                    <span><i class="legend-dot green"></i> Alta disponibilidad</span>
+                    <span><i class="legend-dot yellow"></i> Pocos cupos</span>
+                    <span><i class="legend-dot red"></i> Cupo completo</span>
+                    <span><i class="legend-dot gray"></i> Sin configuración</span>
+                </div>
+            </section>
+
+            <section class="ris-card date-detail-card">
+                <h2>Detalle del <span id="detailDateTitle">día seleccionado</span></h2>
+                <div id="availabilityDetails"></div>
+                <div id="availabilityMessage" class="availability-message neutral">
+                    <i class="bi bi-info-circle"></i><span>Seleccione los estudios y una fecha.</span>
+                </div>
+            </section>
+        </div>
+    </div>
+</form>
+
+<div class="modal fade" id="studyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content ris-modal">
+            <div class="modal-header">
+                <h5 class="modal-title">Buscar estudio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-icon-wrap">
+                    <i class="bi bi-search"></i>
+                    <input id="studySearchText" placeholder="Busque por código o nombre..." />
+                </div>
+                <div class="table-responsive mt-3">
+                    <table class="ris-table">
+                        <thead><tr><th>Código</th><th>Estudio</th><th>Categoría</th><th></th></tr></thead>
+                        <tbody id="studySearchBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+window.excludeAppointmentId = @Model.Id;
+window.initialStudies = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.InitialStudies,
+    new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }));
+</script>
+<script src="~/js/appointments-create.js" asp-append-version="true"></script>
+}

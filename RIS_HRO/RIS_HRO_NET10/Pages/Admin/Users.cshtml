@@ -1,0 +1,98 @@
+@page
+@model RIS_HRO.Pages.Admin.UsersModel
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<section class="page-heading">
+    <div>
+        <h1>Catálogo de usuarios</h1>
+        <p>Administración de acceso y roles del sistema</p>
+    </div>
+</section>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="ris-alert success"><i class="bi bi-check-circle"></i> @success</div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="ris-alert error"><i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage</div>
+}
+
+<div class="catalog-layout">
+    <section class="ris-card">
+        <header class="card-heading"><i class="bi bi-person-plus"></i><h2>@(Model.IsEditing ? "Editar usuario" : "Nuevo usuario")</h2></header>
+
+        <form method="post">
+            <div class="form-group-ris">
+                <label asp-for="Edit.IdUsuario">Usuario</label>
+                @if (Model.IsEditing)
+                {
+                    <input asp-for="Edit.IdUsuario" readonly />
+                }
+                else
+                {
+                    <input asp-for="Edit.IdUsuario" placeholder="Ej. JLOPEZ" />
+                }
+            </div>
+            <div class="form-group-ris">
+                <label asp-for="Edit.NombreCompleto">Nombre completo</label>
+                <input asp-for="Edit.NombreCompleto" />
+            </div>
+            <div class="form-group-ris">
+                <label asp-for="Edit.IdRol">Rol</label>
+                <select asp-for="Edit.IdRol">
+                    <option value="0">Seleccione</option>
+                    @foreach (var role in Model.Roles)
+                    {
+                        <option value="@role.IdRol">@role.NombreRol</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group-ris">
+                <label asp-for="Edit.Correo">Correo</label>
+                <input asp-for="Edit.Correo" type="email" />
+            </div>
+            <div class="form-group-ris">
+                <label asp-for="Password">Contraseña @(Model.IsEditing ? "(dejar en blanco para conservar)" : "")</label>
+                <input asp-for="Password" type="password" minlength="5" autocomplete="new-password" />
+            </div>
+            <div class="check-row">
+                <input asp-for="Edit.Activo" />
+                <label asp-for="Edit.Activo">Usuario activo</label>
+            </div>
+            <div class="form-bottom-actions">
+                <a asp-page="/Admin/Users" class="btn-ris-cancel">Limpiar</a>
+                <button type="submit" class="btn-ris-primary"><i class="bi bi-check-lg"></i> Guardar</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="ris-card">
+        <header class="card-heading"><i class="bi bi-people"></i><h2>Usuarios registrados</h2></header>
+        <form method="get" class="search-inline">
+            <input name="q" value="@Model.Query" placeholder="Buscar usuario o nombre..." />
+            <button type="submit" class="btn-ris-outline"><i class="bi bi-search"></i> Buscar</button>
+        </form>
+
+        <div class="table-responsive">
+            <table class="ris-table">
+                <thead><tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Último acceso</th><th>Estado</th><th></th></tr></thead>
+                <tbody>
+                @foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        <td><strong>@row.IdUsuario</strong></td>
+                        <td>@row.NombreCompleto</td>
+                        <td>@row.NombreRol</td>
+                        <td>@(row.UltimoAcceso?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                        <td>@(row.Activo ? "Activo" : "Inactivo")</td>
+                        <td><a asp-page="/Admin/Users" asp-route-edit="@row.IdUsuario" class="table-action"><i class="bi bi-pencil-square"></i></a></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

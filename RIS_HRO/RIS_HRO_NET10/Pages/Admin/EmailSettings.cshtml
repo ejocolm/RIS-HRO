@@ -1,0 +1,140 @@
+@page
+@model RIS_HRO.Pages.Admin.EmailSettingsModel
+@{
+    ViewData["Title"] = "Configuración de correo";
+}
+
+<section class="page-heading">
+    <div>
+        <h1>Configuración de correo</h1>
+        <p>
+            Cuenta utilizada para enviar recuperaciones
+            de contraseña desde RIS HRO
+        </p>
+    </div>
+</section>
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="ris-alert success">
+        <i class="bi bi-check-circle"></i>
+        @Model.Message
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="ris-alert error">
+        <i class="bi bi-exclamation-triangle"></i>
+        @Model.ErrorMessage
+    </div>
+}
+
+<section class="ris-card" style="max-width:850px">
+    <header class="card-heading">
+        <i class="bi bi-envelope-gear"></i>
+        <h2>Servidor SMTP</h2>
+    </header>
+
+    <form method="post">
+        <div class="two-col">
+            <div class="form-group-ris">
+                <label asp-for="Settings.ServidorSmtp">
+                    Servidor SMTP
+                </label>
+                <input asp-for="Settings.ServidorSmtp" />
+            </div>
+
+            <div class="form-group-ris">
+                <label asp-for="Settings.Puerto">
+                    Puerto
+                </label>
+                <input asp-for="Settings.Puerto"
+                       type="number" min="1" max="65535" />
+            </div>
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="Settings.NombreRemitente">
+                Nombre del remitente
+            </label>
+            <input asp-for="Settings.NombreRemitente" />
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="Settings.CorreoRemitente">
+                Correo remitente
+            </label>
+            <input asp-for="Settings.CorreoRemitente"
+                   type="email" />
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="Settings.UsuarioSmtp">
+                Usuario SMTP
+            </label>
+            <input asp-for="Settings.UsuarioSmtp" />
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="NewPassword">
+                Contraseña de aplicación / credencial SMTP
+            </label>
+            <input asp-for="NewPassword"
+                   type="password"
+                   autocomplete="new-password"
+                   placeholder="Déjela vacía para conservar la actual" />
+        </div>
+
+        <div class="check-row">
+            <input asp-for="Settings.UsarSsl" />
+            <label asp-for="Settings.UsarSsl">
+                Usar conexión segura (SSL/TLS)
+            </label>
+        </div>
+
+        <div class="check-row">
+            <input asp-for="Settings.Activo" />
+            <label asp-for="Settings.Activo">
+                Habilitar envío de correos
+            </label>
+        </div>
+
+        <div class="login-info">
+            <i class="bi bi-shield-lock"></i>
+            <span>
+                La credencial SMTP no se almacena como texto plano.
+                Se protege con ASP.NET Core Data Protection
+                antes de guardarse en SQL Server.
+            </span>
+        </div>
+
+        <div class="form-bottom-actions">
+            <button type="submit"
+                    class="btn-ris-primary">
+                <i class="bi bi-check-lg"></i>
+                Guardar configuración
+            </button>
+        </div>
+    </form>
+
+    <hr style="margin:28px 0" />
+
+    <form method="post" asp-page-handler="Test">
+        <div class="form-group-ris">
+            <label asp-for="TestEmail">
+                Correo para prueba
+            </label>
+            <div style="display:flex;gap:10px">
+                <input asp-for="TestEmail"
+                       type="email"
+                       placeholder="destino@correo.com" />
+                <button type="submit"
+                        class="btn-ris-outline">
+                    <i class="bi bi-send"></i>
+                    Enviar prueba
+                </button>
+            </div>
+        </div>
+    </form>
+</section>

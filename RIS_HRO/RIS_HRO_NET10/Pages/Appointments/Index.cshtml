@@ -1,0 +1,98 @@
+@page
+@model RIS_HRO.Pages.Appointments.IndexModel
+@{
+    ViewData["Title"] = "Consultar citas";
+}
+
+<section class="page-heading">
+    <div>
+        <h1>Consultar citas</h1>
+        <p>Historial y seguimiento de programaciones radiológicas</p>
+    </div>
+    <a asp-page="/Appointments/Create" class="btn-ris-primary page-action">
+        <i class="bi bi-plus-lg"></i> Nueva cita
+    </a>
+</section>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="ris-alert success"><i class="bi bi-check-circle"></i> @success</div>
+}
+
+<section class="ris-card filter-card">
+    <form method="get" class="filter-grid">
+        <div class="form-group-ris">
+            <label asp-for="From">Fecha inicial</label>
+            <input asp-for="From" type="date" />
+        </div>
+        <div class="form-group-ris">
+            <label asp-for="To">Fecha final</label>
+            <input asp-for="To" type="date" />
+        </div>
+        <div class="form-group-ris">
+            <label asp-for="Patient">Paciente</label>
+            <input asp-for="Patient" placeholder="ID o nombre" />
+        </div>
+        <div class="form-group-ris">
+            <label asp-for="Status">Estado</label>
+            <select asp-for="Status">
+                <option value="">Todos</option>
+                <option>PROGRAMADA</option>
+                <option>ATENDIDA</option>
+                <option>CANCELADA</option>
+                <option>NO_ASISTIO</option>
+            </select>
+        </div>
+        <div class="filter-actions">
+            <button type="submit" class="btn-ris-primary"><i class="bi bi-search"></i> Buscar</button>
+            <a asp-page="/Appointments/Index" class="btn-ris-cancel">Limpiar</a>
+        </div>
+    </form>
+</section>
+
+<section class="ris-card mt-3">
+    <div class="table-responsive">
+        <table class="ris-table">
+            <thead>
+            <tr>
+                <th>Número</th>
+                <th>Fecha / Hora</th>
+                <th>Paciente</th>
+                <th>Servicio</th>
+                <th>Estudios</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model.Rows.Count == 0)
+            {
+                <tr><td colspan="7" class="text-center text-muted py-4">No se encontraron citas.</td></tr>
+            }
+            else
+            {
+                @foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        <td><strong>@row.NumeroCita</strong></td>
+                        <td>@row.FechaCita.ToString("dd/MM/yyyy")<br/><span class="text-muted">@DateTime.Today.Add(row.HoraCita).ToString("HH:mm")</span></td>
+                        <td>@row.IdPaciente - @row.Paciente</td>
+                        <td>@row.Servicio</td>
+                        <td>@row.Estudios</td>
+                        <td><span class="status-pill status-@row.Estado.ToLowerInvariant()">@row.Estado</span></td>
+                        <td class="actions-cell">
+                            <a asp-page="/Appointments/Edit" asp-route-id="@row.IdCita" class="table-action" title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a asp-page="/Appointments/Edit" asp-page-handler="Pdf" asp-route-id="@row.IdCita"
+                               class="table-action" title="Constancia PDF">
+                                <i class="bi bi-file-earmark-pdf"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

@@ -1,0 +1,90 @@
+@page
+@model RIS_HRO.Pages.Dashboard.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<section class="page-heading dashboard-heading">
+    <div><h1>Dashboard</h1><p>Estado de cupos y citas del día</p></div>
+    <a asp-page="/Appointments/Create" class="btn-ris-primary page-action"><i class="bi bi-plus-lg"></i> Nueva cita</a>
+</section>
+
+<div class="summary-grid">
+    <article class="summary-card">
+        <div class="summary-icon blue"><i class="bi bi-calendar2-plus"></i></div>
+        <div><span>Citas de hoy</span><strong class="blue-text">@Model.Summary.CitasHoy</strong></div>
+    </article>
+    <article class="summary-card">
+        <div class="summary-icon orange"><i class="bi bi-clock"></i></div>
+        <div><span>Pendientes</span><strong class="orange-text">@Model.Summary.Pendientes</strong></div>
+    </article>
+    <article class="summary-card">
+        <div class="summary-icon teal"><i class="bi bi-check-lg"></i></div>
+        <div><span>Atendidas</span><strong class="teal-text">@Model.Summary.Atendidas</strong></div>
+    </article>
+    <article class="summary-card">
+        <div class="summary-icon red"><i class="bi bi-x-lg"></i></div>
+        <div><span>Canceladas</span><strong class="red-text">@Model.Summary.Canceladas</strong></div>
+    </article>
+</div>
+
+<div class="capacity-grid">
+@if (Model.CapacityCards.Count == 0)
+{
+    <div class="empty-card"><i class="bi bi-info-circle"></i> No existe capacidad configurada para el día de hoy.</div>
+}
+else
+{
+    @for (var i = 0; i < Model.CapacityCards.Count; i++)
+    {
+        var item = Model.CapacityCards[i];
+        var tone = i % 3 == 0 ? "blue" : i % 3 == 1 ? "teal" : "purple";
+        var pct = Math.Min(100m, Math.Max(0m, item.PorcentajeUso));
+
+        <article class="capacity-card tone-@tone">
+            <div class="capacity-symbol">
+                <i class="bi @(item.NombreCategoria.Contains("Ultra", StringComparison.OrdinalIgnoreCase) ? "bi-broadcast" :
+                              item.NombreCategoria.Contains("Mamo", StringComparison.OrdinalIgnoreCase) ? "bi-heart-pulse" :
+                              "bi-clipboard2-pulse")"></i>
+            </div>
+            <div class="capacity-main">
+                <h3>@item.NombrePrueba</h3>
+                <div class="capacity-count"><strong>@item.Utilizados</strong><span>/ @item.Capacidad</span></div>
+                <div class="capacity-available @(item.Disponibles == 0 ? "full" : "")">
+                    @(item.Disponibles == 0 ? "Cupo completo" : $"{item.Disponibles} disponibles")
+                </div>
+            </div>
+            <div class="capacity-ring" style="--pct:@pct;">
+                <div><strong>@Math.Round(pct)%</strong></div>
+            </div>
+        </article>
+    }
+}
+</div>
+
+<section class="appointments-card">
+    <header><h2><i class="bi bi-calendar2-week"></i> Próximas citas</h2></header>
+    <div class="table-responsive">
+        <table class="ris-table">
+            <thead><tr><th>Hora</th><th>Paciente</th><th>Estudios</th><th>Estado</th></tr></thead>
+            <tbody>
+            @if (Model.Upcoming.Count == 0)
+            {
+                <tr><td colspan="4" class="text-center py-4 text-muted">No hay citas para mostrar.</td></tr>
+            }
+            else
+            {
+                @foreach (var appointment in Model.Upcoming)
+                {
+                    <tr>
+                        <td>@DateTime.Today.Add(appointment.HoraCita).ToString("HH:mm")</td>
+                        <td>@appointment.Paciente</td>
+                        <td>@appointment.Estudios</td>
+                        <td><span class="status-pill">@appointment.Estado</span></td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+    <footer><span>Desarrollado por Edgar Eduardo Jocol Morales Versión 2.0.0.1</span></footer>
+</section>

@@ -1,0 +1,150 @@
+@page
+@model RIS_HRO.Pages.Appointments.CreateModel
+@{
+    ViewData["Title"] = "Nueva cita";
+}
+<section class="page-heading">
+    <div><h1>Nueva cita</h1><p>Registro y programación de citas radiológicas</p></div>
+    <button type="submit" form="appointmentForm" class="btn-ris-primary page-action"><i class="bi bi-check-lg"></i> Guardar cita</button>
+</section>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="ris-alert success"><i class="bi bi-check-circle"></i> @success</div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="ris-alert error"><i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage</div>
+}
+
+<form method="post" id="appointmentForm">
+<input asp-for="StudyIdsCsv" type="hidden" id="studyIdsCsv" />
+<div class="appointment-layout">
+    <div class="appointment-left">
+        <section class="ris-card">
+            <header class="card-heading"><i class="bi bi-calendar2-plus"></i><h2>Datos generales de la cita</h2></header>
+
+            <div class="appointment-top-grid">
+                <div class="form-group-ris"><label>Número de cita</label><input value="Se genera al guardar" readonly /></div>
+                <div class="form-group-ris"><label asp-for="AppointmentDate">Fecha de cita</label><input asp-for="AppointmentDate" type="date" id="appointmentDate" /></div>
+                <div class="form-group-ris"><label asp-for="AppointmentTime">Hora de cita</label><input asp-for="AppointmentTime" type="time" /></div>
+            </div>
+
+            <div class="form-group-ris">
+                <label asp-for="PatientId">Paciente</label>
+                <div class="patient-search-row">
+                    <div class="input-icon-wrap flex-grow-1"><i class="bi bi-person"></i><input asp-for="PatientId" id="patientId" placeholder="Ingrese el ID del paciente" autocomplete="off" /></div>
+                    <button type="button" class="btn-ris-outline" id="btnSearchPatient"><i class="bi bi-search"></i> Buscar</button>
+                </div>
+                <div id="patientMessage" class="field-message"></div>
+            </div>
+
+            <div id="patientSummary" class="patient-summary d-none">
+                <i class="bi bi-person-check"></i>
+                <div><strong id="patientSummaryName"></strong><span id="patientSummarySource"></span></div>
+            </div>
+
+            <div id="manualPatientSection" class="manual-patient d-none">
+                <div class="manual-title"><i class="bi bi-pencil-square"></i> Paciente no encontrado: complete los datos</div>
+                <div class="manual-grid">
+                    <div class="form-group-ris"><label asp-for="PatientFirstName">Primer nombre</label><input asp-for="PatientFirstName" id="patientFirstName" /></div>
+                    <div class="form-group-ris"><label asp-for="PatientSecondName">Segundo nombre</label><input asp-for="PatientSecondName" id="patientSecondName" /></div>
+                    <div class="form-group-ris"><label asp-for="PatientFirstLastName">Primer apellido</label><input asp-for="PatientFirstLastName" id="patientFirstLastName" /></div>
+                    <div class="form-group-ris"><label asp-for="PatientSecondLastName">Segundo apellido</label><input asp-for="PatientSecondLastName" id="patientSecondLastName" /></div>
+                    <div class="form-group-ris"><label asp-for="PatientBirthDate">Fecha de nacimiento</label><input asp-for="PatientBirthDate" id="patientBirthDate" type="date" /></div>
+                    <div class="form-group-ris">
+                        <label asp-for="PatientSex">Sexo</label>
+                        <select asp-for="PatientSex" id="patientSex"><option value="">Seleccione</option><option value="M">Masculino</option><option value="F">Femenino</option></select>
+                    </div>
+                    <div class="form-group-ris">
+                        <label asp-for="PatientPhone">Teléfono</label>
+                        <input asp-for="PatientPhone" id="patientPhone" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group-ris">
+                <label asp-for="DoctorId">Médico solicitante</label>
+                <select asp-for="DoctorId">
+                    <option value="">Seleccione un médico</option>
+                    @foreach (var doctor in Model.Doctors) { <option value="@doctor.IdMedico">@doctor.IdMedico - @doctor.NombreCompleto</option> }
+                </select>
+            </div>
+
+            <div class="form-group-ris">
+                <label asp-for="ServiceId">Servicio hospitalario</label>
+                <select asp-for="ServiceId">
+                    <option value="">Seleccione un servicio</option>
+                    @foreach (var service in Model.Services) { <option value="@service.IdServicio">@service.IdServicio - @service.NombreServicio</option> }
+                </select>
+            </div>
+
+            <div class="form-group-ris"><label asp-for="Observations">Observaciones</label><textarea asp-for="Observations" rows="3" maxlength="500" placeholder="Ingrese observaciones adicionales (opcional)..."></textarea></div>
+        </section>
+
+        <section class="ris-card studies-card">
+            <header class="card-heading studies-heading">
+                <div class="d-flex align-items-center gap-2"><i class="bi bi-file-earmark-medical"></i><h2>Estudios solicitados</h2></div>
+                <div class="study-actions">
+                    <input type="text" id="studyCode" placeholder="Código del estudio" />
+                    <button type="button" class="btn-ris-outline" id="btnAddStudyCode"><i class="bi bi-plus-lg"></i> Agregar</button>
+                    <button type="button" class="btn-ris-outline" data-bs-toggle="modal" data-bs-target="#studyModal"><i class="bi bi-search"></i> Buscar estudio</button>
+                </div>
+            </header>
+
+            <div class="study-hint"><i class="bi bi-info-circle"></i> Al ingresar el código y presionar Enter, el estudio se agrega automáticamente.</div>
+            <div class="table-responsive">
+                <table class="ris-table" id="studiesTable">
+                    <thead><tr><th>Código</th><th>Estudio</th><th>Categoría</th><th>Técnico</th><th>Acción</th></tr></thead>
+                    <tbody id="studiesBody"><tr id="emptyStudies"><td colspan="5" class="text-center text-muted py-4">Agregue por lo menos un estudio.</td></tr></tbody>
+                </table>
+            </div>
+            <div class="capacity-note"><i class="bi bi-info-circle"></i> Cada estudio solicitado consume un cupo de la prueba correspondiente.</div>
+            <div class="form-bottom-actions"><a asp-page="/Dashboard/Index" class="btn-ris-cancel">Cancelar</a><button type="submit" class="btn-ris-primary"><i class="bi bi-check-lg"></i> Guardar cita</button></div>
+        </section>
+    </div>
+
+    <div class="appointment-right">
+        <section class="ris-card calendar-card">
+            <header class="card-heading"><i class="bi bi-calendar2-plus"></i><div><h2>Disponibilidad de citas</h2><span>Calendario con cupos por día</span></div></header>
+            <div class="calendar-toolbar"><button type="button" id="prevMonth"><i class="bi bi-chevron-left"></i></button><strong id="calendarMonthTitle"></strong><button type="button" id="nextMonth"><i class="bi bi-chevron-right"></i></button></div>
+            <div class="calendar-week"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
+            <div id="calendarGrid" class="calendar-grid"></div>
+            <div class="calendar-legend">
+                <span><i class="legend-dot green"></i> Alta disponibilidad</span>
+                <span><i class="legend-dot yellow"></i> Pocos cupos</span>
+                <span><i class="legend-dot red"></i> Cupo completo</span>
+                <span><i class="legend-dot gray"></i> Sin configuración</span>
+            </div>
+        </section>
+
+        <section class="ris-card date-detail-card">
+            <h2>Detalle del <span id="detailDateTitle">día seleccionado</span></h2>
+            <div id="availabilityDetails"><div class="text-muted py-3">Agregue estudios para calcular la disponibilidad.</div></div>
+            <div id="availabilityMessage" class="availability-message neutral"><i class="bi bi-info-circle"></i><span>Seleccione los estudios y una fecha.</span></div>
+        </section>
+    </div>
+</div>
+</form>
+
+<div class="modal fade" id="studyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content ris-modal">
+            <div class="modal-header"><h5 class="modal-title">Buscar estudio</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <div class="input-icon-wrap"><i class="bi bi-search"></i><input id="studySearchText" placeholder="Busque por código o nombre..." /></div>
+                <div class="table-responsive mt-3">
+                    <table class="ris-table"><thead><tr><th>Código</th><th>Estudio</th><th>Categoría</th><th></th></tr></thead><tbody id="studySearchBody"></tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+window.initialStudies = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.InitialStudies,
+    new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }));
+</script>
+<script src="~/js/appointments-create.js" asp-append-version="true"></script>
+}

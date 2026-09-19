@@ -1,0 +1,80 @@
+@page
+@model RIS_HRO.Pages.Reports.IndexModel
+@{
+    ViewData["Title"] = "Reportes";
+}
+
+<section class="page-heading">
+    <div>
+        <h1>Reportes</h1>
+        <p>Información del departamento por rango de fechas</p>
+    </div>
+</section>
+
+<section class="ris-card report-filter">
+    <form method="get" class="report-date-grid">
+        <div class="form-group-ris">
+            <label asp-for="From">Fecha inicial</label>
+            <input asp-for="From" type="date" />
+        </div>
+        <div class="form-group-ris">
+            <label asp-for="To">Fecha final</label>
+            <input asp-for="To" type="date" />
+        </div>
+        <div class="filter-actions">
+            <button type="submit" class="btn-ris-primary"><i class="bi bi-bar-chart"></i> Generar</button>
+        </div>
+    </form>
+</section>
+
+<div class="summary-grid report-summary">
+    <article class="summary-card"><div class="summary-icon blue"><i class="bi bi-calendar2"></i></div><div><span>Total citas</span><strong class="blue-text">@Model.Summary.TotalCitas</strong></div></article>
+    <article class="summary-card"><div class="summary-icon teal"><i class="bi bi-check2-circle"></i></div><div><span>Atendidas</span><strong class="teal-text">@Model.Summary.Atendidas</strong></div></article>
+    <article class="summary-card"><div class="summary-icon red"><i class="bi bi-x-circle"></i></div><div><span>Canceladas</span><strong class="red-text">@Model.Summary.Canceladas</strong></div></article>
+    <article class="summary-card"><div class="summary-icon orange"><i class="bi bi-file-medical"></i></div><div><span>Estudios realizados</span><strong class="orange-text">@Model.Summary.EstudiosRealizados</strong></div></article>
+</div>
+
+<div class="reports-two-col">
+    <section class="ris-card">
+        <header class="card-heading report-title-row">
+            <div class="d-flex align-items-center gap-2"><i class="bi bi-file-earmark-medical"></i><h2>Conteo de estudios realizados</h2></div>
+            <a asp-page="/Reports/Index" asp-page-handler="StudiesPdf" asp-route-from="@Model.FromValue" asp-route-to="@Model.ToValue"
+               class="btn-ris-outline"><i class="bi bi-file-earmark-pdf"></i> Exportar PDF</a>
+        </header>
+        <div class="table-responsive">
+            <table class="ris-table">
+                <thead><tr><th>Código</th><th>Estudio</th><th>Categoría</th><th>Cantidad</th></tr></thead>
+                <tbody>
+                @foreach (var row in Model.Studies)
+                {
+                    <tr><td><strong>@row.IdPrueba</strong></td><td>@row.NombrePrueba</td><td>@row.Categoria</td><td>@row.Cantidad</td></tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="ris-card">
+        <header class="card-heading report-title-row">
+            <div class="d-flex align-items-center gap-2"><i class="bi bi-calendar2-week"></i><h2>Listado de citas</h2></div>
+            <a asp-page="/Reports/Index" asp-page-handler="AppointmentsPdf" asp-route-from="@Model.FromValue" asp-route-to="@Model.ToValue"
+               class="btn-ris-outline"><i class="bi bi-file-earmark-pdf"></i> Exportar PDF</a>
+        </header>
+        <div class="table-responsive">
+            <table class="ris-table">
+                <thead><tr><th>Fecha</th><th>Cita</th><th>Paciente</th><th>Estado</th></tr></thead>
+                <tbody>
+                @foreach (var row in Model.Appointments.Take(12))
+                {
+                    <tr>
+                        <td>@row.FechaCita.ToString("dd/MM/yyyy") @DateTime.Today.Add(row.HoraCita).ToString("HH:mm")</td>
+                        <td>@row.NumeroCita</td>
+                        <td>@row.Paciente</td>
+                        <td>@row.Estado</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

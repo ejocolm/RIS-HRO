@@ -1,0 +1,6 @@
+wwwroot\css\site.css
+wwwroot\images\login-hero.png
+wwwroot\images\ris-logo.png
+wwwroot\js\appointments-create.js
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\wwwroot\js\appointments-create.js
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\wwwroot\css\site.css
