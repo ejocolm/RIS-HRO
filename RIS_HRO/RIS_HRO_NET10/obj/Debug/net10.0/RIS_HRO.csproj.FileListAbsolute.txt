@@ -62,7 +62,6 @@ C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Se
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\scopedcss\bundle\RIS_HRO.styles.css
-C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\compressed\209nrfkhvy-{0}-md3q9mnyq0-md3q9mnyq0.gz
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\staticwebassets.build.json
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\staticwebassets.build.json.cache
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\staticwebassets.development.json
@@ -75,4 +74,5 @@ C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Se
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\RIS_HRO.pdb
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\RIS_HRO.genruntimeconfig.cache
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\ref\RIS_HRO.dll
-C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\compressed\ff4fabu7gx-{0}-oy8rimbc32-oy8rimbc32.gz
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\compressed\209nrfkhvy-{0}-q87wjtfrsz-q87wjtfrsz.gz
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\compressed\ff4fabu7gx-{0}-ld3stnuewj-ld3stnuewj.gz

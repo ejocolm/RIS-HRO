@@ -3,64 +3,104 @@
   "WorkspaceRootPath": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\account\\changepassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\account\\changepassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\services\\pdfservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:services\\pdfservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\account\\changepassword.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\account\\changepassword.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\admin\\users.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\admin\\users.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\services\\passwordpolicy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:services\\passwordpolicy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\account\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\account\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\models\\authmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:models\\authmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\services\\hospitalpatientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:services\\hospitalpatientservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\services\\hl7parserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:services\\hl7parserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\repositories\\dashboardrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:repositories\\dashboardrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\capacity\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\capacity\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\repositories\\catalogrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:repositories\\catalogrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\models\\appointmentmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:models\\appointmentmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\repositories\\capacityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:repositories\\capacityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\repositories\\appointmentrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:repositories\\appointmentrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\catalogs\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\catalogs\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\catalogs\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\catalogs\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\data\\sqlconnectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:data\\sqlconnectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\admin\\emailsettings.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\admin\\emailsettings.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\appointments\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\appointments\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\appointments\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\appointments\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\wwwroot\\js\\appointments-create.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:wwwroot\\js\\appointments-create.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\admin\\emailsettings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\admin\\emailsettings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\account\\changepassword.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\account\\changepassword.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\account\\changepassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\account\\changepassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\admin\\users.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\admin\\users.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\account\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\account\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|c:\\users\\ejocol\\mi unidad\\universidad edgar\\universidad mariano galvez\\decimo semestre ii\\ris\\ris_hro\\ris_hro_net10\\pages\\capacity\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{2C6171B7-5BEA-49AA-AF59-87C683381A32}|RIS_HRO.csproj|solutionrelative:pages\\capacity\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,37 +110,268 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ChangePassword.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\ChangePassword.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\Account\\ChangePassword.cshtml.cs",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\ChangePassword.cshtml.cs",
-              "RelativeToolTip": "Pages\\Account\\ChangePassword.cshtml.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAuwFEAAAA3AAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "PdfService.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Services\\PdfService.cs",
+              "RelativeDocumentMoniker": "Services\\PdfService.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Services\\PdfService.cs",
+              "RelativeToolTip": "Services\\PdfService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-19T20:10:19.968Z",
+              "WhenOpened": "2026-09-21T03:43:51.792Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ChangePassword.cshtml",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\ChangePassword.cshtml",
-              "RelativeDocumentMoniker": "Pages\\Account\\ChangePassword.cshtml",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\ChangePassword.cshtml",
-              "RelativeToolTip": "Pages\\Account\\ChangePassword.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-19T20:10:17.567Z",
+              "DocumentIndex": 1,
+              "Title": "HospitalPatientService.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Services\\HospitalPatientService.cs",
+              "RelativeDocumentMoniker": "Services\\HospitalPatientService.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Services\\HospitalPatientService.cs",
+              "RelativeToolTip": "Services\\HospitalPatientService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-21T03:43:08.773Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DashboardRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\DashboardRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\DashboardRepository.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\DashboardRepository.cs",
+              "RelativeToolTip": "Repositories\\DashboardRepository.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-21T03:41:17.111Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CatalogRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\CatalogRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\CatalogRepository.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\CatalogRepository.cs",
+              "RelativeToolTip": "Repositories\\CatalogRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-21T03:41:11.836Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CapacityRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\CapacityRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\CapacityRepository.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\CapacityRepository.cs",
+              "RelativeToolTip": "Repositories\\CapacityRepository.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-21T03:41:00.514Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AppointmentRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\AppointmentRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\AppointmentRepository.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\AppointmentRepository.cs",
+              "RelativeToolTip": "Repositories\\AppointmentRepository.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAIwBIAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-21T03:40:23.193Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Catalogs\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Catalogs\\Index.cshtml.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Catalogs\\Index.cshtml.cs",
+              "RelativeToolTip": "Pages\\Catalogs\\Index.cshtml.cs",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-21T03:39:51.183Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Hl7ParserService.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Services\\Hl7ParserService.cs",
+              "RelativeDocumentMoniker": "Services\\Hl7ParserService.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Services\\Hl7ParserService.cs",
+              "RelativeToolTip": "Services\\Hl7ParserService.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwBkAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-14T04:00:48.235Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Catalogs\\Index.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Catalogs\\Index.cshtml",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Catalogs\\Index.cshtml",
+              "RelativeToolTip": "Pages\\Catalogs\\Index.cshtml",
+              "ViewState": "AgIAAGMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-21T03:39:42.173Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "SqlConnectionFactory.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Data\\SqlConnectionFactory.cs",
+              "RelativeDocumentMoniker": "Data\\SqlConnectionFactory.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Data\\SqlConnectionFactory.cs",
+              "RelativeToolTip": "Data\\SqlConnectionFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-21T03:38:18.168Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Dashboard\\Index.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Dashboard\\Index.cshtml",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Dashboard\\Index.cshtml",
+              "RelativeToolTip": "Pages\\Dashboard\\Index.cshtml",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAAFQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-21T02:58:03.773Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Appointments\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Appointments\\Index.cshtml.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Appointments\\Index.cshtml.cs",
+              "RelativeToolTip": "Pages\\Appointments\\Index.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-20T23:32:14.252Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AuthRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\AuthRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\AuthRepository.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\AuthRepository.cs",
+              "RelativeToolTip": "Repositories\\AuthRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAABJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-19T19:36:26.996Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "EmailSettings.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Admin\\EmailSettings.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Admin\\EmailSettings.cshtml.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Admin\\EmailSettings.cshtml.cs",
+              "RelativeToolTip": "Pages\\Admin\\EmailSettings.cshtml.cs",
+              "ViewState": "AgIAAGcAAAAAAAAAAAAmwG8AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-19T22:31:26.611Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "EmailSettings.cshtml",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Admin\\EmailSettings.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Admin\\EmailSettings.cshtml",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Admin\\EmailSettings.cshtml",
+              "RelativeToolTip": "Pages\\Admin\\EmailSettings.cshtml",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAAAF4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-19T22:31:12.964Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-19T19:16:35.219Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "appointments-create.js",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\wwwroot\\js\\appointments-create.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\appointments-create.js",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\wwwroot\\js\\appointments-create.js",
+              "RelativeToolTip": "wwwroot\\js\\appointments-create.js",
+              "ViewState": "AgIAAGYEAAAAAAAAAAAAAIAEAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-09-19T23:25:53.156Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Appointments\\Index.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Appointments\\Index.cshtml",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Appointments\\Index.cshtml",
+              "RelativeToolTip": "Pages\\Appointments\\Index.cshtml",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAABoAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-20T23:27:32.778Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ChangePassword.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\ChangePassword.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Account\\ChangePassword.cshtml.cs",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\ChangePassword.cshtml.cs",
+              "RelativeToolTip": "Pages\\Account\\ChangePassword.cshtml.cs",
+              "ViewState": "AgIAADsAAAAAAAAAAAAuwFEAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-19T20:10:19.968Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "ChangePassword.cshtml",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\ChangePassword.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Account\\ChangePassword.cshtml",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\ChangePassword.cshtml",
+              "RelativeToolTip": "Pages\\Account\\ChangePassword.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-19T20:10:17.567Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
               "Title": "Users.cshtml.cs",
               "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Admin\\Users.cshtml.cs",
               "RelativeDocumentMoniker": "Pages\\Admin\\Users.cshtml.cs",
@@ -108,25 +379,24 @@
               "RelativeToolTip": "Pages\\Admin\\Users.cshtml.cs",
               "ViewState": "AgIAAEMAAAAAAAAAAAAAAFgAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-19T20:08:25.994Z",
+              "WhenOpened": "2026-09-19T20:08:25.994Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAcIAAAAAAAAAAAAABwCAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-09-14T03:51:55.777Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "PasswordPolicy.cs",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Services\\PasswordPolicy.cs",
-              "RelativeDocumentMoniker": "Services\\PasswordPolicy.cs",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Services\\PasswordPolicy.cs",
-              "RelativeToolTip": "Services\\PasswordPolicy.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-19T20:07:48.082Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 23,
               "Title": "Login.cshtml.cs",
               "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\Login.cshtml.cs",
               "RelativeDocumentMoniker": "Pages\\Account\\Login.cshtml.cs",
@@ -134,12 +404,11 @@
               "RelativeToolTip": "Pages\\Account\\Login.cshtml.cs",
               "ViewState": "AgIAACkAAAAAAAAAAAAAwEcAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-19T19:47:35.682Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T19:47:35.682Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 22,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "Pages\\Shared\\_Layout.cshtml",
@@ -147,100 +416,11 @@
               "RelativeToolTip": "Pages\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAADkAAAAAAAAAAAAAAEIAAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-19T19:40:38.711Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-19T19:40:38.711Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\Login.cshtml",
-              "RelativeDocumentMoniker": "Pages\\Account\\Login.cshtml",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Account\\Login.cshtml",
-              "RelativeToolTip": "Pages\\Account\\Login.cshtml",
-              "ViewState": "AgIAABIAAAAAAAAAAAAAACYAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-19T19:38:42.976Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "AuthRepository.cs",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\AuthRepository.cs",
-              "RelativeDocumentMoniker": "Repositories\\AuthRepository.cs",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Repositories\\AuthRepository.cs",
-              "RelativeToolTip": "Repositories\\AuthRepository.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAgwBsAAABJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-19T19:36:26.996Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "AuthModels.cs",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Models\\AuthModels.cs",
-              "RelativeDocumentMoniker": "Models\\AuthModels.cs",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Models\\AuthModels.cs",
-              "RelativeToolTip": "Models\\AuthModels.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-19T19:36:08.266Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAAACkAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-19T19:16:35.219Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Hl7ParserService.cs",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Services\\Hl7ParserService.cs",
-              "RelativeDocumentMoniker": "Services\\Hl7ParserService.cs",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Services\\Hl7ParserService.cs",
-              "RelativeToolTip": "Services\\Hl7ParserService.cs",
-              "ViewState": "AgIAACUAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-14T04:00:48.235Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "site.css",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\wwwroot\\css\\site.css",
-              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\wwwroot\\css\\site.css",
-              "RelativeToolTip": "wwwroot\\css\\site.css",
-              "ViewState": "AgIAAP8AAAAAAAAAAAAkwD4BAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2026-09-14T03:51:55.777Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Dashboard\\Index.cshtml",
-              "RelativeDocumentMoniker": "Pages\\Dashboard\\Index.cshtml",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Dashboard\\Index.cshtml",
-              "RelativeToolTip": "Pages\\Dashboard\\Index.cshtml",
-              "ViewState": "AgIAACcAAAAAAAAAAAAAAFgAAABIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-09-14T03:46:58.166Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 24,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Pages\\Capacity\\Index.cshtml",
               "RelativeDocumentMoniker": "Pages\\Capacity\\Index.cshtml",
@@ -249,18 +429,6 @@
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-09-14T03:42:54.82Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "AppointmentModels.cs",
-              "DocumentMoniker": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Models\\AppointmentModels.cs",
-              "RelativeDocumentMoniker": "Models\\AppointmentModels.cs",
-              "ToolTip": "C:\\Users\\ejocol\\Mi unidad\\Universidad Edgar\\Universidad Mariano Galvez\\Decimo Semestre II\\RIS\\RIS_HRO\\RIS_HRO_NET10\\Models\\AppointmentModels.cs",
-              "RelativeToolTip": "Models\\AppointmentModels.cs",
-              "ViewState": "AgIAACAAAAAAAAAAAAAmwCcAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-14T03:33:24.214Z"
             }
           ]
         }

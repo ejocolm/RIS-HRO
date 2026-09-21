@@ -18,8 +18,11 @@ public sealed class IndexModel : PageModel
 
     public async Task OnGetAsync(DateTime? from, DateTime? to, string? patient, string? status, CancellationToken ct)
     {
-        From = from ?? DateTime.Today.AddDays(-7);
-        To = to ?? DateTime.Today.AddDays(30);
+        //Edgar -> cambio para que el filtro funcione iniciando y finalizando el día en curso
+        //From = from ?? DateTime.Today.AddDays(-7);
+        From = from ?? DateTime.Today;
+        //To = to ?? DateTime.Today.AddDays(30);
+        To = to ?? DateTime.Today;
         Patient = patient;
         Status = status;
         Rows = await _appointments.ListAsync(From, To, Patient, Status, ct);
