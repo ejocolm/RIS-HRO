@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RIS_HRO.Models;
@@ -28,6 +29,7 @@ public sealed class CreateModel : PageModel
 
     public List<DoctorItem> Doctors { get; private set; } = [];
     public List<HospitalServiceItem> Services { get; private set; } = [];
+    public List<BodyPartItem> BodyParts { get; private set; } = [];
     public List<StudyItem> InitialStudies { get; private set; } = [];
     public string? ErrorMessage { get; private set; }
 
@@ -44,10 +46,24 @@ public sealed class CreateModel : PageModel
     [BindProperty] public string ServiceId { get; set; } = "";
     [BindProperty] public DateTime AppointmentDate { get; set; } = DateTime.Today;
     [BindProperty] public TimeSpan AppointmentTime { get; set; } = new(8, 0, 0);
+    [BindProperty] public string TipoRegistro { get; set; } = "SOLICITUD_DIA";
+    [BindProperty] public bool EsMovil { get; set; }
     [BindProperty] public string? Observations { get; set; }
-    [BindProperty] public string StudyIdsCsv { get; set; } = "";
 
-    public async Task OnGetAsync(CancellationToken ct) => await LoadCatalogsAsync(ct);
+    [BindProperty] public string StudyIdsCsv { get; set; } = "";
+    [BindProperty] public string StudyBodyPartsJson { get; set; } = "[]";
+
+    public async Task OnGetAsync(CancellationToken ct)
+    {
+        var now = DateTime.Now;
+
+        TipoRegistro = "SOLICITUD_DIA";
+        EsMovil = false;
+        AppointmentDate = now.Date;
+        AppointmentTime = new TimeSpan(now.Hour, now.Minute, 0);
+
+        await LoadCatalogsAsync(ct);
+    }
 
     public async Task<JsonResult> OnGetPatientAsync(string id, CancellationToken ct)
     {
@@ -66,7 +82,10 @@ public sealed class CreateModel : PageModel
 
     public async Task<JsonResult> OnGetStudyAsync(string code, CancellationToken ct)
     {
-        var study = string.IsNullOrWhiteSpace(code) ? null : await _catalogs.GetStudyAsync(code.Trim(), ct);
+        var study = string.IsNullOrWhiteSpace(code)
+            ? null
+            : await _catalogs.GetStudyAsync(code.Trim(), ct);
+
         return new JsonResult(new { found = study is not null, study });
     }
 
@@ -77,29 +96,49 @@ public sealed class CreateModel : PageModel
         int year, int month, string? studies, CancellationToken ct)
     {
         var ids = SplitStudies(studies);
-        return new JsonResult(await _appointments.GetMonthAvailabilityAsync(year, month, ids, null, ct));
+        return new JsonResult(
+            await _appointments.GetMonthAvailabilityAsync(year, month, ids, null, ct));
     }
 
     public async Task<IActionResult> OnPostAsync(CancellationToken ct)
     {
         await LoadCatalogsAsync(ct);
-        var studyIds = SplitStudies(StudyIdsCsv);
 
-        Validate(studyIds);
+        TipoRegistro = (TipoRegistro ?? "").Trim().ToUpperInvariant();
+
+        if (TipoRegistro != "CITA" && TipoRegistro != "SOLICITUD_DIA")
+            ModelState.AddModelError("", "Debe seleccionar un tipo de registro válido.");
+
+        if (TipoRegistro == "CITA")
+            EsMovil = false;
+
+        if (TipoRegistro == "SOLICITUD_DIA")
+            AppointmentDate = DateTime.Today;
+
+        var studyIds = SplitStudies(StudyIdsCsv);
+        var studyBodyParts = ParseStudyBodyParts(StudyBodyPartsJson);
+
+        Validate(studyIds, studyBodyParts);
+
         if (!ModelState.IsValid)
         {
-            await LoadInitialStudiesAsync(studyIds, ct);
-            ErrorMessage = string.Join(" ", ModelState.Values.SelectMany(x => x.Errors)
-                .Select(x => x.ErrorMessage).Where(x => !string.IsNullOrWhiteSpace(x)));
+            await LoadInitialStudiesAsync(studyIds, studyBodyParts, ct);
+            ErrorMessage = string.Join(" ",
+                ModelState.Values
+                    .SelectMany(x => x.Errors)
+                    .Select(x => x.ErrorMessage)
+                    .Where(x => !string.IsNullOrWhiteSpace(x)));
+
             return Page();
         }
 
         var patient = await _patients.GetAsync(PatientId.Trim(), ct);
         if (patient is null)
         {
-            if (string.IsNullOrWhiteSpace(PatientFirstName) || string.IsNullOrWhiteSpace(PatientFirstLastName))
+            if (string.IsNullOrWhiteSpace(PatientFirstName) ||
+                string.IsNullOrWhiteSpace(PatientFirstLastName))
             {
-                await LoadInitialStudiesAsync(studyIds, ct);
+                await LoadInitialStudiesAsync(studyIds, studyBodyParts, ct);
                 ErrorMessage = "Complete los datos del paciente antes de guardar.";
                 return Page();
             }
@@ -119,7 +158,8 @@ public sealed class CreateModel : PageModel
         }
 
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrWhiteSpace(userId)) return Challenge();
+        if (string.IsNullOrWhiteSpace(userId))
+            return Challenge();
 
         try
         {
@@ -130,48 +170,121 @@ public sealed class CreateModel : PageModel
                 IdServicio = ServiceId,
                 FechaCita = AppointmentDate,
                 HoraCita = AppointmentTime,
+                TipoRegistro = TipoRegistro,
+                EsMovil = EsMovil,
                 Observaciones = Observations,
                 IdUsuario = userId,
-                Estudios = studyIds
+                Estudios = studyIds,
+                EstudioPartes = studyBodyParts
             }, ct);
 
-            TempData["Success"] = $"Cita {result.NumeroCita} registrada correctamente.";
+            var tipoTexto = TipoRegistro == "SOLICITUD_DIA" ? "Solicitud" : "Cita";
+            TempData["Success"] = $"{tipoTexto} {result.NumeroCita} registrada correctamente.";
             return RedirectToPage("/Appointments/Index");
         }
         catch (InvalidOperationException ex)
         {
-            await LoadInitialStudiesAsync(studyIds, ct);
+            await LoadInitialStudiesAsync(studyIds, studyBodyParts, ct);
             ErrorMessage = ex.Message;
             return Page();
         }
     }
 
-    private void Validate(List<string> studies)
+    private void Validate(
+        List<string> studies,
+        List<StudyBodyPartSelection> studyBodyParts)
     {
-        if (string.IsNullOrWhiteSpace(PatientId)) ModelState.AddModelError("", "Debe seleccionar un paciente.");
-        if (string.IsNullOrWhiteSpace(DoctorId)) ModelState.AddModelError("", "Debe seleccionar un médico.");
-        if (string.IsNullOrWhiteSpace(ServiceId)) ModelState.AddModelError("", "Debe seleccionar un servicio.");
-        if (studies.Count == 0) ModelState.AddModelError("", "Debe agregar por lo menos un estudio.");
+        if (string.IsNullOrWhiteSpace(PatientId))
+            ModelState.AddModelError("", "Debe seleccionar un paciente.");
+
+        if (string.IsNullOrWhiteSpace(DoctorId))
+            ModelState.AddModelError("", "Debe seleccionar un médico.");
+
+        if (string.IsNullOrWhiteSpace(ServiceId))
+            ModelState.AddModelError("", "Debe seleccionar un servicio.");
+
+        if (studies.Count == 0)
+        {
+            ModelState.AddModelError("", "Debe agregar por lo menos un estudio.");
+            return;
+        }
+
+        foreach (var studyId in studies)
+        {
+            if (!studyBodyParts.Any(x =>
+                    string.Equals(x.IdPrueba, studyId, StringComparison.OrdinalIgnoreCase)))
+            {
+                ModelState.AddModelError(
+                    "",
+                    $"Debe seleccionar por lo menos una parte del cuerpo para el estudio {studyId}.");
+            }
+        }
     }
 
     private async Task LoadCatalogsAsync(CancellationToken ct)
     {
         Doctors = await _catalogs.GetDoctorsAsync(ct);
         Services = await _catalogs.GetServicesAsync(ct);
+        BodyParts = await _catalogs.GetBodyPartsAsync(null, ct);
     }
 
-    private async Task LoadInitialStudiesAsync(IEnumerable<string> ids, CancellationToken ct)
+    private async Task LoadInitialStudiesAsync(
+        IEnumerable<string> ids,
+        IReadOnlyCollection<StudyBodyPartSelection> selections,
+        CancellationToken ct)
     {
         InitialStudies = [];
+
         foreach (var id in ids)
         {
             var study = await _catalogs.GetStudyAsync(id, ct);
-            if (study is not null)
-                InitialStudies.Add(study);
+            if (study is null)
+                continue;
+
+            study.PartesCuerpo = BodyParts
+                .Where(part => selections.Any(selection =>
+                    string.Equals(selection.IdPrueba, id, StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(selection.IdParteCuerpo, part.IdParteCuerpo, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+            InitialStudies.Add(study);
+        }
+    }
+
+    private static List<StudyBodyPartSelection> ParseStudyBodyParts(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return [];
+
+        try
+        {
+            var items = JsonSerializer.Deserialize<List<StudyBodyPartSelection>>(
+                json,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? [];
+
+            return items
+                .Where(x =>
+                    !string.IsNullOrWhiteSpace(x.IdPrueba) &&
+                    !string.IsNullOrWhiteSpace(x.IdParteCuerpo))
+                .GroupBy(
+                    x => $"{x.IdPrueba.Trim()}\u001F{x.IdParteCuerpo.Trim()}",
+                    StringComparer.OrdinalIgnoreCase)
+                .Select(g => new StudyBodyPartSelection
+                {
+                    IdPrueba = g.First().IdPrueba.Trim(),
+                    IdParteCuerpo = g.First().IdParteCuerpo.Trim()
+                })
+                .ToList();
+        }
+        catch (JsonException)
+        {
+            return [];
         }
     }
 
     private static List<string> SplitStudies(string? csv) =>
-        (csv ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        (csv ?? "")
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
 }

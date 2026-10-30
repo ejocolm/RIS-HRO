@@ -127,7 +127,7 @@ public sealed class EmailSenderService
                             padding:22px;
                             border-radius:12px 12px 0 0">
                     <h2 style="margin:0">RIS HRO</h2>
-                    <div>Sistema de Citas de Radiología</div>
+                    <div>Sistema de Solicitudes de Radiología</div>
                 </div>
 
                 <div style="border:1px solid #dfe7f1;

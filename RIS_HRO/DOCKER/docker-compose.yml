@@ -1,0 +1,54 @@
+services:
+  ris-hro:
+    container_name: ris-hro
+    image: ris-hro-web:latest
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    env_file:
+      - .env
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "8080"
+
+      # La app puede quedar detrás de Nginx/Traefik/Caddy que termina HTTPS.
+      # El contenedor no publica HTTPS directamente.
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+
+      # Ruta explícita para que las claves de Data Protection persistan.
+      DataProtection__KeysPath: /var/ris-hro/dataprotection
+
+      # Zona horaria usada por DateTime.Now / DateTime.Today dentro de la app.
+      TZ: America/Guatemala
+
+    # El reverse proxy que esté unido a hro-net debe apuntar a:
+    # http://ris-hro:8080
+    expose:
+      - "8080"
+    ports:
+      - 8080:8080
+
+    networks:
+      - hro-net
+
+    volumes:
+      - dp-keys:/var/ris-hro/dataprotection
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/Account/Login > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+networks:
+  hro-net:
+    external: true
+
+volumes:
+  dp-keys:

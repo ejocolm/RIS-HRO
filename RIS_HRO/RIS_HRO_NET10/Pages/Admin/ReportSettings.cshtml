@@ -1,0 +1,107 @@
+@page
+@model RIS_HRO.Pages.Admin.ReportSettingsModel
+@{
+    ViewData["Title"] = "Configuración de informes";
+}
+
+<style>
+.report-config-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:20px}
+.header-preview{min-height:220px;border:1px dashed #bdcadb;border-radius:12px;background:#f8fbff;display:flex;align-items:center;justify-content:center;padding:18px}
+.header-preview img{display:block;max-width:100%;max-height:260px;object-fit:contain}
+.config-meta{display:grid;gap:9px}
+.config-meta div{padding:10px 12px;border-radius:8px;background:#f7f9fc}
+.config-meta small{display:block;color:#738199}
+.config-meta strong{color:#173866}
+@@media(max-width:950px){.report-config-grid{grid-template-columns:1fr}}
+</style>
+
+<section class="page-heading">
+    <div>
+        <h1>Configuración de informes</h1>
+        <p>Encabezado utilizado en la impresión de informes radiológicos.</p>
+    </div>
+</section>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="ris-alert success"><i class="bi bi-check-circle"></i> @success</div>
+}
+@if (TempData["Error"] is string error)
+{
+    <div class="ris-alert error"><i class="bi bi-exclamation-triangle"></i> @error</div>
+}
+
+<div class="report-config-grid">
+    <section class="ris-card">
+        <header class="card-heading">
+            <i class="bi bi-image"></i>
+            <div>
+                <h2>Encabezado actual</h2>
+                <span>La imagen se almacena directamente en la base de datos.</span>
+            </div>
+        </header>
+
+        <div class="header-preview">
+            @if (Model.HasHeader)
+            {
+                <img src="@Url.Page("/Admin/ReportSettings", "Header", new { v = Model.ModifiedAt?.Ticks })"
+                     alt="Encabezado actual de informes" />
+            }
+            else
+            {
+                <div class="text-center text-muted">
+                    <i class="bi bi-image fs-1 d-block mb-2"></i>
+                    No hay un encabezado configurado.
+                </div>
+            }
+        </div>
+
+        @if (Model.HasHeader)
+        {
+            <div class="config-meta mt-3">
+                <div><small>Archivo</small><strong>@Model.FileName</strong></div>
+                <div><small>Tipo</small><strong>@Model.MimeType</strong></div>
+                <div><small>Última modificación</small><strong>@Model.ModifiedAt?.ToString("dd/MM/yyyy HH:mm")</strong></div>
+                <div><small>Usuario</small><strong>@(Model.ModifiedBy ?? "-")</strong></div>
+            </div>
+        }
+    </section>
+
+    <section class="ris-card">
+        <header class="card-heading">
+            <i class="bi bi-cloud-arrow-up"></i>
+            <div>
+                <h2>Actualizar encabezado</h2>
+                <span>PNG, JPG o JPEG. Máximo 5 MB.</span>
+            </div>
+        </header>
+
+        <form method="post"
+              enctype="multipart/form-data"
+              asp-page-handler="Save">
+            <div class="form-group-ris">
+                <label asp-for="HeaderFile">Imagen de encabezado</label>
+                <input asp-for="HeaderFile"
+                       type="file"
+                       accept=".png,.jpg,.jpeg,image/png,image/jpeg" />
+            </div>
+
+            <button type="submit" class="btn-ris-primary">
+                <i class="bi bi-check2-circle"></i>
+                @(Model.HasHeader ? "Reemplazar encabezado" : "Guardar encabezado")
+            </button>
+        </form>
+
+        @if (Model.HasHeader)
+        {
+            <hr class="my-4" />
+            <form method="post"
+                  asp-page-handler="Delete"
+                  onsubmit="return confirm('¿Desea eliminar el encabezado configurado?');">
+                <button type="submit" class="btn-ris-cancel">
+                    <i class="bi bi-trash"></i> Eliminar encabezado
+                </button>
+            </form>
+        }
+    </section>
+</div>

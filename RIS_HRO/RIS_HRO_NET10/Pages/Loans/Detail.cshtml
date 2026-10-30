@@ -1,0 +1,233 @@
+@page
+@model RIS_HRO.Pages.Loans.DetailModel
+@{
+    ViewData["Title"] = "Detalle del préstamo";
+    var loan = Model.Loan;
+}
+
+<style>
+    .loan-detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .loan-detail-card {
+        border: 1px solid #e0e7ee;
+        border-radius: 12px;
+        padding: 18px;
+        background: #fff;
+    }
+
+    .loan-detail-card h3 {
+        font-size: 1rem;
+        color: #0b4f8a;
+        margin-bottom: 14px;
+    }
+
+    .detail-row {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid #eef2f5;
+    }
+
+    .detail-row:last-child {
+        border-bottom: 0;
+    }
+
+    .detail-row span:first-child {
+        color: #7a8794;
+        font-size: .86rem;
+    }
+
+    .document-preview {
+        width: 100%;
+        max-height: 340px;
+        object-fit: contain;
+        border-radius: 10px;
+        border: 1px solid #e1e7ed;
+        background: #fff;
+    }
+
+    @@media (max-width: 820px) {
+        .loan-detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .detail-row {
+            grid-template-columns: 1fr;
+            gap: 3px;
+        }
+    }
+</style>
+
+<section class="page-heading">
+    <div>
+        <h1>Detalle del préstamo</h1>
+        <p>Préstamo #@loan.IdPrestamo</p>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap">
+        <a asp-page="/Loans/Index" class="btn-ris-cancel">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+
+        @if (loan.EstaActivo)
+        {
+            <a asp-page="/Loans/Return"
+               asp-route-loanId="@loan.IdPrestamo"
+               class="btn-ris-primary">
+                <i class="bi bi-box-arrow-in-left"></i> Devolver
+            </a>
+        }
+    </div>
+</section>
+
+<div class="loan-detail-grid">
+    <section class="loan-detail-card">
+        <h3><i class="bi bi-file-earmark-medical"></i> Estudio</h3>
+
+        <div class="detail-row">
+            <span>ID interno</span>
+            <strong>
+                @(string.IsNullOrWhiteSpace(loan.IdInternoRadiologia)
+                    ? "Pendiente"
+                    : loan.IdInternoRadiologia)
+            </strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Paciente</span>
+            <strong>@loan.Paciente (@loan.IdPaciente)</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Estudio</span>
+            <strong>@loan.NombrePrueba (@loan.IdPrueba)</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Parte(s)</span>
+            <strong>@(string.IsNullOrWhiteSpace(loan.PartesCuerpo) ? "—" : loan.PartesCuerpo)</strong>
+        </div>
+    </section>
+
+    <section class="loan-detail-card">
+        <h3><i class="bi bi-box-arrow-right"></i> Préstamo</h3>
+
+        <div class="detail-row">
+            <span>Estado</span>
+            <strong>@loan.Estado</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Fecha/hora</span>
+            <strong>@loan.FechaHoraPrestamo.ToString("dd/MM/yyyy HH:mm")</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Motivo</span>
+            <strong>@loan.MotivoPrestamo</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Usuario</span>
+            <strong>@loan.UsuarioPrestamo</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Observaciones</span>
+            <strong>@(string.IsNullOrWhiteSpace(loan.Observaciones) ? "—" : loan.Observaciones)</strong>
+        </div>
+    </section>
+
+    <section class="loan-detail-card">
+        <h3><i class="bi bi-person-vcard"></i> Prestatario</h3>
+
+        <div class="detail-row">
+            <span>ID</span>
+            <strong>@loan.IdPrestatario</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Nombre</span>
+            <strong>@loan.Prestatario</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Teléfono</span>
+            <strong>@(string.IsNullOrWhiteSpace(loan.TelefonoPrestatario) ? "—" : loan.TelefonoPrestatario)</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Correo</span>
+            <strong>@(string.IsNullOrWhiteSpace(loan.CorreoPrestatario) ? "—" : loan.CorreoPrestatario)</strong>
+        </div>
+
+        <div class="detail-row">
+            <span>Dirección</span>
+            <strong>@(string.IsNullOrWhiteSpace(loan.DireccionPrestatario) ? "—" : loan.DireccionPrestatario)</strong>
+        </div>
+    </section>
+
+    @if (!loan.EstaActivo)
+    {
+        <section class="loan-detail-card">
+            <h3><i class="bi bi-box-arrow-in-left"></i> Devolución</h3>
+
+            <div class="detail-row">
+                <span>Fecha/hora</span>
+                <strong>@(loan.FechaHoraDevolucion.HasValue ? loan.FechaHoraDevolucion.Value.ToString("dd/MM/yyyy HH:mm") : "—")</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>ID persona</span>
+                <strong>@(string.IsNullOrWhiteSpace(loan.DocumentoIdentificacionDevuelve) ? "—" : loan.DocumentoIdentificacionDevuelve)</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Nombre</span>
+                <strong>@(string.IsNullOrWhiteSpace(loan.NombrePersonaDevuelve) ? "—" : loan.NombrePersonaDevuelve)</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Usuario</span>
+                <strong>@(string.IsNullOrWhiteSpace(loan.UsuarioDevolucion) ? "—" : loan.UsuarioDevolucion)</strong>
+            </div>
+
+            <div class="detail-row">
+                <span>Observaciones</span>
+                <strong>@(string.IsNullOrWhiteSpace(loan.ObservacionesDevolucion) ? "—" : loan.ObservacionesDevolucion)</strong>
+            </div>
+        </section>
+    }
+</div>
+
+<section class="ris-card mt-3">
+    <header class="card-heading">
+        <i class="bi bi-images"></i>
+        <div>
+            <h2>Identificación del prestatario</h2>
+            <span>Las imágenes se consumen desde CAT_PRESTATARIOS y no se duplican en el préstamo</span>
+        </div>
+    </header>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <img class="document-preview"
+                 src="@Url.Page("/Borrowers/Edit", "Document", new { id = loan.IdPrestatario, number = 1 })"
+                 alt="Documento 1 del prestatario" />
+        </div>
+
+        @if (loan.TieneDocumento2)
+        {
+            <div class="col-md-6">
+                <img class="document-preview"
+                     src="@Url.Page("/Borrowers/Edit", "Document", new { id = loan.IdPrestatario, number = 2 })"
+                     alt="Documento 2 del prestatario" />
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,407 @@
+@page
+@model RIS_HRO.Pages.Inventory.IndexModel
+@{
+    ViewData["Title"] = "Inventario de estudios";
+}
+
+<style>
+    .inventory-filter-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        align-items: end;
+    }
+
+    .inventory-filter-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        grid-column: 1 / -1;
+    }
+
+    .inventory-id {
+        font-weight: 700;
+        color: #0b4f8a;
+    }
+
+    .inventory-muted {
+        color: #7b8794;
+        font-size: .86rem;
+    }
+
+    .inventory-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: .78rem;
+        font-weight: 700;
+        white-space: nowrap;
+        border: 1px solid #dce4ec;
+        background: #f8fafc;
+    }
+
+    .inventory-status.finalizado {
+        background: #edf8f1;
+        border-color: #cfe9d8;
+        color: #247044;
+    }
+
+    .inventory-status.borrador {
+        background: #fff8e8;
+        border-color: #f2dfaa;
+        color: #8a6415;
+    }
+
+    .inventory-status.sin-informe {
+        background: #f4f6f8;
+        border-color: #dfe5ea;
+        color: #66717d;
+    }
+
+    .inventory-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        min-width: 155px;
+    }
+
+    .inventory-action-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        text-decoration: none;
+        font-size: .82rem;
+        font-weight: 600;
+        padding: 6px 9px;
+        border: 1px solid #d9e3ed;
+        border-radius: 8px;
+        background: #fff;
+        color: #0b5ea8;
+        white-space: nowrap;
+    }
+
+    .inventory-action-link:hover {
+        background: #f4f9fd;
+    }
+
+    .loan-state {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 999px;
+        padding: 5px 9px;
+        font-size: .77rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .loan-state.available {
+        background: #edf8f1;
+        color: #247044;
+        border: 1px solid #cfe9d8;
+    }
+
+    .loan-state.borrowed {
+        background: #fff2e8;
+        color: #98551c;
+        border: 1px solid #f0d3b9;
+    }
+
+    @@media (max-width: 1100px) {
+        .inventory-filter-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @@media (max-width: 650px) {
+        .inventory-filter-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="page-heading">
+    <div>
+        <h1>Inventario de estudios</h1>
+        <p>Consulta de estudios realizados sin duplicar registros del sistema</p>
+    </div>
+</section>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="ris-alert danger">
+        <i class="bi bi-exclamation-triangle"></i>
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+        {
+            <span>@error.ErrorMessage</span>
+        }
+    </div>
+}
+
+<section class="ris-card filter-card">
+    <form method="get" class="inventory-filter-grid">
+        <div class="form-group-ris">
+            <label asp-for="InternalId">ID interno de radiología</label>
+            <input asp-for="InternalId" placeholder="Ej. RX-2026-00125" />
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="PatientId">ID del paciente</label>
+            <input asp-for="PatientId" placeholder="Código del paciente" />
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="PatientName">Nombre del paciente</label>
+            <input asp-for="PatientName" placeholder="Nombre o apellido" />
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="ReportStatus">Estado del informe</label>
+            <select asp-for="ReportStatus">
+                <option value="">Todos</option>
+                <option value="SIN_INFORME">Sin informe</option>
+                <option value="BORRADOR">Borrador</option>
+                <option value="FINALIZADO">Finalizado</option>
+            </select>
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="StudyCode">Código del estudio</label>
+            <input asp-for="StudyCode" placeholder="Ej. RX001" />
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="StudyName">Nombre del estudio</label>
+            <input asp-for="StudyName" placeholder="Nombre del estudio" />
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="From">Fecha inicial</label>
+            <input asp-for="From" type="date" />
+        </div>
+
+        <div class="form-group-ris">
+            <label asp-for="To">Fecha final</label>
+            <input asp-for="To" type="date" />
+        </div>
+
+        <div class="inventory-filter-actions">
+            <button type="submit" class="btn-ris-primary">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+            <a asp-page="/Inventory/Index" class="btn-ris-cancel">
+                Limpiar
+            </a>
+        </div>
+    </form>
+</section>
+
+<section class="ris-card mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <strong>@Model.Rows.Count</strong>
+            <span class="text-muted">estudio(s) encontrado(s)</span>
+        </div>
+
+        @if (!Model.CanManageReports)
+        {
+            <span class="text-muted small">
+                <i class="bi bi-box-seam"></i>
+                Bodega: préstamo / devolución
+            </span>
+        }
+    </div>
+
+    <div class="table-responsive">
+        <table class="ris-table">
+            <thead>
+                <tr>
+                    <th>ID interno</th>
+                    <th>Fecha</th>
+                    <th>Paciente</th>
+                    <th>Estudio</th>
+                    <th>Parte(s) del cuerpo</th>
+                    <th>Informe</th>
+                    <th>Préstamo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Rows.Count == 0)
+            {
+                <tr>
+                    <td colspan="8"
+                        class="text-center text-muted py-4">
+                        No se encontraron estudios realizados con los filtros seleccionados.
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var row in Model.Rows)
+                {
+                    var statusClass = row.EstadoInforme switch
+                    {
+                        "FINALIZADO" => "finalizado",
+                        "BORRADOR" => "borrador",
+                        _ => "sin-informe"
+                    };
+
+                    <tr>
+                        <td>
+                            @if (string.IsNullOrWhiteSpace(row.IdInternoRadiologia))
+                            {
+                                <span class="inventory-muted">Pendiente</span>
+                            }
+                            else
+                            {
+                                <span class="inventory-id">@row.IdInternoRadiologia</span>
+                            }
+                        </td>
+
+                        <td>
+                            @row.FechaRealizacion.ToString("dd/MM/yyyy")
+                            <div class="inventory-muted">
+                                @row.FechaRealizacion.ToString("HH:mm")
+                            </div>
+                        </td>
+
+                        <td>
+                            <strong>@row.Paciente</strong>
+                            <div class="inventory-muted">@row.IdPaciente</div>
+                        </td>
+
+                        <td>
+                            <strong>@row.NombrePrueba</strong>
+                            <div class="inventory-muted">
+                                @row.IdPrueba · @row.NombreCategoria
+                            </div>
+                        </td>
+
+                        <td>
+                            @(string.IsNullOrWhiteSpace(row.PartesCuerpo)
+                                ? "—"
+                                : row.PartesCuerpo)
+                        </td>
+
+                        <td>
+                            <span class="inventory-status @statusClass">
+                                @if (row.EstadoInforme == "FINALIZADO")
+                                {
+                                    <i class="bi bi-check-circle"></i>
+                                }
+                                else if (row.EstadoInforme == "BORRADOR")
+                                {
+                                    <i class="bi bi-pencil"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-file-earmark"></i>
+                                }
+                                @row.EstadoInformeTexto
+                            </span>
+
+                            @if (row.NumeroVersion > 0)
+                            {
+                                <div class="inventory-muted mt-1">
+                                    Versión @row.NumeroVersion
+                                </div>
+                            }
+                        </td>
+
+                        <td>
+                            @if (row.EstaPrestado)
+                            {
+                                <span class="loan-state borrowed">
+                                    <i class="bi bi-box-arrow-right"></i> Prestado
+                                </span>
+                                @if (!string.IsNullOrWhiteSpace(row.PrestatarioActivo))
+                                {
+                                    <div class="inventory-muted mt-1">
+                                        @row.PrestatarioActivo
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="loan-state available">
+                                    <i class="bi bi-check-circle"></i> Disponible
+                                </span>
+                            }
+                        </td>
+
+                        <td>
+                            <div class="inventory-actions">
+                                @if (Model.CanManageReports)
+                                {
+                                    <a asp-page="/Inventory/Detail"
+                                       asp-route-detailId="@row.IdDetalleCita"
+                                       class="inventory-action-link"
+                                       title="Ver detalle">
+                                        <i class="bi bi-eye"></i> Detalle
+                                    </a>
+
+                                    @if (row.EstadoInforme == "SIN_INFORME")
+                                    {
+                                        <a asp-page="/StudyReports/Edit"
+                                           asp-route-detailId="@row.IdDetalleCita"
+                                           class="inventory-action-link"
+                                           title="Crear informe">
+                                            <i class="bi bi-file-earmark-plus"></i> Crear informe
+                                        </a>
+                                    }
+                                    else if (row.EstadoInforme == "BORRADOR")
+                                    {
+                                        <a asp-page="/StudyReports/Edit"
+                                           asp-route-detailId="@row.IdDetalleCita"
+                                           class="inventory-action-link"
+                                           title="Continuar informe">
+                                            <i class="bi bi-pencil-square"></i> Continuar
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-page="/StudyReports/Edit"
+                                           asp-route-detailId="@row.IdDetalleCita"
+                                           class="inventory-action-link"
+                                           title="Ver informe">
+                                            <i class="bi bi-file-earmark-medical"></i> Ver informe
+                                        </a>
+                                    }
+                                }
+
+                                @if (Model.CanManageLoans)
+                                {
+                                    @if (row.EstaPrestado)
+                                    {
+                                        <a asp-page="/Loans/Return"
+                                           asp-route-loanId="@row.IdPrestamoActivo"
+                                           class="inventory-action-link"
+                                           title="Registrar devolución">
+                                            <i class="bi bi-box-arrow-in-left"></i> Devolver
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        @if (!string.IsNullOrWhiteSpace(row.IdInternoRadiologia))
+                                        {
+                                            <a asp-page="/Loans/Create"
+                                               asp-route-detailId="@row.IdDetalleCita"
+                                               class="inventory-action-link"
+                                               title="Registrar préstamo">
+                                                <i class="bi bi-box-arrow-right"></i> Prestar
+                                            </a>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

@@ -9,6 +9,13 @@ public sealed class AppointmentDetailItem
     public string? IdTecnico { get; set; }
     public string? Tecnico { get; set; }
     public string Estado { get; set; } = "";
+    public string PartesCuerpoTexto { get; set; } = "";
+
+    public int? IdInforme { get; set; }
+    public string? EstadoInforme { get; set; }
+    public int? NumeroVersionInforme { get; set; }
+
+    public List<BodyPartItem> PartesCuerpo { get; set; } = [];
 }
 
 public sealed class AppointmentDetail
@@ -24,10 +31,20 @@ public sealed class AppointmentDetail
     public DateTime FechaCita { get; set; }
     public TimeSpan HoraCita { get; set; }
     public string Estado { get; set; } = "";
+
+    public string TipoRegistro { get; set; } = "CITA";
+    public bool EsMovil { get; set; }
+
     public string? Observaciones { get; set; }
     public string UsuarioCreacion { get; set; } = "";
     public DateTime FechaCreacion { get; set; }
     public List<AppointmentDetailItem> Estudios { get; set; } = [];
+}
+
+public sealed class StudyBodyPartSelection
+{
+    public string IdPrueba { get; set; } = "";
+    public string IdParteCuerpo { get; set; } = "";
 }
 
 public class CreateAppointmentCommand
@@ -37,9 +54,14 @@ public class CreateAppointmentCommand
     public string IdServicio { get; set; } = "";
     public DateTime FechaCita { get; set; }
     public TimeSpan HoraCita { get; set; }
+
+    public string TipoRegistro { get; set; } = "CITA";
+    public bool EsMovil { get; set; }
+
     public string? Observaciones { get; set; }
     public string IdUsuario { get; set; } = "";
     public List<string> Estudios { get; set; } = [];
+    public List<StudyBodyPartSelection> EstudioPartes { get; set; } = [];
 }
 
 public sealed class UpdateAppointmentCommand : CreateAppointmentCommand

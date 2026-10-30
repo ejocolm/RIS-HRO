@@ -1,16 +1,16 @@
 @page
 @model RIS_HRO.Pages.Appointments.IndexModel
 @{
-    ViewData["Title"] = "Consultar citas";
+    ViewData["Title"] = "Solicitudes";
 }
 
 <section class="page-heading">
     <div>
-        <h1>Consultar citas</h1>
+        <h1>Solicitudes</h1>
         <p>Historial y seguimiento de programaciones radiológicas</p>
     </div>
     <a asp-page="/Appointments/Create" class="btn-ris-primary page-action">
-        <i class="bi bi-plus-lg"></i> Nueva cita
+        <i class="bi bi-plus-lg"></i> Nueva solicitud
     </a>
 </section>
 
@@ -67,7 +67,7 @@
             <tbody>
             @if (Model.Rows.Count == 0)
             {
-                <tr><td colspan="7" class="text-center text-muted py-4">No se encontraron citas.</td></tr>
+                <tr><td colspan="7" class="text-center text-muted py-4">No se encontraron solicitudes.</td></tr>
             }
             else
             {

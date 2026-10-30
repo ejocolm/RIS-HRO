@@ -1,22 +1,135 @@
 @page "{id:int}"
 @model RIS_HRO.Pages.Appointments.EditModel
 @{
-    ViewData["Title"] = "Modificar cita";
+    ViewData["Title"] = "Modificar solicitud";
 }
+
+<style>
+/* Estudios solicitados:
+   evitamos que un menú desplegable quede recortado dentro de .table-responsive. */
+@@media (min-width: 992px) {
+    .studies-card .table-responsive {
+        overflow: visible !important;
+    }
+}
+
+.studies-card .ris-table td {
+    vertical-align: middle;
+}
+
+.studies-report-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.print-choice-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.print-choice {
+    border: 1px solid #d8e2ef;
+    border-radius: 12px;
+    background: #f8fbff;
+    padding: 18px;
+    text-align: left;
+    text-decoration: none;
+    color: inherit;
+    transition: .15s ease;
+}
+
+.print-choice:hover {
+    border-color: #0d6efd;
+    background: #f1f7ff;
+    transform: translateY(-1px);
+}
+
+.print-choice i {
+    font-size: 1.4rem;
+    color: #0b63bd;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.print-choice strong {
+    display: block;
+    color: #0b4aa4;
+    margin-bottom: 4px;
+}
+
+.print-choice span {
+    display: block;
+    color: #718096;
+    font-size: .86rem;
+    line-height: 1.35;
+}
+
+@@media (max-width: 650px) {
+    .print-choice-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.registration-type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+.registration-type-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid #dbe4ec;
+    border-radius: 12px;
+    background: #f8fbfd;
+    cursor: pointer;
+}
+.registration-type-option input { margin-top: 4px; }
+.registration-type-option strong { display: block; }
+.registration-type-option small { display: block; color: #718096; margin-top: 2px; }
+.mobile-request-box {
+    border: 1px solid #cfe3f5;
+    background: #f4f9fd;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 18px;
+}
+.appointment-layout.request-mode { grid-template-columns: minmax(0, 1fr) !important; }
+@@media (max-width: 700px) { .registration-type-grid { grid-template-columns: 1fr; } }
+</style>
 
 <section class="page-heading">
     <div>
-        <h1>Modificar cita</h1>
-        <p>@Model.Number - actualización de fecha, hora y estudios</p>
+        <h1>Modificar solicitud</h1>
+        <p>@Model.Number - seguimiento de la solicitud y sus estudios</p>
     </div>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 flex-wrap">
         <a asp-page="/Appointments/Edit" asp-page-handler="Pdf" asp-route-id="@Model.Id"
            class="btn-ris-outline"><i class="bi bi-file-earmark-pdf"></i> Constancia</a>
-        <button type="submit" form="appointmentForm" class="btn-ris-primary">
-            <i class="bi bi-check-lg"></i> Guardar cambios
-        </button>
+        @if (Model.CanEditAppointment)
+        {
+            <button type="submit" form="appointmentForm" class="btn-ris-primary">
+                <i class="bi bi-check-lg"></i> Guardar cambios
+            </button>
+        }
     </div>
 </section>
+
+@if (TempData["Success"] is string successMessage)
+{
+    <div class="ris-alert success"><i class="bi bi-check-circle"></i> @successMessage</div>
+}
+
+@if (TempData["Error"] is string tempError)
+{
+    <div class="ris-alert error"><i class="bi bi-exclamation-triangle"></i> @tempError</div>
+}
 
 @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
 {
@@ -26,74 +139,123 @@
 <form method="post" id="appointmentForm">
     <input type="hidden" asp-for="Id" />
     <input asp-for="StudyIdsCsv" type="hidden" id="studyIdsCsv" />
+    <input asp-for="StudyBodyPartsJson" type="hidden" id="studyBodyPartsJson" />
 
-    <div class="appointment-layout">
+    <div id="appointmentLayout" class="@(Model.CanEditAppointment ? "appointment-layout" : "")">
         <div class="appointment-left">
             <section class="ris-card">
                 <header class="card-heading">
-                    <i class="bi bi-calendar2-check"></i><h2>Datos generales de la cita</h2>
+                    <i class="bi bi-calendar2-check"></i><h2>Datos generales</h2>
                 </header>
 
-                <div class="appointment-top-grid">
-                    <div class="form-group-ris">
-                        <label>Número de cita</label>
-                        <input value="@Model.Number" readonly />
+                <fieldset disabled="@(!Model.CanEditAppointment)" style="border:0;padding:0;margin:0;min-width:0;">
+
+                    <div class="registration-type-grid">
+                        <label class="registration-type-option">
+                            <input asp-for="TipoRegistro" type="radio" value="SOLICITUD_DIA" />
+                            <span>
+                                <strong>Solicitud del día</strong>
+                                <small>Registro durante la jornada que no consume cupo de agenda.</small>
+                            </span>
+                        </label>
+
+                        <label class="registration-type-option">
+                            <input asp-for="TipoRegistro" type="radio" value="CITA" />
+                            <span>
+                                <strong>Cita programada</strong>
+                                <small>Utiliza la agenda y valida los cupos disponibles.</small>
+                            </span>
+                        </label>
                     </div>
-                    <div class="form-group-ris">
-                        <label asp-for="AppointmentDate">Fecha de cita</label>
-                        <input asp-for="AppointmentDate" type="date" id="appointmentDate" />
+
+                    <div id="mobileStudyWrapper"
+                         class="mobile-request-box @(Model.TipoRegistro == "SOLICITUD_DIA" ? "" : "d-none")">
+                        <div class="form-check">
+                            <input asp-for="EsMovil" class="form-check-input" type="checkbox" id="isMobile" />
+                            <label asp-for="EsMovil" class="form-check-label">
+                                        <strong>Solicitud móvil</strong>
+                                        <span class="d-block small text-muted">
+                                            Marque esta opción cuando el equipo de radiología deba trasladarse al servicio hospitalario.
+                                        </span>
+                            </label>
+                        </div>
                     </div>
-                    <div class="form-group-ris">
-                        <label asp-for="AppointmentTime">Hora de cita</label>
-                        <input asp-for="AppointmentTime" type="time" />
+
+                    <div class="appointment-top-grid">
+                        <div class="form-group-ris">
+                            <label>Número de solicitud</label>
+                            <input value="@Model.Number" readonly />
+                        </div>
+                        <div class="form-group-ris">
+                            <label asp-for="AppointmentDate">Fecha de solicitud</label>
+                            <input asp-for="AppointmentDate" type="date" id="appointmentDate" />
+                        </div>
+                        <div class="form-group-ris">
+                            <label asp-for="AppointmentTime">Hora de solicitud</label>
+                            <input asp-for="AppointmentTime" type="time" id="appointmentTime" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group-ris">
-                    <label>Paciente</label>
-                    <input value="@Model.PatientId - @Model.PatientName" readonly />
-                    <input asp-for="PatientId" type="hidden" id="patientId" />
-                </div>
+                    <div class="form-group-ris">
+                        <label>Paciente</label>
+                        <input value="@Model.PatientId - @Model.PatientName" readonly />
+                        <input asp-for="PatientId" type="hidden" id="patientId" />
+                    </div>
 
-                <div class="form-group-ris">
-                    <label asp-for="DoctorId">Médico solicitante</label>
-                    <select asp-for="DoctorId">
-                        @foreach (var doctor in Model.Doctors)
-                        {
-                            <option value="@doctor.IdMedico">@doctor.IdMedico - @doctor.NombreCompleto</option>
-                        }
-                    </select>
-                </div>
+                    <div class="form-group-ris">
+                        <label asp-for="DoctorId">Médico solicitante</label>
+                        <select asp-for="DoctorId">
+                            @foreach (var doctor in Model.Doctors)
+                            {
+                                <option value="@doctor.IdMedico">@doctor.IdMedico - @doctor.NombreCompleto</option>
+                            }
+                        </select>
+                    </div>
 
-                <div class="form-group-ris">
-                    <label asp-for="ServiceId">Servicio hospitalario</label>
-                    <select asp-for="ServiceId">
-                        @foreach (var service in Model.Services)
-                        {
-                            <option value="@service.IdServicio">@service.IdServicio - @service.NombreServicio</option>
-                        }
-                    </select>
-                </div>
+                    <div class="form-group-ris">
+                        <label asp-for="ServiceId">Servicio hospitalario</label>
+                        <select asp-for="ServiceId">
+                            @foreach (var service in Model.Services)
+                            {
+                                <option value="@service.IdServicio">@service.IdServicio - @service.NombreServicio</option>
+                            }
+                        </select>
+                    </div>
 
-                <div class="form-group-ris">
-                    <label asp-for="Observations">Observaciones</label>
-                    <textarea asp-for="Observations" rows="3" maxlength="500"></textarea>
-                </div>
+                    <div class="form-group-ris">
+                        <label asp-for="Observations">Observaciones</label>
+                        <textarea asp-for="Observations" rows="3" maxlength="500"></textarea>
+                    </div>
+                </fieldset>
 
-                <div class="form-group-ris">
+                <div class="form-group-ris mb-0">
                     <label>Estado actual</label>
-                    <div class="d-flex gap-2 flex-wrap">
+                    <div class="d-flex gap-2 flex-wrap align-items-center">
                         <span class="status-pill status-@Model.Status.ToLowerInvariant()">@Model.Status</span>
+
                         @if (Model.Status == "PROGRAMADA")
                         {
-                            <button formaction="?handler=ChangeStatus&id=@Model.Id&status=ATENDIDA" formmethod="post" class="btn-ris-outline" type="submit">
-                                Marcar atendida
+                            <button type="button"
+                                    class="btn-ris-outline"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#attendAppointmentModal">
+                                <i class="bi bi-check2-square"></i> Marcar atendida
                             </button>
-                            <button formaction="?handler=ChangeStatus&id=@Model.Id&status=NO_ASISTIO" formmethod="post" class="btn-ris-outline" type="submit">
+
+                            <button formaction="?handler=ChangeStatus&id=@Model.Id&status=NO_ASISTIO"
+                                    formmethod="post"
+                                    class="btn-ris-outline"
+                                    type="submit"
+                                    onclick="return confirm('¿Desea marcar esta solicitud como NO ASISTIÓ?');">
                                 No asistió
                             </button>
-                            <button formaction="?handler=ChangeStatus&id=@Model.Id&status=CANCELADA" formmethod="post" class="btn-danger-soft" type="submit">
-                                Cancelar cita
+
+                            <button formaction="?handler=ChangeStatus&id=@Model.Id&status=CANCELADA"
+                                    formmethod="post"
+                                    class="btn-danger-soft"
+                                    type="submit"
+                                    onclick="return confirm('¿Desea cancelar esta solicitud?');">
+                                Cancelar solicitud
                             </button>
                         }
                     </div>
@@ -105,97 +267,471 @@
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-file-earmark-medical"></i><h2>Estudios solicitados</h2>
                     </div>
-                    <div class="study-actions">
-                        <input type="text" id="studyCode" placeholder="Código del estudio" />
-                        <button type="button" class="btn-ris-outline" id="btnAddStudyCode"><i class="bi bi-plus-lg"></i> Agregar</button>
-                        <button type="button" class="btn-ris-outline" data-bs-toggle="modal" data-bs-target="#studyModal">
-                            <i class="bi bi-search"></i> Buscar estudio
+
+                    @if (Model.CanEditAppointment)
+                    {
+                        <div class="study-actions">
+                            <input type="text" id="studyCode" placeholder="Código del estudio" />
+                            <button type="button" class="btn-ris-outline" id="btnAddStudyCode">
+                                <i class="bi bi-plus-lg"></i> Agregar
+                            </button>
+                            <button type="button" class="btn-ris-outline" data-bs-toggle="modal" data-bs-target="#studyModal">
+                                <i class="bi bi-search"></i> Buscar estudio
+                            </button>
+                        </div>
+                    }
+                </header>
+
+                @if (Model.CanEditAppointment)
+                {
+                    <div class="table-responsive">
+                        <table class="ris-table">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Estudio</th>
+                                    <th>Categoría</th>
+                                    <th>Partes del cuerpo</th>
+                                    <th>Técnico</th>
+                                    <th>Informe</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studiesBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="capacity-note" id="capacityNote">
+                        <i class="bi bi-info-circle"></i>
+                        Cada estudio debe tener al menos una parte del cuerpo. Varias partes anatómicas siguen consumiendo un solo cupo.
+                    </div>
+
+                    <div class="form-bottom-actions">
+                        <a asp-page="/Appointments/Index" class="btn-ris-cancel">Volver</a>
+                        <button type="submit" class="btn-ris-primary">
+                            <i class="bi bi-check-lg"></i> Guardar cambios
                         </button>
                     </div>
-                </header>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="ris-table">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Estudio</th>
+                                    <th>Partes del cuerpo</th>
+                                    <th>Estado del estudio</th>
+                                    <th>Informe</th>
+                                    @if (Model.Status == "ATENDIDA")
+                                    {
+                                        <th>Corrección</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var study in Model.AppointmentStudies)
+                                {
+                                    var studyStatusClass = study.Estado switch
+                                    {
+                                        "REALIZADO" => "text-bg-success",
+                                        "NO_REALIZADO" => "text-bg-warning",
+                                        "CANCELADO" => "text-bg-secondary",
+                                        _ => "text-bg-light border"
+                                    };
+                                    <tr>
+                                        <td><strong>@study.IdPrueba</strong></td>
+                                        <td>
+                                            @study.NombrePrueba
+                                            <div class="small text-muted">@study.NombreCategoria</div>
+                                        </td>
+                                        <td>
+                                            @if (study.PartesCuerpo.Count > 0)
+                                            {
+                                                <div class="d-flex flex-wrap gap-1">
+                                                    @foreach (var part in study.PartesCuerpo)
+                                                    {
+                                                        <span class="badge text-bg-light border">@part.NombreParte</span>
+                                                    }
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Sin especificar</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <span class="badge @studyStatusClass">@study.Estado</span>
+                                        </td>
+                                        <td>
+                                            @if (Model.Status != "ATENDIDA")
+                                            {
+                                                <span class="text-muted">Solicitud no atendida</span>
+                                            }
+                                            else if (study.Estado == "REALIZADO")
+                                            {
+                                                @if (!Model.CanManageReports)
+                                                {
+                                                    <span class="text-muted">Requiere permiso de informes</span>
+                                                }
+                                                else if (!study.IdInforme.HasValue)
+                                                {
+                                                    <a asp-page="/StudyReports/Edit" asp-route-detailId="@study.IdDetalleCita"
+                                                       class="btn-ris-small">
+                                                        <i class="bi bi-file-earmark-plus"></i> Crear informe
+                                                    </a>
+                                                }
+                                                else if (study.EstadoInforme == "BORRADOR")
+                                                {
+                                                    <a asp-page="/StudyReports/Edit" asp-route-detailId="@study.IdDetalleCita"
+                                                       class="btn-ris-small">
+                                                        <i class="bi bi-pencil-square"></i> Continuar informe
+                                                    </a>
+                                                    <div class="small text-muted mt-1">Borrador · Versión @(study.NumeroVersionInforme ?? 1)</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="studies-report-actions">
+                                                        <a asp-page="/StudyReports/Edit"
+                                                           asp-route-detailId="@study.IdDetalleCita"
+                                                           class="btn-ris-outline">
+                                                            <i class="bi bi-eye"></i> Ver
+                                                        </a>
 
-                <div class="table-responsive">
-                    <table class="ris-table">
-                        <thead><tr><th>Código</th><th>Estudio</th><th>Categoría</th><th>Técnico</th><th>Acción</th></tr></thead>
-                        <tbody id="studiesBody"></tbody>
-                    </table>
-                </div>
+                                                        @if ((study.NumeroVersionInforme ?? 1) > 1)
+                                                        {
+                                                            <a asp-page="/StudyReports/History"
+                                                               asp-route-detailId="@study.IdDetalleCita"
+                                                               class="btn-ris-outline">
+                                                                <i class="bi bi-clock-history"></i> Historial
+                                                            </a>
+                                                        }
 
-                <div class="capacity-note">
-                    <i class="bi bi-info-circle"></i>
-                    Al cambiar la fecha o los estudios, la disponibilidad se vuelve a validar.
-                </div>
+                                                        <button type="button"
+                                                                class="btn-ris-outline btn-print-report"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#printReportModal"
+                                                                data-detail-id="@study.IdDetalleCita"
+                                                                data-study="@($"{study.IdPrueba} - {study.NombrePrueba}")">
+                                                            <i class="bi bi-printer"></i> Imprimir
+                                                        </button>
+                                                    </div>
+                                                    <div class="small text-muted mt-1">
+                                                        Finalizado · Versión @(study.NumeroVersionInforme ?? 1)
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Estudio no realizado</span>
+                                            }
+                                        </td>
 
-                <div class="form-bottom-actions">
-                    <a asp-page="/Appointments/Index" class="btn-ris-cancel">Volver</a>
-                    <button type="submit" class="btn-ris-primary"><i class="bi bi-check-lg"></i> Guardar cambios</button>
-                </div>
+                                        @if (Model.Status == "ATENDIDA")
+                                        {
+                                            <td>
+                                                @if (study.Estado == "NO_REALIZADO")
+                                                {
+                                                    <button type="submit"
+                                                            class="btn-ris-small"
+                                                            formaction="?handler=ChangeStudyStatus&id=@Model.Id&detailId=@study.IdDetalleCita&newStatus=REALIZADO"
+                                                            formmethod="post"
+                                                            onclick="return confirm('¿Confirma que este estudio sí fue REALIZADO? El cambio quedará registrado.');">
+                                                        Marcar realizado
+                                                    </button>
+                                                }
+                                                else if (study.Estado == "REALIZADO" && !study.IdInforme.HasValue)
+                                                {
+                                                    <button type="submit"
+                                                            class="btn-ris-outline"
+                                                            formaction="?handler=ChangeStudyStatus&id=@Model.Id&detailId=@study.IdDetalleCita&newStatus=NO_REALIZADO"
+                                                            formmethod="post"
+                                                            onclick="return confirm('¿Confirma que este estudio NO fue realizado? El cambio quedará registrado.');">
+                                                        Marcar no realizado
+                                                    </button>
+                                                }
+                                                else if (study.Estado == "REALIZADO" && study.IdInforme.HasValue)
+                                                {
+                                                    <span class="small text-muted">No puede cambiarse mientras tenga informe.</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">—</span>
+                                                }
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="capacity-note mt-3">
+                        <i class="bi bi-info-circle"></i>
+                        Los cambios REALIZADO / NO_REALIZADO quedan registrados con usuario y fecha/hora.
+                    </div>
+
+                    <div class="form-bottom-actions">
+                        <a asp-page="/Appointments/Index" class="btn-ris-cancel">Volver</a>
+                    </div>
+                }
             </section>
         </div>
 
-        <div class="appointment-right">
-            <section class="ris-card calendar-card">
-                <header class="card-heading">
-                    <i class="bi bi-calendar2-plus"></i>
-                    <div><h2>Disponibilidad de citas</h2><span>El cálculo excluye la cita que se está editando</span></div>
-                </header>
+        @if (Model.CanEditAppointment)
+        {
+            <div class="appointment-right" id="availabilityColumn">
+                <section class="ris-card calendar-card">
+                    <header class="card-heading">
+                        <i class="bi bi-calendar2-plus"></i>
+                        <div><h2>Disponibilidad de citas programadas</h2><span>El cálculo excluye el registro que se está editando</span></div>
+                    </header>
 
-                <div class="calendar-toolbar">
-                    <button type="button" id="prevMonth"><i class="bi bi-chevron-left"></i></button>
-                    <strong id="calendarMonthTitle"></strong>
-                    <button type="button" id="nextMonth"><i class="bi bi-chevron-right"></i></button>
-                </div>
-                <div class="calendar-week">
-                    <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
-                </div>
-                <div id="calendarGrid" class="calendar-grid"></div>
-                <div class="calendar-legend">
-                    <span><i class="legend-dot green"></i> Alta disponibilidad</span>
-                    <span><i class="legend-dot yellow"></i> Pocos cupos</span>
-                    <span><i class="legend-dot red"></i> Cupo completo</span>
-                    <span><i class="legend-dot gray"></i> Sin configuración</span>
-                </div>
-            </section>
+                    <div class="calendar-toolbar">
+                        <button type="button" id="prevMonth"><i class="bi bi-chevron-left"></i></button>
+                        <strong id="calendarMonthTitle"></strong>
+                        <button type="button" id="nextMonth"><i class="bi bi-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-week">
+                        <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+                    </div>
+                    <div id="calendarGrid" class="calendar-grid"></div>
+                    <div class="calendar-legend">
+                        <span><i class="legend-dot green"></i> Alta disponibilidad</span>
+                        <span><i class="legend-dot yellow"></i> Pocos cupos</span>
+                        <span><i class="legend-dot red"></i> Cupo completo</span>
+                        <span><i class="legend-dot gray"></i> Sin configuración</span>
+                    </div>
+                </section>
 
-            <section class="ris-card date-detail-card">
-                <h2>Detalle del <span id="detailDateTitle">día seleccionado</span></h2>
-                <div id="availabilityDetails"></div>
-                <div id="availabilityMessage" class="availability-message neutral">
-                    <i class="bi bi-info-circle"></i><span>Seleccione los estudios y una fecha.</span>
-                </div>
-            </section>
-        </div>
+                <section class="ris-card date-detail-card">
+                    <h2>Detalle del <span id="detailDateTitle">día seleccionado</span></h2>
+                    <div id="availabilityDetails"></div>
+                    <div id="availabilityMessage" class="availability-message neutral">
+                        <i class="bi bi-info-circle"></i><span>Seleccione los estudios y una fecha.</span>
+                    </div>
+                </section>
+            </div>
+        }
     </div>
 </form>
 
-<div class="modal fade" id="studyModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content ris-modal">
-            <div class="modal-header">
-                <h5 class="modal-title">Buscar estudio</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="input-icon-wrap">
-                    <i class="bi bi-search"></i>
-                    <input id="studySearchText" placeholder="Busque por código o nombre..." />
+@if (Model.Status == "ATENDIDA")
+{
+    <div class="modal fade" id="printReportModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content ris-modal">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1">Imprimir informe</h5>
+                        <div class="small text-muted" id="printReportStudy">
+                            Seleccione el formato de impresión.
+                        </div>
+                    </div>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Cerrar"></button>
                 </div>
-                <div class="table-responsive mt-3">
-                    <table class="ris-table">
-                        <thead><tr><th>Código</th><th>Estudio</th><th>Categoría</th><th></th></tr></thead>
-                        <tbody id="studySearchBody"></tbody>
-                    </table>
+
+                <div class="modal-body">
+                    <div class="print-choice-grid">
+                        <a href="#"
+                           target="_blank"
+                           rel="noopener"
+                           id="printWithHeader"
+                           class="print-choice">
+                            <i class="bi bi-file-earmark-image"></i>
+                            <strong>Con encabezado</strong>
+                            <span>Utiliza la imagen institucional configurada para los informes.</span>
+                        </a>
+
+                        <a href="#"
+                           target="_blank"
+                           rel="noopener"
+                           id="printWithoutHeader"
+                           class="print-choice">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <strong>Sin encabezado</strong>
+                            <span>Genera el informe sin la imagen institucional.</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn-ris-cancel"
+                            data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}
+
+@if (Model.Status == "PROGRAMADA")
+{
+    <div class="modal fade" id="attendAppointmentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content ris-modal">
+                <form method="post" asp-page-handler="Attend">
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <div class="modal-header">
+                        <div>
+                            <h5 class="modal-title mb-1">Marcar cita como atendida</h5>
+                            <div class="small text-muted">Seleccione únicamente los estudios que realmente se realizaron.</div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="ris-alert success mb-3">
+                            <i class="bi bi-info-circle"></i>
+                            <span>Los estudios seleccionados quedarán como REALIZADO. Los demás quedarán como NO_REALIZADO.</span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            @foreach (var study in Model.AppointmentStudies.Where(x => x.Estado == "PENDIENTE"))
+                            {
+                                <label class="border rounded-3 p-3 d-flex gap-3 align-items-start" style="cursor:pointer;">
+                                    <input class="form-check-input mt-1"
+                                           type="checkbox"
+                                           name="realizedStudyIds"
+                                           value="@study.IdDetalleCita" />
+                                    <span>
+                                        <strong>@study.IdPrueba - @study.NombrePrueba</strong>
+                                        <span class="d-block small text-muted">
+                                            @(string.IsNullOrWhiteSpace(study.PartesCuerpoTexto) ? "Parte del cuerpo sin especificar" : study.PartesCuerpoTexto)
+                                        </span>
+                                    </span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-ris-cancel" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn-ris-primary"
+                                onclick="return confirm('¿Confirma la atención de la solicitud y los estudios seleccionados?');">
+                            <i class="bi bi-check2-circle"></i> Confirmar atención
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="studyModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content ris-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title">Buscar estudio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-icon-wrap">
+                        <i class="bi bi-search"></i>
+                        <input id="studySearchText" placeholder="Busque por código o nombre..." />
+                    </div>
+                    <div class="table-responsive mt-3">
+                        <table class="ris-table">
+                            <thead><tr><th>Código</th><th>Estudio</th><th>Categoría</th><th></th></tr></thead>
+                            <tbody id="studySearchBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="bodyPartModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content ris-modal">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title mb-1">Partes del cuerpo</h5>
+                        <div class="small text-muted" id="bodyPartStudyTitle"></div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-icon-wrap mb-3">
+                        <i class="bi bi-search"></i>
+                        <input id="bodyPartSearchText" placeholder="Buscar parte del cuerpo..." autocomplete="off" />
+                    </div>
+
+                    <div id="bodyPartOptions" class="row g-2"></div>
+
+                    <div id="bodyPartEmpty" class="text-center text-muted py-4 d-none">
+                        No se encontraron partes del cuerpo.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <span class="me-auto small text-muted">
+                        Debe seleccionar por lo menos una parte del cuerpo.
+                    </span>
+                    <button type="button" class="btn-ris-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn-ris-primary" id="btnSaveBodyParts">
+                        <i class="bi bi-check-lg"></i> Aplicar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @section Scripts {
+@if (Model.Status == "ATENDIDA")
+{
+<script>
+(() => {
+    const modal = document.getElementById('printReportModal');
+    if (!modal) return;
+
+    modal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        if (!button) return;
+
+        const detailId = button.getAttribute('data-detail-id');
+        const study = button.getAttribute('data-study') || 'Informe radiológico';
+
+        const title = document.getElementById('printReportStudy');
+        const withHeader = document.getElementById('printWithHeader');
+        const withoutHeader = document.getElementById('printWithoutHeader');
+
+        if (title) {
+            title.textContent = study;
+        }
+
+        if (detailId) {
+            const baseUrl = `/StudyReports/Edit/${encodeURIComponent(detailId)}`;
+
+            if (withHeader) {
+                withHeader.href = `${baseUrl}?handler=Print&withHeader=true`;
+            }
+
+            if (withoutHeader) {
+                withoutHeader.href = `${baseUrl}?handler=Print&withHeader=false`;
+            }
+        }
+    });
+})();
+</script>
+}
+@if (Model.CanEditAppointment)
+{
 <script>
 window.excludeAppointmentId = @Model.Id;
+window.showReportColumn = true;
+window.reportUnavailableText = 'Solicitud no atendida';
 window.initialStudies = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.InitialStudies,
+    new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }));
+window.bodyParts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.BodyParts,
     new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }));
 </script>
 <script src="~/js/appointments-create.js" asp-append-version="true"></script>
+}
 }

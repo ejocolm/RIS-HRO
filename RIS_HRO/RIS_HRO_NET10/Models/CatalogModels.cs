@@ -3,10 +3,12 @@ namespace RIS_HRO.Models;
 public enum CatalogType
 {
     Medicos,
+    MedicosInformantes,
     Tecnicos,
     Servicios,
     Categorias,
     Pruebas,
+    PartesCuerpo,
     Roles
 }
 
@@ -52,11 +54,18 @@ public sealed class HospitalServiceItem
     public string NombreServicio { get; set; } = "";
 }
 
+public sealed class BodyPartItem
+{
+    public string IdParteCuerpo { get; set; } = "";
+    public string NombreParte { get; set; } = "";
+}
+
 public sealed class StudyItem
 {
     public string IdPrueba { get; set; } = "";
     public string NombrePrueba { get; set; } = "";
     public string NombreCategoria { get; set; } = "";
+    public List<BodyPartItem> PartesCuerpo { get; set; } = [];
 }
 
 public sealed class CategoryItem

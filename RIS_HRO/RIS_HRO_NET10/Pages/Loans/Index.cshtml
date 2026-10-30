@@ -1,0 +1,383 @@
+@page
+@model RIS_HRO.Pages.Loans.IndexModel
+
+@{
+    ViewData["Title"] = "Préstamos";
+}
+
+<style>
+    .loan-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: .78rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+        .loan-status.prestado {
+            color: #99591f;
+            background: #fff4ea;
+            border: 1px solid #efd4bd;
+        }
+
+        .loan-status.devuelto {
+            color: #247044;
+            background: #edf8f1;
+            border: 1px solid #cfe9d8;
+        }
+
+    .loan-summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .loan-summary-item {
+        background: #f8fbfd;
+        border: 1px solid #dde6ee;
+        border-radius: 20px;
+        padding: 7px 13px;
+        font-size: .87rem;
+    }
+
+    .loan-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .loan-muted {
+        color: #7a8794;
+        font-size: .84rem;
+    }
+</style>
+
+
+<section class="page-heading">
+    <div>
+        <h1>Préstamos</h1>
+        <p>Consulta, seguimiento e historial de materiales físicos prestados</p>
+    </div>
+</section>
+
+
+@if (TempData["Success"] is string success)
+{
+    <div class="ris-alert success">
+        <i class="bi bi-check-circle"></i>
+        <div>@success</div>
+    </div>
+}
+
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="ris-alert danger">
+        <i class="bi bi-exclamation-triangle"></i>
+
+        <div>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+            {
+                <div>@error.ErrorMessage</div>
+            }
+        </div>
+    </div>
+}
+
+
+<section class="ris-card filter-card">
+
+    <form method="get">
+
+        <div class="row g-3 align-items-end">
+
+            <div class="col-md-2">
+                <div class="form-group-ris">
+                    <label asp-for="From">Fecha inicial</label>
+                    <input asp-for="From" type="date" />
+                </div>
+            </div>
+
+
+            <div class="col-md-2">
+                <div class="form-group-ris">
+                    <label asp-for="To">Fecha final</label>
+                    <input asp-for="To" type="date" />
+                </div>
+            </div>
+
+
+            <div class="col-md-2">
+                <div class="form-group-ris">
+                    <label asp-for="PatientId">ID del paciente</label>
+                    <input asp-for="PatientId"
+                           placeholder="ID del paciente" />
+                </div>
+            </div>
+
+
+            <div class="col-md-3">
+                <div class="form-group-ris">
+                    <label asp-for="InternalId">ID interno del estudio</label>
+                    <input asp-for="InternalId"
+                           placeholder="ID de radiología" />
+                </div>
+            </div>
+
+
+            <div class="col-md-3">
+                <div class="form-group-ris">
+                    <label asp-for="Status">Estado</label>
+
+                    <select asp-for="Status">
+                        <option value="">Todos</option>
+                        <option value="PRESTADO">Prestado</option>
+                        <option value="DEVUELTO">Devuelto</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="d-flex gap-2 mt-3">
+
+            <button type="submit"
+                    class="btn-ris-primary">
+                <i class="bi bi-search"></i>
+                Buscar
+            </button>
+
+
+            <a asp-page="/Loans/Index"
+               class="btn-ris-cancel">
+                <i class="bi bi-x-circle"></i>
+                Limpiar
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<section class="ris-card mt-3">
+
+    <div class="loan-summary">
+
+        <div class="loan-summary-item">
+            <i class="bi bi-list-ul"></i>
+            <strong>@Model.Rows.Count</strong>
+            resultado(s)
+        </div>
+
+
+        <div class="loan-summary-item">
+            <i class="bi bi-box-arrow-right"></i>
+            <strong>@Model.Prestados</strong>
+            prestado(s)
+        </div>
+
+
+        <div class="loan-summary-item">
+            <i class="bi bi-check-circle"></i>
+            <strong>@Model.Devueltos</strong>
+            devuelto(s)
+        </div>
+
+    </div>
+
+
+    <div class="table-responsive">
+
+        <table class="ris-table">
+
+            <thead>
+                <tr>
+                    <th>Préstamo</th>
+                    <th>ID interno</th>
+                    <th>Paciente / estudio</th>
+                    <th>Prestatario</th>
+                    <th>Fecha préstamo</th>
+                    <th>Estado</th>
+                    <th>Fecha devolución</th>
+                    <th>Días</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+
+            <tbody>
+
+                @if (Model.Rows.Count == 0)
+                {
+                    <tr>
+                        <td colspan="9"
+                            class="text-center text-muted py-4">
+                            No se encontraron préstamos con los filtros seleccionados.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var row in Model.Rows)
+                    {
+                        <tr>
+
+                            <td>
+                                <strong>#@row.IdPrestamo</strong>
+                            </td>
+
+
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(row.IdInternoRadiologia))
+                                {
+                                    <strong>@row.IdInternoRadiologia</strong>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+
+
+                            <td>
+
+                                <strong>@row.Paciente</strong>
+
+                                <div class="loan-muted">
+                                    @row.IdPaciente
+                                </div>
+
+                                <div class="mt-1">
+                                    @row.NombrePrueba
+                                </div>
+
+                                <div class="loan-muted">
+                                    @row.IdPrueba
+
+                                    @if (!string.IsNullOrWhiteSpace(row.PartesCuerpo))
+                                    {
+                                        <span> · @row.PartesCuerpo</span>
+                                    }
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <strong>@row.Prestatario</strong>
+
+                                <div class="loan-muted">
+                                    @row.IdPrestatario
+                                </div>
+
+                                @if (!string.IsNullOrWhiteSpace(row.TelefonoPrestatario))
+                                {
+                                    <div class="loan-muted">
+                                        @row.TelefonoPrestatario
+                                    </div>
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                @row.FechaHoraPrestamo.ToString("dd/MM/yyyy")
+
+                                <div class="loan-muted">
+                                    @row.FechaHoraPrestamo.ToString("HH:mm")
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                @if (row.EstaPrestado)
+                                {
+                                    <span class="loan-status prestado">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        Prestado
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="loan-status devuelto">
+                                        <i class="bi bi-check-circle"></i>
+                                        Devuelto
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                @if (row.FechaHoraDevolucion.HasValue)
+                                {
+                                    <span>
+                                        @row.FechaHoraDevolucion.Value.ToString("dd/MM/yyyy")
+                                    </span>
+
+                                    <div class="loan-muted">
+                                        @row.FechaHoraDevolucion.Value.ToString("HH:mm")
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+
+                            </td>
+
+
+                            <td>
+                                <strong>@row.DiasPrestamo</strong>
+                            </td>
+
+
+                            <td>
+
+                                <div class="loan-actions">
+
+                                    <a asp-page="/Loans/Detail"
+                                       asp-route-loanId="@row.IdPrestamo"
+                                       class="btn-ris-outline">
+                                        <i class="bi bi-eye"></i>
+                                        Ver
+                                    </a>
+
+
+                                    @if (row.EstaPrestado)
+                                    {
+                                        <a asp-page="/Loans/Return"
+                                           asp-route-loanId="@row.IdPrestamo"
+                                           class="btn-ris-primary">
+                                            <i class="bi bi-box-arrow-in-left"></i>
+                                            Devolver
+                                        </a>
+                                    }
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>

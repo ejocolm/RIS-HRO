@@ -185,13 +185,39 @@ public sealed class CatalogRepository
         return result;
     }
 
+    public async Task<List<BodyPartItem>> GetBodyPartsAsync(string? q = null, CancellationToken ct = default)
+    {
+        var result = new List<BodyPartItem>();
+        await using var cn = _factory.Create();
+        await using var cmd = new SqlCommand("dbo.sp_ParteCuerpo_Buscar", cn)
+        { CommandType = CommandType.StoredProcedure };
+
+        cmd.Parameters.Add("@Texto", SqlDbType.VarChar, 120).Value = (object?)q ?? DBNull.Value;
+        cmd.Parameters.Add("@SoloActivos", SqlDbType.Bit).Value = true;
+
+        await cn.OpenAsync(ct);
+        await using var r = await cmd.ExecuteReaderAsync(ct);
+        while (await r.ReadAsync(ct))
+        {
+            result.Add(new BodyPartItem
+            {
+                IdParteCuerpo = r.GetString(r.GetOrdinal("IdParteCuerpo")),
+                NombreParte = r.GetString(r.GetOrdinal("NombreParte"))
+            });
+        }
+
+        return result;
+    }
+
     private static string GetListProc(CatalogType type) => type switch
     {
         CatalogType.Medicos => "dbo.sp_Medico_Listar",
+        CatalogType.MedicosInformantes => "dbo.sp_MedicoInformante_ListarUI",
         CatalogType.Tecnicos => "dbo.sp_Tecnico_Listar",
         CatalogType.Servicios => "dbo.sp_Servicio_Listar",
         CatalogType.Categorias => "dbo.sp_Categoria_Listar",
         CatalogType.Pruebas => "dbo.sp_Prueba_Listar",
+        CatalogType.PartesCuerpo => "dbo.sp_ParteCuerpo_ListarUI",
         CatalogType.Roles => "dbo.sp_Rol_Listar",
         _ => throw new ArgumentOutOfRangeException(nameof(type))
     };
@@ -199,10 +225,12 @@ public sealed class CatalogRepository
     private static string GetGetProc(CatalogType type) => type switch
     {
         CatalogType.Medicos => "dbo.sp_Medico_Obtener",
+        CatalogType.MedicosInformantes => "dbo.sp_MedicoInformante_ObtenerUI",
         CatalogType.Tecnicos => "dbo.sp_Tecnico_Obtener",
         CatalogType.Servicios => "dbo.sp_Servicio_Obtener",
         CatalogType.Categorias => "dbo.sp_Categoria_Obtener",
         CatalogType.Pruebas => "dbo.sp_Prueba_Obtener",
+        CatalogType.PartesCuerpo => "dbo.sp_ParteCuerpo_ObtenerUI",
         CatalogType.Roles => "dbo.sp_Rol_Obtener",
         _ => throw new ArgumentOutOfRangeException(nameof(type))
     };
@@ -210,10 +238,12 @@ public sealed class CatalogRepository
     private static string GetSaveProc(CatalogType type) => type switch
     {
         CatalogType.Medicos => "dbo.sp_Medico_Guardar",
+        CatalogType.MedicosInformantes => "dbo.sp_MedicoInformante_GuardarUI",
         CatalogType.Tecnicos => "dbo.sp_Tecnico_Guardar",
         CatalogType.Servicios => "dbo.sp_Servicio_Guardar",
         CatalogType.Categorias => "dbo.sp_Categoria_Guardar",
         CatalogType.Pruebas => "dbo.sp_Prueba_Guardar",
+        CatalogType.PartesCuerpo => "dbo.sp_ParteCuerpo_GuardarUI",
         CatalogType.Roles => "dbo.sp_Rol_Guardar",
         _ => throw new ArgumentOutOfRangeException(nameof(type))
     };

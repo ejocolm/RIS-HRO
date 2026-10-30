@@ -1,0 +1,24 @@
+@using System.Security.Claims
+@{
+    var role = User.FindFirstValue(ClaimTypes.Role) ?? "";
+
+    var manualPath = role.ToUpperInvariant() switch
+    {
+        "ADMINISTRADOR" => "~/manuales/Manual_Administrador.pdf",
+        "USUARIO_INFORMES" => "~/manuales/Manual_Informes.pdf",
+        "USUARIO_CITAS" => "~/manuales/Manual_Solicitudes.pdf",
+        "USUARIO_BODEGA" => "~/manuales/Manual_Bodega.pdf",
+        _ => null
+    };
+}
+
+@if (!string.IsNullOrWhiteSpace(manualPath))
+{
+    <a href="@Url.Content(manualPath)"
+       class="btn btn-outline-primary d-inline-flex align-items-center gap-2"
+       download
+       title="Descargar el manual correspondiente a su rol">
+        <i class="bi bi-file-earmark-pdf"></i>
+        <span>Manual de usuario</span>
+    </a>
+}

@@ -5,5 +5,11 @@ namespace RIS_HRO.Pages;
 
 public sealed class IndexModel : PageModel
 {
-    public IActionResult OnGet() => RedirectToPage("/Dashboard/Index");
+    public IActionResult OnGet()
+    {
+        if (User.IsInRole("USUARIO_BODEGA"))
+            return RedirectToPage("/Inventory/Index");
+
+        return RedirectToPage("/Dashboard/Index");
+    }
 }

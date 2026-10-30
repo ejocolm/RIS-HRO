@@ -44,7 +44,7 @@ public sealed class IndexModel : PageModel
     {
         var rows = await _reports.GetAppointmentsAsync(from, to, ct);
         return File(_pdf.AppointmentReport(rows, from, to), "application/pdf",
-            $"Citas_{from:yyyyMMdd}_{to:yyyyMMdd}.pdf");
+            $"Solicitudes_{from:yyyyMMdd}_{to:yyyyMMdd}.pdf");
     }
 
     private async Task LoadAsync(CancellationToken ct)

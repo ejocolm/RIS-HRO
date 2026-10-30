@@ -1,0 +1,18 @@
+services:
+  hl7-pdq-mediator:
+    build: .
+    image: hro/hl7-pdq-mediator:2.0.0
+    container_name: hl7-pdq-mediator
+    restart: unless-stopped
+    ports:
+      # Exponer solo hacia la red del sistema que consulta (ajusta la IP del host)
+      - "2575:2575"
+    # Configuración y credenciales del API FHIR (ver .env.example)
+    env_file: .env
+    # --- MLLP sobre TLS (opcional) ---
+    # Pon MLLP_TLS: "true", monta el keystore y agrega a JAVA_OPTS:
+    #   -Djavax.net.ssl.keyStore=/certs/mediator.p12
+    #   -Djavax.net.ssl.keyStorePassword=CAMBIAR
+    #   -Djavax.net.ssl.keyStoreType=PKCS12
+    # volumes:
+    #   - ./certs:/certs:ro

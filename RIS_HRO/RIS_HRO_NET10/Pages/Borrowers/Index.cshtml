@@ -1,0 +1,110 @@
+@page
+@model RIS_HRO.Pages.Borrowers.IndexModel
+@{
+    ViewData["Title"] = "Prestatarios";
+}
+
+<section class="page-heading">
+    <div>
+        <h1>Prestatarios</h1>
+        <p>Personas registradas para el préstamo de materiales físicos</p>
+    </div>
+
+    <a asp-page="/Borrowers/Edit" class="btn-ris-primary">
+        <i class="bi bi-person-plus"></i> Nuevo prestatario
+    </a>
+</section>
+
+<section class="ris-card filter-card">
+    <form method="get" class="d-flex gap-2 flex-wrap align-items-end">
+        <div class="form-group-ris flex-grow-1" style="min-width:260px;">
+            <label asp-for="Q">Buscar</label>
+            <input asp-for="Q"
+                   placeholder="ID, nombre, teléfono o correo" />
+        </div>
+
+        <button type="submit" class="btn-ris-primary">
+            <i class="bi bi-search"></i> Buscar
+        </button>
+
+        <a asp-page="/Borrowers/Index" class="btn-ris-cancel">
+            Limpiar
+        </a>
+    </form>
+</section>
+
+<section class="ris-card mt-3">
+    <div class="mb-3">
+        <strong>@Model.Rows.Count</strong>
+        <span class="text-muted">prestatario(s)</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="ris-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Contacto</th>
+                    <th>Documentos</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Rows.Count == 0)
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        No se encontraron prestatarios.
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        <td><strong>@row.IdPrestatario</strong></td>
+                        <td>@row.NombreCompleto</td>
+                        <td>
+                            <div>@(string.IsNullOrWhiteSpace(row.Telefono) ? "—" : row.Telefono)</div>
+                            <div class="small text-muted">
+                                @(string.IsNullOrWhiteSpace(row.Correo) ? "—" : row.Correo)
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge text-bg-light border">
+                                Documento 1
+                            </span>
+                            @if (row.TieneDocumento2)
+                            {
+                                <span class="badge text-bg-light border">
+                                    Documento 2
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            @if (row.Activo)
+                            {
+                                <span class="badge text-bg-success">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-secondary">Inactivo</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-page="/Borrowers/Edit"
+                               asp-route-id="@row.IdPrestatario"
+                               class="btn-ris-outline">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

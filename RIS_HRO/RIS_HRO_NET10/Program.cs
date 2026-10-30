@@ -9,8 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 if (OperatingSystem.IsWindows())
 {
-    // PDFsharp Core 6.2+: enables common Windows fonts such as Arial.
-    // The deployment guide therefore recommends Azure App Service on Windows.
     GlobalFontSettings.UseWindowsFontsUnderWindows = true;
 }
 
@@ -29,17 +27,10 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
+
 builder.Services.AddRazorPages(options =>
 {
-    //options.Conventions.AuthorizeFolder("/");
-    //options.Conventions.AllowAnonymousToPage("/Account/Login");
-
-    // Edgar -> Cambio para mostrar olvido su contraseña
-
-    // Todo el sistema requiere autenticación
     options.Conventions.AuthorizeFolder("/");
-
-    // Estas páginas deben funcionar SIN haber iniciado sesión
     options.Conventions.AllowAnonymousToPage("/Account/Login");
     options.Conventions.AllowAnonymousToPage("/Account/ForgotPassword");
 });
@@ -51,19 +42,9 @@ builder.Services.AddScoped<PasswordService>();
 builder.Services.AddScoped<Hl7ParserService>();
 builder.Services.AddScoped<PdfService>();
 
-builder.Services.AddScoped<AuthRepository>();
-builder.Services.AddScoped<DashboardRepository>();
-builder.Services.AddScoped<PatientRepository>();
-builder.Services.AddScoped<CatalogRepository>();
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<CapacityRepository>();
-builder.Services.AddScoped<AppointmentRepository>();
-builder.Services.AddScoped<ReportRepository>();
-
-builder.Services.AddScoped<IHospitalPatientService, HospitalPatientService>();
-builder.Services.AddScoped<PatientLookupService>();
-//Edgar -> agregado para recuperacion de contraseñas
-
+// =============================================================
+// RECUPERACIÓN DE CONTRASEÑA Y CONFIGURACIÓN DE CORREO
+// =============================================================
 builder.Services.AddDataProtection()
     .SetApplicationName("RIS_HRO");
 
@@ -74,7 +55,19 @@ builder.Services.AddScoped<EmailSecretProtector>();
 builder.Services.AddScoped<TemporaryPasswordGenerator>();
 builder.Services.AddScoped<EmailSenderService>();
 
-// 
+builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<DashboardRepository>();
+builder.Services.AddScoped<PatientRepository>();
+builder.Services.AddScoped<CatalogRepository>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<CapacityRepository>();
+builder.Services.AddScoped<AppointmentRepository>();
+builder.Services.AddScoped<LoanRepository>();
+builder.Services.AddScoped<ReportRepository>();
+
+builder.Services.AddScoped<IHospitalPatientService, HospitalPatientService>();
+builder.Services.AddScoped<PatientLookupService>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -87,7 +80,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
-// //Edgar -> agregado para recuperacion de contraseñas
+
+// =============================================================
+// RECUPERACIÓN DE CONTRASEÑA
+// Fuerza el cambio de contraseña cuando el usuario inicia sesión
+// con una contraseña temporal.
+// =============================================================
 app.Use(async (context, next) =>
 {
     var mustChange =
@@ -103,15 +101,101 @@ app.Use(async (context, next) =>
 
     if (mustChange && !allowed)
     {
-        context.Response.Redirect(
-            "/Account/ChangePassword");
+        context.Response.Redirect("/Account/ChangePassword");
         return;
     }
 
     await next();
 });
 
-//
+/// =============================================================
+// REQUERIMIENTO 7
+// CONTROL CENTRAL DE ACCESO POR ROLES
+// =============================================================
+app.Use(async (context, next) =>
+{
+    if (context.User.Identity?.IsAuthenticated == true)
+    {
+        var path = context.Request.Path;
+
+        var isAdmin =
+            context.User.IsInRole("ADMINISTRADOR");
+
+        var isWarehouse =
+            context.User.IsInRole("USUARIO_BODEGA");
+
+        var isAppointments =
+            context.User.IsInRole("USUARIO_CITAS");
+
+        var isReports =
+            context.User.IsInRole("USUARIO_INFORMES");
+
+
+        // ---------------------------------------------------------
+        // MÓDULOS EXCLUSIVOS DE ADMINISTRADOR Y BODEGA
+        // ---------------------------------------------------------
+
+        var isWarehouseModule =
+            path.StartsWithSegments("/Inventory") ||
+            path.StartsWithSegments("/Loans") ||
+            path.StartsWithSegments("/Borrowers");
+
+
+        // USUARIO_CITAS y USUARIO_INFORMES no pueden acceder
+        // a Inventario, Préstamos ni Prestatarios.
+        if (isWarehouseModule &&
+            !isAdmin &&
+            !isWarehouse)
+        {
+            context.Response.Redirect(
+                "/Account/AccessDenied"
+            );
+
+            return;
+        }
+
+
+        // ---------------------------------------------------------
+        // USUARIO_BODEGA
+        // ---------------------------------------------------------
+
+        if (isWarehouse)
+        {
+            var allowedForWarehouse =
+                isWarehouseModule ||
+
+                path.StartsWithSegments(
+                    "/Account/Logout"
+                ) ||
+
+                path.StartsWithSegments(
+                    "/Account/ChangePassword"
+                ) ||
+
+                path.StartsWithSegments(
+                    "/Account/AccessDenied"
+                ) ||
+
+                path.StartsWithSegments(
+                    "/Error"
+                );
+
+
+            // Bodega no puede entrar a ningún otro módulo.
+            if (!allowedForWarehouse)
+            {
+                context.Response.Redirect(
+                    "/Inventory/Index"
+                );
+
+                return;
+            }
+        }
+    }
+
+    await next();
+});
+
 
 app.UseAuthorization();
 app.MapRazorPages();

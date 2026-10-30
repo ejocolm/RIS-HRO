@@ -1,11 +1,44 @@
 @page
 @model RIS_HRO.Pages.Appointments.CreateModel
 @{
-    ViewData["Title"] = "Nueva cita";
+    ViewData["Title"] = "Nueva Solicitud";
 }
+
+<style>
+.registration-type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+.registration-type-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid #dbe4ec;
+    border-radius: 12px;
+    background: #f8fbfd;
+    cursor: pointer;
+}
+.registration-type-option input { margin-top: 4px; }
+.registration-type-option strong { display: block; }
+.registration-type-option small { display: block; color: #718096; margin-top: 2px; }
+.mobile-request-box {
+    border: 1px solid #cfe3f5;
+    background: #f4f9fd;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 18px;
+}
+.appointment-layout.request-mode { grid-template-columns: minmax(0, 1fr) !important; }
+@@media (max-width: 700px) {
+    .registration-type-grid { grid-template-columns: 1fr; }
+}
+</style>
 <section class="page-heading">
-    <div><h1>Nueva cita</h1><p>Registro y programación de citas radiológicas</p></div>
-    <button type="submit" form="appointmentForm" class="btn-ris-primary page-action"><i class="bi bi-check-lg"></i> Guardar cita</button>
+    <div><h1>Nueva Solicitud</h1><p>Registro de solicitudes del día y citas programadas</p></div>
+    <button type="submit" form="appointmentForm" class="btn-ris-primary page-action"><i class="bi bi-check-lg"></i> Guardar solicitud</button>
 </section>
 
 @if (TempData["Success"] is string success)
@@ -19,15 +52,47 @@
 
 <form method="post" id="appointmentForm">
 <input asp-for="StudyIdsCsv" type="hidden" id="studyIdsCsv" />
-<div class="appointment-layout">
+<input asp-for="StudyBodyPartsJson" type="hidden" id="studyBodyPartsJson" />
+<div class="appointment-layout" id="appointmentLayout">
     <div class="appointment-left">
         <section class="ris-card">
-            <header class="card-heading"><i class="bi bi-calendar2-plus"></i><h2>Datos generales de la cita</h2></header>
+            <header class="card-heading"><i class="bi bi-calendar2-plus"></i><h2>Datos generales</h2></header>
+
+            <div class="registration-type-grid">
+                <label class="registration-type-option">
+                    <input asp-for="TipoRegistro" type="radio" value="SOLICITUD_DIA" />
+                    <span>
+                        <strong>Solicitud del día</strong>
+                        <small>Registro durante la jornada que no consume cupo de agenda.</small>
+                    </span>
+                </label>
+
+                <label class="registration-type-option">
+                    <input asp-for="TipoRegistro" type="radio" value="CITA" />
+                    <span>
+                        <strong>Cita programada</strong>
+                        <small>Utiliza la agenda y valida los cupos disponibles.</small>
+                    </span>
+                </label>
+            </div>
+
+            <div id="mobileStudyWrapper"
+                 class="mobile-request-box @(Model.TipoRegistro == "SOLICITUD_DIA" ? "" : "d-none")">
+                <div class="form-check">
+                    <input asp-for="EsMovil" class="form-check-input" type="checkbox" id="isMobile" />
+                    <label asp-for="EsMovil" class="form-check-label">
+                        <strong>Solicitud móvil</strong>
+                        <span class="d-block small text-muted">
+                            Marque esta opción cuando el equipo de radiología deba trasladarse al servicio hospitalario.
+                        </span>
+                    </label>
+                </div>
+            </div>
 
             <div class="appointment-top-grid">
-                <div class="form-group-ris"><label>Número de cita</label><input value="Se genera al guardar" readonly /></div>
-                <div class="form-group-ris"><label asp-for="AppointmentDate">Fecha de cita</label><input asp-for="AppointmentDate" type="date" id="appointmentDate" /></div>
-                <div class="form-group-ris"><label asp-for="AppointmentTime">Hora de cita</label><input asp-for="AppointmentTime" type="time" /></div>
+                <div class="form-group-ris"><label>Número de solicitud</label><input value="Se genera al guardar" readonly /></div>
+                <div class="form-group-ris"><label asp-for="AppointmentDate">Fecha de solicitud</label><input asp-for="AppointmentDate" type="date" id="appointmentDate" /></div>
+                <div class="form-group-ris"><label asp-for="AppointmentTime">Hora de solicitud</label><input asp-for="AppointmentTime" type="time" id="appointmentTime" /></div>
             </div>
 
             <div class="form-group-ris">
@@ -95,18 +160,18 @@
             <div class="study-hint"><i class="bi bi-info-circle"></i> Al ingresar el código y presionar Enter, el estudio se agrega automáticamente.</div>
             <div class="table-responsive">
                 <table class="ris-table" id="studiesTable">
-                    <thead><tr><th>Código</th><th>Estudio</th><th>Categoría</th><th>Técnico</th><th>Acción</th></tr></thead>
-                    <tbody id="studiesBody"><tr id="emptyStudies"><td colspan="5" class="text-center text-muted py-4">Agregue por lo menos un estudio.</td></tr></tbody>
+                    <thead><tr><th>Código</th><th>Estudio</th><th>Categoría</th><th>Partes del cuerpo</th><th>Técnico</th><th>Acción</th></tr></thead>
+                    <tbody id="studiesBody"><tr id="emptyStudies"><td colspan="6" class="text-center text-muted py-4">Agregue por lo menos un estudio.</td></tr></tbody>
                 </table>
             </div>
-            <div class="capacity-note"><i class="bi bi-info-circle"></i> Cada estudio solicitado consume un cupo de la prueba correspondiente.</div>
-            <div class="form-bottom-actions"><a asp-page="/Dashboard/Index" class="btn-ris-cancel">Cancelar</a><button type="submit" class="btn-ris-primary"><i class="bi bi-check-lg"></i> Guardar cita</button></div>
+            <div class="capacity-note" id="capacityNote"><i class="bi bi-info-circle"></i> Cada estudio debe tener al menos una parte del cuerpo. Aunque seleccione varias partes, el estudio consume un solo cupo.</div>
+            <div class="form-bottom-actions"><a asp-page="/Dashboard/Index" class="btn-ris-cancel">Cancelar</a><button type="submit" class="btn-ris-primary"><i class="bi bi-check-lg"></i> Guardar solicitud</button></div>
         </section>
     </div>
 
-    <div class="appointment-right">
+    <div class="appointment-right" id="availabilityColumn">
         <section class="ris-card calendar-card">
-            <header class="card-heading"><i class="bi bi-calendar2-plus"></i><div><h2>Disponibilidad de citas</h2><span>Calendario con cupos por día</span></div></header>
+            <header class="card-heading"><i class="bi bi-calendar2-plus"></i><div><h2>Disponibilidad de citas programadas</h2><span>Calendario con cupos por día</span></div></header>
             <div class="calendar-toolbar"><button type="button" id="prevMonth"><i class="bi bi-chevron-left"></i></button><strong id="calendarMonthTitle"></strong><button type="button" id="nextMonth"><i class="bi bi-chevron-right"></i></button></div>
             <div class="calendar-week"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
             <div id="calendarGrid" class="calendar-grid"></div>
@@ -141,9 +206,47 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="bodyPartModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content ris-modal">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title mb-1">Partes del cuerpo</h5>
+                    <div class="small text-muted" id="bodyPartStudyTitle"></div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-icon-wrap mb-3">
+                    <i class="bi bi-search"></i>
+                    <input id="bodyPartSearchText" placeholder="Buscar parte del cuerpo..." autocomplete="off" />
+                </div>
+
+                <div id="bodyPartOptions" class="row g-2"></div>
+
+                <div id="bodyPartEmpty" class="text-center text-muted py-4 d-none">
+                    No se encontraron partes del cuerpo.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="me-auto small text-muted">
+                    Debe seleccionar por lo menos una parte del cuerpo.
+                </span>
+                <button type="button" class="btn-ris-cancel" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn-ris-primary" id="btnSaveBodyParts">
+                    <i class="bi bi-check-lg"></i> Aplicar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
 <script>
 window.initialStudies = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.InitialStudies,
+    new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }));
+window.bodyParts = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.BodyParts,
     new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }));
 </script>
 <script src="~/js/appointments-create.js" asp-append-version="true"></script>

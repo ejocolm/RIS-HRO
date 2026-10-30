@@ -14,7 +14,9 @@ public sealed class LoginModel : PageModel
     private readonly AuthRepository _authRepository;
     private readonly PasswordService _passwordService;
 
-    public LoginModel(AuthRepository authRepository, PasswordService passwordService)
+    public LoginModel(
+        AuthRepository authRepository,
+        PasswordService passwordService)
     {
         _authRepository = authRepository;
         _passwordService = passwordService;
@@ -31,11 +33,18 @@ public sealed class LoginModel : PageModel
     public IActionResult OnGet()
     {
         if (User.Identity?.IsAuthenticated == true)
+        {
+            if (User.IsInRole("USUARIO_BODEGA"))
+                return RedirectToPage("/Inventory/Index");
+
             return RedirectToPage("/Dashboard/Index");
+        }
+
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
+    public async Task<IActionResult> OnPostAsync(
+        CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
         {
@@ -43,9 +52,13 @@ public sealed class LoginModel : PageModel
             return Page();
         }
 
-        var user = await _authRepository.GetForLoginAsync(IdUsuario.Trim(), cancellationToken);
+        var user = await _authRepository.GetForLoginAsync(
+            IdUsuario.Trim(),
+            cancellationToken);
 
-        if (user is null || !user.Activo || !_passwordService.Verify(Password, user.ContrasenaHash))
+        if (user is null ||
+            !user.Activo ||
+            !_passwordService.Verify(Password, user.ContrasenaHash))
         {
             ErrorMessage = "Usuario o contraseña incorrectos.";
             return Page();
@@ -55,21 +68,33 @@ public sealed class LoginModel : PageModel
         {
             new(ClaimTypes.NameIdentifier, user.IdUsuario),
             new(ClaimTypes.Name, user.NombreCompleto),
-            new(ClaimTypes.Role, user.NombreRol),
-            new Claim("RIS_HRO.MustChangePassword", user.DebeCambiarContrasena ? "true" : "false")
+            new(ClaimTypes.Role, user.NombreRol)
         };
 
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var identity = new ClaimsIdentity(
+            claims,
+            CookieAuthenticationDefaults.AuthenticationScheme);
 
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(identity),
-            new AuthenticationProperties { IsPersistent = false, AllowRefresh = true });
+            new AuthenticationProperties
+            {
+                IsPersistent = false,
+                AllowRefresh = true
+            });
 
-        await _authRepository.UpdateLastAccessAsync(user.IdUsuario, cancellationToken);
-        //return RedirectToPage("/Dashboard/Index");
-        if (user.DebeCambiarContrasena) 
-            return RedirectToPage("/Account/ChangePassword");
+        await _authRepository.UpdateLastAccessAsync(
+            user.IdUsuario,
+            cancellationToken);
+
+        if (string.Equals(
+                user.NombreRol,
+                "USUARIO_BODEGA",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return RedirectToPage("/Inventory/Index");
+        }
 
         return RedirectToPage("/Dashboard/Index");
     }

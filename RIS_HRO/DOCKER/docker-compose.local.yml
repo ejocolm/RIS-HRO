@@ -1,0 +1,10 @@
+# Override opcional para probar RIS HRO directamente desde tu PC.
+# Uso:
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+# Luego abre:
+#   http://localhost:8080
+
+services:
+  ris-hro:
+    ports:
+      - "8080:8080"

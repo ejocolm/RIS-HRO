@@ -1,0 +1,229 @@
+@page
+@model RIS_HRO.Pages.Loans.CreateModel
+@{
+    ViewData["Title"] = "Registrar préstamo";
+}
+
+<style>
+    .loan-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .loan-summary-item {
+        border: 1px solid #e0e8ef;
+        border-radius: 10px;
+        padding: 13px;
+        background: #fbfdff;
+    }
+
+    .loan-summary-item small {
+        display: block;
+        color: #7a8794;
+        margin-bottom: 4px;
+    }
+
+    .borrower-found {
+        border: 1px solid #cfe5d5;
+        background: #f4fbf6;
+        border-radius: 12px;
+        padding: 16px;
+    }
+
+    @@media (max-width: 800px) {
+        .loan-summary {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="page-heading">
+    <div>
+        <h1>Registrar préstamo</h1>
+        <p>Préstamo de materiales físicos asociados al estudio seleccionado</p>
+    </div>
+
+    <a asp-page="/Inventory/Index" class="btn-ris-cancel">
+        <i class="bi bi-arrow-left"></i> Volver al inventario
+    </a>
+</section>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="ris-alert danger">
+        <i class="bi bi-exclamation-triangle"></i>
+        <div>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+            {
+                <div>@error.ErrorMessage</div>
+            }
+        </div>
+    </div>
+}
+
+<section class="ris-card">
+    <header class="card-heading">
+        <i class="bi bi-file-earmark-medical"></i>
+        <div>
+            <h2>Estudio</h2>
+            <span>El préstamo quedará relacionado con este registro existente</span>
+        </div>
+    </header>
+
+    <div class="loan-summary">
+        <div class="loan-summary-item">
+            <small>ID interno</small>
+            <strong>
+                @(string.IsNullOrWhiteSpace(Model.Study.IdInternoRadiologia)
+                    ? "Pendiente"
+                    : Model.Study.IdInternoRadiologia)
+            </strong>
+        </div>
+
+        <div class="loan-summary-item">
+            <small>Paciente</small>
+            <strong>@Model.Study.Paciente</strong>
+            <div class="small text-muted">@Model.Study.IdPaciente</div>
+        </div>
+
+        <div class="loan-summary-item">
+            <small>Estudio</small>
+            <strong>@Model.Study.NombrePrueba</strong>
+            <div class="small text-muted">@Model.Study.IdPrueba</div>
+        </div>
+    </div>
+</section>
+
+@if (!Model.CanLoan)
+{
+    <div class="ris-alert warning mt-3">
+        <i class="bi bi-exclamation-triangle"></i>
+        <div>
+            <strong>Préstamo no disponible.</strong>
+            <div>
+                Este estudio todavía no tiene un ID interno de radiología.
+                Debe asignarse antes de registrar un préstamo.
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.CanLoan)
+{
+<section class="ris-card mt-3">
+    <header class="card-heading">
+        <i class="bi bi-person-vcard"></i>
+        <div>
+            <h2>Prestatario</h2>
+            <span>Ingrese manualmente el ID para consumir el catálogo</span>
+        </div>
+    </header>
+
+    <form method="get" class="d-flex gap-2 flex-wrap align-items-end">
+        <input type="hidden" name="detailId" value="@Model.DetailId" />
+
+        <div class="form-group-ris flex-grow-1" style="min-width:250px;">
+            <label for="borrowerId">ID del prestatario</label>
+            <input id="borrowerId"
+                   name="borrowerId"
+                   value="@Model.BorrowerId"
+                   placeholder="Ingrese el ID y presione Buscar" />
+        </div>
+
+        <button type="submit" class="btn-ris-outline">
+            <i class="bi bi-search"></i> Buscar
+        </button>
+    </form>
+
+    @if (!string.IsNullOrWhiteSpace(Model.BorrowerId))
+    {
+        <div class="mt-3">
+            @if (Model.Borrower is not null)
+            {
+                <div class="borrower-found">
+                    <div class="d-flex justify-content-between gap-3 flex-wrap">
+                        <div>
+                            <strong>@Model.Borrower.NombreCompleto</strong>
+                            <div class="small text-muted">
+                                ID: @Model.Borrower.IdPrestatario
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(Model.Borrower.Telefono))
+                            {
+                                <div class="small text-muted">
+                                    Tel. @Model.Borrower.Telefono
+                                </div>
+                            }
+                        </div>
+
+                        <div>
+                            @if (Model.Borrower.Activo)
+                            {
+                                <span class="badge text-bg-success">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-danger">Inactivo</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="ris-alert warning">
+                    <i class="bi bi-person-exclamation"></i>
+                    <div>
+                        <strong>Prestatario no encontrado.</strong>
+                        <div class="mt-2">
+                            <a asp-page="/Borrowers/Edit"
+                               asp-route-id="@Model.BorrowerId"
+                               asp-route-returnDetailId="@Model.DetailId"
+                               class="btn-ris-primary">
+                                <i class="bi bi-person-plus"></i>
+                                Registrar prestatario
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>
+
+@if (Model.Borrower is not null)
+{
+    <form method="post">
+        <input asp-for="DetailId" type="hidden" />
+        <input asp-for="BorrowerId" type="hidden" />
+
+        <section class="ris-card mt-3">
+            <div class="form-group-ris">
+                <label asp-for="MotivoPrestamo">Motivo del préstamo *</label>
+                <input asp-for="MotivoPrestamo"
+                       maxlength="250"
+                       placeholder="Indique el motivo del préstamo" />
+            </div>
+
+            <div class="form-group-ris mt-3">
+                <label asp-for="Observaciones">Observaciones</label>
+                <textarea asp-for="Observaciones"
+                          rows="4"
+                          maxlength="500"></textarea>
+            </div>
+        </section>
+
+        <div class="d-flex gap-2 mt-3">
+            <button type="submit"
+                    class="btn-ris-primary"
+                    disabled="@(!Model.Borrower.Activo)">
+                <i class="bi bi-box-arrow-right"></i> Confirmar préstamo
+            </button>
+
+            <a asp-page="/Inventory/Index" class="btn-ris-cancel">
+                Cancelar
+            </a>
+        </div>
+    </form>
+}
+}

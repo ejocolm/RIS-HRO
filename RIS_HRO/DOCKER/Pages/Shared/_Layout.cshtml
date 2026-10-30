@@ -1,0 +1,359 @@
+@using System.Security.Claims
+@{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "";
+    var role = User.FindFirstValue(ClaimTypes.Role) ?? "";
+    var page = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+
+    var isAdmin = string.Equals(role, "ADMINISTRADOR", StringComparison.OrdinalIgnoreCase);
+    var isWarehouse = string.Equals(role, "USUARIO_BODEGA", StringComparison.OrdinalIgnoreCase);
+
+    var homePage = isWarehouse ? "/Inventory/Index" : "/Dashboard/Index";
+
+    // El botón del manual se muestra únicamente en la página principal de cada rol.
+    var isRoleHomePage =
+        (isWarehouse && string.Equals(page, "/Inventory/Index", StringComparison.OrdinalIgnoreCase)) ||
+        (!isWarehouse && string.Equals(page, "/Dashboard/Index", StringComparison.OrdinalIgnoreCase));
+
+    bool active(string prefix) => page.StartsWith(prefix, StringComparison.OrdinalIgnoreCase);
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RIS HRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    @if (isWarehouse)
+    {
+        <style>
+            /* =========================================================
+               ESTILO EXCLUSIVO PARA USUARIO_BODEGA
+               ========================================================= */
+
+            .warehouse-sidebar {
+                padding-top: 48px !important;
+            }
+
+            .warehouse-sidebar .sidebar-brand {
+                margin: 15px 10px 38px !important;
+                gap: 12px !important;
+            }
+
+            .warehouse-sidebar .sidebar-brand img {
+                width: 58px !important;
+                height: 58px !important;
+                border-radius: 13px !important;
+            }
+
+            .warehouse-sidebar .sidebar-brand strong {
+                font-size: 1.55rem !important;
+            }
+
+            .warehouse-sidebar .sidebar-brand span {
+                font-size: .62rem !important;
+            }
+
+            .warehouse-sidebar .sidebar-nav {
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+                align-content: flex-start !important;
+                grid-template-columns: none !important;
+                grid-auto-rows: unset !important;
+                gap: 10px !important;
+                flex: 1 !important;
+                min-height: 0 !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                padding: 0 4px 15px !important;
+            }
+
+            .warehouse-sidebar .sidebar-caption {
+                margin: 0 14px 8px !important;
+                font-size: .62rem !important;
+                font-weight: 700 !important;
+                letter-spacing: .14em !important;
+                color: rgba(255,255,255,.60) !important;
+            }
+
+            .warehouse-sidebar .sidebar-link {
+                flex: 0 0 62px !important;
+                min-height: 62px !important;
+                height: 62px !important;
+                padding: 0 16px !important;
+                border-radius: 12px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                gap: 15px !important;
+                border: 1px solid transparent !important;
+                transition: background .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease !important;
+            }
+
+            .warehouse-sidebar .sidebar-link i {
+                width: 28px !important;
+                font-size: 1.25rem !important;
+                text-align: center !important;
+            }
+
+            .warehouse-sidebar .sidebar-link:hover {
+                background: rgba(255,255,255,.09) !important;
+                border-color: rgba(255,255,255,.08) !important;
+                transform: translateX(2px);
+                color: #fff !important;
+            }
+
+            .warehouse-sidebar .sidebar-link.active {
+                background: linear-gradient(90deg, rgba(18,188,202,.94), rgba(31,168,197,.88)) !important;
+                border-color: rgba(255,255,255,.13) !important;
+                box-shadow: 0 7px 18px rgba(0,54,110,.20) !important;
+            }
+
+            .warehouse-sidebar .sidebar-logout {
+                margin-top: auto !important;
+                padding-top: 16px !important;
+                border-top: 1px solid rgba(255,255,255,.20) !important;
+            }
+
+            .warehouse-sidebar .sidebar-logout button {
+                width: 100% !important;
+                min-height: 45px !important;
+                padding: 0 14px !important;
+                border-radius: 10px !important;
+            }
+        </style>
+    }
+</head>
+<body class="app-body">
+<div class="app-shell">
+    <aside class="sidebar @(isWarehouse ? "warehouse-sidebar" : "")">
+        <div class="sidebar-dots"></div>
+
+        <a asp-page="@homePage" class="sidebar-brand text-decoration-none">
+            <img src="~/images/ris-logo.png" alt="RIS HRO" />
+            <div>
+                <strong>RIS HRO</strong>
+                <span>Sistema de Solicitudes</span>
+                <span>de Radiología</span>
+            </div>
+        </a>
+
+        <nav class="sidebar-nav">
+
+            @* =========================================================
+               USUARIO_BODEGA
+               Solo puede visualizar Inventario, Préstamos y Prestatarios.
+               ========================================================= *@
+            @if (isWarehouse)
+            {
+                <div class="sidebar-caption">BODEGA</div>
+
+                <a asp-page="/Inventory/Index"
+                   class="sidebar-link @(active("/Inventory") ? "active" : "")">
+                    <i class="bi bi-archive"></i>
+                    <span>Inventario</span>
+                </a>
+
+                <a asp-page="/Loans/Index"
+                   class="sidebar-link @(active("/Loans") ? "active" : "")">
+                    <i class="bi bi-box-seam"></i>
+                    <span>Préstamos</span>
+                </a>
+
+                <a asp-page="/Borrowers/Index"
+                   class="sidebar-link @(active("/Borrowers") ? "active" : "")">
+                    <i class="bi bi-person-vcard"></i>
+                    <span>Prestatarios</span>
+                </a>
+            }
+
+            @* =========================================================
+               MÓDULOS GENERALES
+               Para ADMINISTRADOR el orden es:
+               Dashboard -> Solicitudes -> Bodega -> resto de módulos.
+               ========================================================= *@
+            @if (!isWarehouse)
+            {
+                <a asp-page="/Dashboard/Index"
+                   class="sidebar-link @(active("/Dashboard") ? "active" : "")">
+                    <i class="bi bi-grid"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <div class="sidebar-caption">SOLICITUDES</div>
+
+                <a asp-page="/Appointments/Create"
+                   class="sidebar-link @(page == "/Appointments/Create" ? "active" : "")">
+                    <i class="bi bi-calendar2-plus"></i>
+                    <span>Nueva Solicitud</span>
+                </a>
+
+                <a asp-page="/Appointments/Index"
+                   class="sidebar-link @(active("/Appointments/Index") || active("/Appointments/Edit") ? "active" : "")">
+                    <i class="bi bi-calendar2-check"></i>
+                    <span>Solicitudes</span>
+                </a>
+
+                <a asp-page="/Patients/Index"
+                   class="sidebar-link @(active("/Patients") ? "active" : "")">
+                    <i class="bi bi-person"></i>
+                    <span>Pacientes</span>
+                </a>
+
+                @if (isAdmin)
+                {
+                    <div class="sidebar-caption">BODEGA</div>
+
+                    <a asp-page="/Inventory/Index"
+                       class="sidebar-link @(active("/Inventory") ? "active" : "")">
+                        <i class="bi bi-archive"></i>
+                        <span>Inventario</span>
+                    </a>
+
+                    <a asp-page="/Loans/Index"
+                       class="sidebar-link @(active("/Loans") ? "active" : "")">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Préstamos</span>
+                    </a>
+
+                    <a asp-page="/Borrowers/Index"
+                       class="sidebar-link @(active("/Borrowers") ? "active" : "")">
+                        <i class="bi bi-person-vcard"></i>
+                        <span>Prestatarios</span>
+                    </a>
+                }
+
+                @* =====================================================
+                   CATÁLOGOS / ADMINISTRACIÓN
+                   Solo ADMINISTRADOR.
+                   ===================================================== *@
+                @if (isAdmin)
+                {
+                    <div class="sidebar-caption">CATÁLOGOS</div>
+
+                    <a asp-page="/Catalogs/Index" asp-route-type="Medicos" class="sidebar-link">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Médicos</span>
+                    </a>
+
+                    <a asp-page="/Catalogs/Index" asp-route-type="Tecnicos" class="sidebar-link">
+                        <i class="bi bi-person-gear"></i>
+                        <span>Técnicos radiólogos</span>
+                    </a>
+
+                    <a asp-page="/Catalogs/Index" asp-route-type="MedicosInformantes" class="sidebar-link">
+                        <i class="bi bi-person-vcard"></i>
+                        <span>Médicos informantes</span>
+                    </a>
+
+                    <a asp-page="/Catalogs/Index" asp-route-type="Servicios" class="sidebar-link">
+                        <i class="bi bi-hospital"></i>
+                        <span>Servicios</span>
+                    </a>
+
+                    <a asp-page="/Catalogs/Index" asp-route-type="Categorias" class="sidebar-link">
+                        <i class="bi bi-folder2"></i>
+                        <span>Categorías</span>
+                    </a>
+
+                    <a asp-page="/Catalogs/Index" asp-route-type="Pruebas" class="sidebar-link">
+                        <i class="bi bi-file-earmark-medical"></i>
+                        <span>Estudios</span>
+                    </a>
+
+                    <a asp-page="/Catalogs/Index" asp-route-type="PartesCuerpo" class="sidebar-link">
+                        <i class="bi bi-person-bounding-box"></i>
+                        <span>Partes del cuerpo</span>
+                    </a>
+
+                    <a asp-page="/Capacity/Index"
+                       class="sidebar-link @(active("/Capacity") ? "active" : "")">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Capacidad</span>
+                    </a>
+
+                    <div class="sidebar-caption">ADMINISTRACIÓN</div>
+
+                    <a asp-page="/Admin/Users"
+                       class="sidebar-link @(active("/Admin/Users") ? "active" : "")">
+                        <i class="bi bi-people"></i>
+                        <span>Usuarios</span>
+                    </a>
+
+                    <a asp-page="/Catalogs/Index" asp-route-type="Roles" class="sidebar-link">
+                        <i class="bi bi-shield-lock"></i>
+                        <span>Roles</span>
+                    </a>
+
+                    <a asp-page="/Admin/ReportSettings"
+                       class="sidebar-link @(page == "/Admin/ReportSettings" ? "active" : "")">
+                        <i class="bi bi-file-earmark-image"></i>
+                        <span>Configuración de informes</span>
+                    </a>
+
+                    <a asp-page="/Admin/EmailSettings"
+                       class="sidebar-link @(page == "/Admin/EmailSettings" ? "active" : "")">
+                        <i class="bi bi-envelope-gear"></i>
+                        <span>Configuración de correo</span>
+                    </a>
+                }
+
+                <div class="sidebar-caption">REPORTES</div>
+
+                <a asp-page="/Reports/Index"
+                   class="sidebar-link @(page == "/Reports/Index" ? "active" : "")">
+                    <i class="bi bi-bar-chart"></i>
+                    <span>Reportes</span>
+                </a>
+
+                <a asp-page="/Reports/Availability"
+                   class="sidebar-link @(page == "/Reports/Availability" ? "active" : "")">
+                    <i class="bi bi-calendar3"></i>
+                    <span>Disponibilidad</span>
+                </a>
+            }
+        </nav>
+
+        <form method="post" asp-page="/Account/Logout" class="sidebar-logout">
+            <button type="submit">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Cerrar sesión</span>
+            </button>
+        </form>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-userbar">
+            <div class="d-flex align-items-center gap-2 ms-auto">
+                @if (isRoleHomePage)
+                {
+                    <partial name="_ManualButton" />
+                }
+
+                <div class="user-chip">
+                    <span class="user-avatar"><i class="bi bi-person-fill"></i></span>
+                    <div>
+                        <small>Usuario</small>
+                        <strong>@userId</strong>
+                    </div>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        @RenderBody()
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,403 @@
+@page "{detailId:int}"
+@model RIS_HRO.Pages.StudyReports.EditModel
+@{
+    ViewData["Title"] = "Informe radiológico";
+    var readOnly = Model.IsFinalized;
+}
+
+<style>
+.report-shell{display:grid;gap:18px}.report-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.report-summary>div{padding:12px 14px;border:1px solid #e1e8f2;border-radius:10px;background:#f8fbff}.report-summary small{display:block;color:#728097;margin-bottom:3px}.report-summary strong{color:#173866}.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.rich-editor{border:1px solid var(--ris-border);border-radius:10px;overflow:hidden;background:#fff}.rich-toolbar{display:flex;flex-wrap:wrap;gap:5px;padding:8px;border-bottom:1px solid #e1e8f2;background:#f7f9fc}.rich-toolbar button{width:34px;height:32px;border:1px solid #d8e0eb;border-radius:6px;background:#fff;color:#164d91}.rich-content{min-height:180px;padding:14px;outline:none;line-height:1.55}.rich-content[contenteditable="false"]{background:#fafbfd}.resource-table input{min-width:90px}.report-state{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.report-actions{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px}@@media(max-width:900px){.report-summary,.report-grid{grid-template-columns:1fr}}
+</style>
+
+<section class="page-heading">
+    <div>
+        <h1>Informe radiológico</h1>
+        <p>@Model.Context.NumeroCita · @Model.Context.IdPrueba - @Model.Context.NombrePrueba</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        @if (Model.HasHistory)
+        {
+            <a asp-page="/StudyReports/History"
+               asp-route-detailId="@Model.Context.IdDetalleCita"
+               class="btn-ris-outline">
+                <i class="bi bi-clock-history"></i> Historial
+            </a>
+        }
+        @if (Model.IsFinalized)
+        {
+            <div class="dropdown">
+                <button class="btn-ris-outline dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    <i class="bi bi-printer"></i> Imprimir
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item"
+                           asp-page="/StudyReports/Edit"
+                           asp-page-handler="Print"
+                           asp-route-detailId="@Model.Context.IdDetalleCita"
+                           asp-route-withHeader="true"
+                           target="_blank">
+                            Con encabezado
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                           asp-page="/StudyReports/Edit"
+                           asp-page-handler="Print"
+                           asp-route-detailId="@Model.Context.IdDetalleCita"
+                           asp-route-withHeader="false"
+                           target="_blank">
+                            Sin encabezado
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        }
+        @if (User.IsInRole("ADMINISTRADOR"))
+        {
+            <a asp-page="/Admin/ReportSettings" class="btn-ris-outline">
+                <i class="bi bi-image"></i> Configurar encabezado
+            </a>
+        }
+        <a asp-page="/Appointments/Edit"
+           asp-route-id="@Model.Context.IdCita"
+           class="btn-ris-cancel">
+            <i class="bi bi-arrow-left"></i> Volver a la cita
+        </a>
+    </div>
+</section>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="ris-alert success"><i class="bi bi-check-circle"></i> @success</div>
+}
+@if (TempData["Error"] is string tempError)
+{
+    <div class="ris-alert error"><i class="bi bi-exclamation-triangle"></i> @tempError</div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="ris-alert error"><i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage</div>
+}
+@if (TempData["OfferPrint"] is not null)
+{
+    <div class="ris-alert success align-items-center flex-wrap">
+        <i class="bi bi-printer"></i>
+        <div class="me-auto">
+            <strong>Informe finalizado.</strong>
+            <div class="small">¿Desea realizar la impresión?</div>
+        </div>
+        <a asp-page="/StudyReports/Edit"
+           asp-page-handler="Print"
+           asp-route-detailId="@Model.Context.IdDetalleCita"
+           asp-route-withHeader="true"
+           target="_blank"
+           class="btn-ris-primary">
+            Con encabezado
+        </a>
+        <a asp-page="/StudyReports/Edit"
+           asp-page-handler="Print"
+           asp-route-detailId="@Model.Context.IdDetalleCita"
+           asp-route-withHeader="false"
+           target="_blank"
+           class="btn-ris-outline">
+            Sin encabezado
+        </a>
+        <a asp-page="/StudyReports/Edit"
+           asp-route-detailId="@Model.Context.IdDetalleCita"
+           class="btn-ris-cancel">
+            No imprimir
+        </a>
+    </div>
+}
+
+<div class="report-shell">
+    <section class="ris-card">
+        <header class="card-heading">
+            <i class="bi bi-file-earmark-medical"></i>
+            <div>
+                <h2>Datos del estudio</h2>
+                <span>Información de la cita y localización anatómica</span>
+            </div>
+        </header>
+
+        <div class="report-summary">
+            <div><small>Paciente</small><strong>@Model.Context.IdPaciente - @Model.Context.Paciente</strong></div>
+            <div><small>Estudio</small><strong>@Model.Context.IdPrueba - @Model.Context.NombrePrueba</strong></div>
+            <div><small>Parte(s) del cuerpo</small><strong>@(string.IsNullOrWhiteSpace(Model.Context.PartesCuerpo) ? "Sin especificar" : Model.Context.PartesCuerpo)</strong></div>
+            <div><small>Estado</small><strong>@Model.Context.EstadoEstudio</strong></div>
+        </div>
+    </section>
+
+    <form method="post" id="reportForm">
+        <input type="hidden" asp-for="Input.IdDetalleCita" />
+        <textarea asp-for="Input.Hallazgos" id="hallazgosHidden" class="d-none"></textarea>
+        <textarea asp-for="Input.Conclusiones" id="conclusionesHidden" class="d-none"></textarea>
+
+        <section class="ris-card mb-3">
+            <header class="card-heading d-flex justify-content-between align-items-start">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-clipboard2-pulse"></i>
+                    <div>
+                        <h2>Datos del informe</h2>
+                        <span>Versión @Model.Context.NumeroVersion</span>
+                    </div>
+                </div>
+                <div class="report-state">
+                    @if (Model.Context.IdInforme.HasValue)
+                    {
+                        <span class="badge @(Model.IsFinalized ? "text-bg-success" : "text-bg-warning")">
+                            @(Model.Context.EstadoInforme ?? "BORRADOR")
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge text-bg-light border">NUEVO</span>
+                    }
+                </div>
+            </header>
+
+            <fieldset disabled="@readOnly" style="border:0;padding:0;margin:0;min-width:0;">
+                <div class="report-grid">
+                    <div class="form-group-ris">
+                        <label asp-for="Input.IdInternoRadiologia">ID interno de radiología</label>
+                        <input asp-for="Input.IdInternoRadiologia" maxlength="50" placeholder="Ingrese el ID interno" />
+                    </div>
+                    <div class="form-group-ris">
+                        <label asp-for="Input.FechaHoraInforme">Fecha y hora del informe</label>
+                        <input asp-for="Input.FechaHoraInforme" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+                    </div>
+                </div>
+
+                <div class="report-grid">
+                    <div class="form-group-ris">
+                        <label asp-for="Input.IdTecnicoRealiza">Técnico que realizó el estudio</label>
+                        <select asp-for="Input.IdTecnicoRealiza">
+                            <option value="">Seleccione</option>
+                            @foreach (var tech in Model.Technicians)
+                            {
+                                <option value="@tech.IdTecnico">@tech.IdTecnico - @tech.NombreCompleto</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group-ris">
+                        <label asp-for="Input.IdTecnicoPosiciona">Técnico que posicionó al paciente</label>
+                        <select asp-for="Input.IdTecnicoPosiciona">
+                            <option value="">Seleccione</option>
+                            @foreach (var tech in Model.Technicians)
+                            {
+                                <option value="@tech.IdTecnico">@tech.IdTecnico - @tech.NombreCompleto</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group-ris">
+                    <label asp-for="Input.IdMedicoInformante">Médico informante</label>
+                    <select asp-for="Input.IdMedicoInformante">
+                        <option value="">Seleccione</option>
+                        @foreach (var doctor in Model.InformingDoctors)
+                        {
+                            <option value="@doctor.IdMedicoInformante">
+                                @doctor.IdMedicoInformante - @doctor.NombreCompleto @(string.IsNullOrWhiteSpace(doctor.NoColegiado) ? "" : $"· Col. {doctor.NoColegiado}")
+                            </option>
+                        }
+                    </select>
+                </div>
+            </fieldset>
+        </section>
+
+        <section class="ris-card mb-3">
+            <header class="card-heading">
+                <i class="bi bi-card-text"></i>
+                <div><h2>Redacción del informe</h2><span>Hallazgos y conclusiones</span></div>
+            </header>
+
+            <div class="form-group-ris">
+                <label>Hallazgos</label>
+                <div class="rich-editor">
+                    @if (!readOnly)
+                    {
+                        <div class="rich-toolbar" data-editor="hallazgosEditor">
+                            <button type="button" data-cmd="bold" title="Negrita"><strong>B</strong></button>
+                            <button type="button" data-cmd="italic" title="Cursiva"><em>I</em></button>
+                            <button type="button" data-cmd="underline" title="Subrayado"><u>U</u></button>
+                            <button type="button" data-cmd="insertUnorderedList" title="Lista"><i class="bi bi-list-ul"></i></button>
+                            <button type="button" data-cmd="insertOrderedList" title="Lista numerada"><i class="bi bi-list-ol"></i></button>
+                            <button type="button" data-cmd="justifyLeft" title="Alinear izquierda"><i class="bi bi-text-left"></i></button>
+                            <button type="button" data-cmd="justifyCenter" title="Centrar"><i class="bi bi-text-center"></i></button>
+                            <button type="button" data-cmd="justifyRight" title="Alinear derecha"><i class="bi bi-text-right"></i></button>
+                        </div>
+                    }
+                    <div id="hallazgosEditor" class="rich-content" contenteditable="@(!readOnly ? "true" : "false")">@Html.Raw(Model.Input.Hallazgos ?? "")</div>
+                </div>
+            </div>
+
+            <div class="form-group-ris mb-0">
+                <label>Conclusiones</label>
+                <div class="rich-editor">
+                    @if (!readOnly)
+                    {
+                        <div class="rich-toolbar" data-editor="conclusionesEditor">
+                            <button type="button" data-cmd="bold" title="Negrita"><strong>B</strong></button>
+                            <button type="button" data-cmd="italic" title="Cursiva"><em>I</em></button>
+                            <button type="button" data-cmd="underline" title="Subrayado"><u>U</u></button>
+                            <button type="button" data-cmd="insertUnorderedList" title="Lista"><i class="bi bi-list-ul"></i></button>
+                            <button type="button" data-cmd="insertOrderedList" title="Lista numerada"><i class="bi bi-list-ol"></i></button>
+                            <button type="button" data-cmd="justifyLeft" title="Alinear izquierda"><i class="bi bi-text-left"></i></button>
+                            <button type="button" data-cmd="justifyCenter" title="Centrar"><i class="bi bi-text-center"></i></button>
+                            <button type="button" data-cmd="justifyRight" title="Alinear derecha"><i class="bi bi-text-right"></i></button>
+                        </div>
+                    }
+                    <div id="conclusionesEditor" class="rich-content" contenteditable="@(!readOnly ? "true" : "false")">@Html.Raw(Model.Input.Conclusiones ?? "")</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ris-card">
+            <header class="card-heading">
+                <i class="bi bi-images"></i>
+                <div><h2>Películas e imágenes</h2><span>Registro de recursos utilizados</span></div>
+            </header>
+
+            <fieldset disabled="@readOnly" style="border:0;padding:0;margin:0;min-width:0;">
+                <div class="table-responsive">
+                    <table class="ris-table resource-table">
+                        <thead>
+                            <tr>
+                                <th>Tamaño de película</th>
+                                <th>Películas entregadas</th>
+                                <th>Imágenes digitales</th>
+                                <th>Sistema de adquisición CD/DR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < Model.Input.Recursos.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@Model.Input.Recursos[i].TamanoPelicula</strong>
+                                        <input type="hidden" asp-for="Input.Recursos[i].TamanoPelicula" />
+                                    </td>
+                                    <td><input asp-for="Input.Recursos[i].PeliculasEntregadas" type="number" min="0" /></td>
+                                    <td><input asp-for="Input.Recursos[i].ImagenesDigitales" type="number" min="0" /></td>
+                                    <td><input asp-for="Input.Recursos[i].SistemaAdquisicionCDDR" maxlength="100" placeholder="Ej. CR / DR" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+
+            <div class="report-actions">
+                <a asp-page="/Appointments/Edit" asp-route-id="@Model.Context.IdCita" class="btn-ris-cancel">Volver</a>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    @if (!readOnly)
+                    {
+                        <button type="submit" asp-page-handler="SaveDraft" class="btn-ris-outline">
+                            <i class="bi bi-save"></i> Guardar borrador
+                        </button>
+                        <button type="submit" asp-page-handler="Finalize" class="btn-ris-primary"
+                                onclick="return confirm('¿Desea FINALIZAR este informe? Se validarán todos los datos obligatorios.');">
+                            <i class="bi bi-check2-circle"></i> Finalizar informe
+                        </button>
+                    }
+                    else
+                    {
+                        @if (Model.HasHistory)
+                        {
+                            <a asp-page="/StudyReports/History"
+                               asp-route-detailId="@Model.Context.IdDetalleCita"
+                               class="btn-ris-outline">
+                                <i class="bi bi-clock-history"></i> Historial
+                            </a>
+                        }
+                        <div class="dropdown">
+                            <button class="btn-ris-outline dropdown-toggle"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <i class="bi bi-printer"></i> Imprimir
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-page="/StudyReports/Edit"
+                                       asp-page-handler="Print"
+                                       asp-route-detailId="@Model.Context.IdDetalleCita"
+                                       asp-route-withHeader="true"
+                                       target="_blank">
+                                        Con encabezado
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-page="/StudyReports/Edit"
+                                       asp-page-handler="Print"
+                                       asp-route-detailId="@Model.Context.IdDetalleCita"
+                                       asp-route-withHeader="false"
+                                       target="_blank">
+                                        Sin encabezado
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <button type="submit"
+                                asp-page-handler="StartCorrection"
+                                asp-route-detailId="@Model.Context.IdDetalleCita"
+                                class="btn-ris-primary"
+                                onclick="return confirm('¿Desea iniciar una corrección? La versión actual se guardará en el historial y se creará una nueva versión editable.');">
+                            <i class="bi bi-pencil-square"></i> Corregir informe
+                        </button>
+                    }
+                </div>
+            </div>
+        </section>
+    </form>
+</div>
+
+@section Scripts {
+@if (!readOnly)
+{
+<script>
+(() => {
+    'use strict';
+    const form = document.getElementById('reportForm');
+    const pairs = [
+        ['hallazgosEditor', 'hallazgosHidden'],
+        ['conclusionesEditor', 'conclusionesHidden']
+    ];
+
+    document.querySelectorAll('.rich-toolbar button[data-cmd]').forEach(button => {
+        button.addEventListener('click', () => {
+            const toolbar = button.closest('.rich-toolbar');
+            const editor = document.getElementById(toolbar?.dataset.editor || '');
+            if (!editor) return;
+            editor.focus();
+            document.execCommand(button.dataset.cmd, false, null);
+            sync();
+        });
+    });
+
+    pairs.forEach(([editorId]) => {
+        document.getElementById(editorId)?.addEventListener('input', sync);
+    });
+
+    function sync() {
+        pairs.forEach(([editorId, hiddenId]) => {
+            const editor = document.getElementById(editorId);
+            const hidden = document.getElementById(hiddenId);
+            if (editor && hidden) hidden.value = editor.innerHTML;
+        });
+    }
+
+    form?.addEventListener('submit', sync);
+    sync();
+})();
+</script>
+}
+}

@@ -28,7 +28,7 @@
 </section>
 
 <div class="summary-grid report-summary">
-    <article class="summary-card"><div class="summary-icon blue"><i class="bi bi-calendar2"></i></div><div><span>Total citas</span><strong class="blue-text">@Model.Summary.TotalCitas</strong></div></article>
+    <article class="summary-card"><div class="summary-icon blue"><i class="bi bi-calendar2"></i></div><div><span>Total solicitudes</span><strong class="blue-text">@Model.Summary.TotalCitas</strong></div></article>
     <article class="summary-card"><div class="summary-icon teal"><i class="bi bi-check2-circle"></i></div><div><span>Atendidas</span><strong class="teal-text">@Model.Summary.Atendidas</strong></div></article>
     <article class="summary-card"><div class="summary-icon red"><i class="bi bi-x-circle"></i></div><div><span>Canceladas</span><strong class="red-text">@Model.Summary.Canceladas</strong></div></article>
     <article class="summary-card"><div class="summary-icon orange"><i class="bi bi-file-medical"></i></div><div><span>Estudios realizados</span><strong class="orange-text">@Model.Summary.EstudiosRealizados</strong></div></article>
@@ -56,13 +56,13 @@
 
     <section class="ris-card">
         <header class="card-heading report-title-row">
-            <div class="d-flex align-items-center gap-2"><i class="bi bi-calendar2-week"></i><h2>Listado de citas</h2></div>
+            <div class="d-flex align-items-center gap-2"><i class="bi bi-calendar2-week"></i><h2>Listado de solicitudes</h2></div>
             <a asp-page="/Reports/Index" asp-page-handler="AppointmentsPdf" asp-route-from="@Model.FromValue" asp-route-to="@Model.ToValue"
                class="btn-ris-outline"><i class="bi bi-file-earmark-pdf"></i> Exportar PDF</a>
         </header>
         <div class="table-responsive">
             <table class="ris-table">
-                <thead><tr><th>Fecha</th><th>Cita</th><th>Paciente</th><th>Estado</th></tr></thead>
+                <thead><tr><th>Fecha</th><th>Solicitud</th><th>Paciente</th><th>Estado</th></tr></thead>
                 <tbody>
                 @foreach (var row in Model.Appointments.Take(12))
                 {

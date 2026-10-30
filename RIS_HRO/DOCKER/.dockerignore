@@ -1,0 +1,32 @@
+# Visual Studio / .NET
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+
+# Git
+.git/
+.gitignore
+
+# Backups y archivos temporales
+_backup_*/
+**/_backup_*/
+*.bak
+*.tmp
+*.log
+
+# Configuración local / secretos
+.env
+appsettings.Development.json
+
+# Paquetes y artefactos locales
+*.zip
+publish/
+
+# Docker local
+Dockerfile*
+docker-compose*.yml
+
+# Permitir explícitamente los archivos Docker principales durante build
+!Dockerfile

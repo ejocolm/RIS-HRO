@@ -1,0 +1,373 @@
+@page
+@model RIS_HRO.Pages.Borrowers.EditModel
+@{
+    ViewData["Title"] = Model.IsExisting ? "Editar prestatario" : "Nuevo prestatario";
+}
+
+<style>
+    .borrower-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .document-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .document-box {
+        border: 1px solid #dfe7ef;
+        border-radius: 12px;
+        padding: 16px;
+        background: #fbfdff;
+    }
+
+    .document-preview {
+        display: block;
+        width: 100%;
+        max-height: 260px;
+        object-fit: contain;
+        border: 1px solid #e0e6ec;
+        border-radius: 8px;
+        background: #fff;
+        margin: 12px 0;
+    }
+
+    @@media (max-width: 760px) {
+        .borrower-grid,
+        .document-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="page-heading">
+    <div>
+        <h1>@ViewData["Title"]</h1>
+        <p>Datos e identificación de la persona que puede retirar materiales</p>
+    </div>
+</section>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="ris-alert danger">
+        <i class="bi bi-exclamation-triangle"></i>
+        <div>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+            {
+                <div>@error.ErrorMessage</div>
+            }
+        </div>
+    </div>
+}
+
+<form method="post" enctype="multipart/form-data">
+    <input asp-for="ReturnDetailId" type="hidden" />
+
+    <section class="ris-card">
+        <div class="borrower-grid">
+            <div class="form-group-ris">
+                <label asp-for="IdPrestatario">ID del prestatario *</label>
+                @if (Model.IsExisting)
+                {
+                    <input asp-for="IdPrestatario" readonly />
+                }
+                else
+                {
+                    <input asp-for="IdPrestatario"
+                           placeholder="DPI, código institucional u otro ID" />
+                }
+            </div>
+
+            <div class="form-group-ris">
+                <label asp-for="NombreCompleto">Nombre completo *</label>
+                <input asp-for="NombreCompleto" />
+            </div>
+
+            <div class="form-group-ris">
+                <label asp-for="Telefono">Teléfono</label>
+                <input asp-for="Telefono" />
+            </div>
+
+            <div class="form-group-ris">
+                <label asp-for="Correo">Correo</label>
+                <input asp-for="Correo" type="email" />
+            </div>
+        </div>
+
+        <div class="form-group-ris mt-3">
+            <label asp-for="Direccion">Dirección</label>
+            <input asp-for="Direccion" />
+        </div>
+
+        <div class="form-check mt-3">
+            <input asp-for="Activo" class="form-check-input" />
+            <label asp-for="Activo" class="form-check-label">
+                Prestatario activo
+            </label>
+        </div>
+    </section>
+
+    <section class="ris-card mt-3">
+        <header class="card-heading">
+            <i class="bi bi-person-vcard"></i>
+            <div>
+                <h2>Documento de identificación</h2>
+                <span>PNG, JPG o JPEG · optimización automática · máximo 1600 px y 1.5 MB almacenados</span>
+            </div>
+        </header>
+
+        <div class="document-grid">
+            <div class="document-box">
+                <strong>Imagen 1 *</strong>
+                <div class="small text-muted">
+                    Obligatoria al registrar un prestatario nuevo.
+                </div>
+
+                @if (Model.TieneDocumento1 && Model.IsExisting)
+                {
+                    <img class="document-preview"
+                         src="@Url.Page("/Borrowers/Edit", "Document", new { id = Model.IdPrestatario, number = 1 })"
+                         alt="Documento 1" />
+                }
+
+                <div class="form-group-ris">
+                    <label asp-for="Documento1">
+                        @(Model.IsExisting ? "Reemplazar imagen 1" : "Seleccionar imagen 1")
+                    </label>
+                    <input asp-for="Documento1"
+                           type="file"
+                           accept=".png,.jpg,.jpeg,image/png,image/jpeg"
+                           data-image-optimize
+                           data-preview="#previewDocumento1"
+                           data-status="#statusDocumento1" />
+                    <div id="statusDocumento1" class="small text-muted mt-2"></div>
+                    <img id="previewDocumento1"
+                         class="document-preview d-none"
+                         alt="Vista previa de la nueva imagen 1" />
+                </div>
+            </div>
+
+            <div class="document-box">
+                <strong>Imagen 2</strong>
+                <div class="small text-muted">
+                    Opcional.
+                </div>
+
+                @if (Model.TieneDocumento2 && Model.IsExisting)
+                {
+                    <img class="document-preview"
+                         src="@Url.Page("/Borrowers/Edit", "Document", new { id = Model.IdPrestatario, number = 2 })"
+                         alt="Documento 2" />
+
+                    <div class="form-check mb-2">
+                        <input asp-for="EliminarDocumento2" class="form-check-input" />
+                        <label asp-for="EliminarDocumento2" class="form-check-label">
+                            Eliminar imagen 2 actual
+                        </label>
+                    </div>
+                }
+
+                <div class="form-group-ris">
+                    <label asp-for="Documento2">
+                        @(Model.TieneDocumento2 ? "Reemplazar imagen 2" : "Seleccionar imagen 2")
+                    </label>
+                    <input asp-for="Documento2"
+                           type="file"
+                           accept=".png,.jpg,.jpeg,image/png,image/jpeg"
+                           data-image-optimize
+                           data-preview="#previewDocumento2"
+                           data-status="#statusDocumento2" />
+                    <div id="statusDocumento2" class="small text-muted mt-2"></div>
+                    <img id="previewDocumento2"
+                         class="document-preview d-none"
+                         alt="Vista previa de la nueva imagen 2" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn-ris-primary">
+            <i class="bi bi-save"></i> Guardar
+        </button>
+
+        @if (Model.ReturnDetailId.HasValue)
+        {
+            <a asp-page="/Loans/Create"
+               asp-route-detailId="@Model.ReturnDetailId"
+               class="btn-ris-cancel">
+                Cancelar
+            </a>
+        }
+        else
+        {
+            <a asp-page="/Borrowers/Index" class="btn-ris-cancel">
+                Cancelar
+            </a>
+        }
+    </div>
+</form>
+
+
+@section Scripts {
+<script>
+(() => {
+    const MAX_SIDE = 1600;
+    const TARGET_BYTES = 900 * 1024; // objetivo ~900 KB
+    const HARD_BYTES = 1536 * 1024;  // coincide con validación servidor
+
+    const formatBytes = bytes => {
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+        return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+    };
+
+    const loadImage = file => new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve(img);
+        };
+
+        img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error("No se pudo leer la imagen."));
+        };
+
+        img.src = url;
+    });
+
+    const canvasToBlob = (canvas, quality) => new Promise(resolve => {
+        canvas.toBlob(resolve, "image/jpeg", quality);
+    });
+
+    async function optimizeFile(file) {
+        const img = await loadImage(file);
+
+        let width = img.naturalWidth;
+        let height = img.naturalHeight;
+
+        if (!width || !height)
+            throw new Error("La imagen no tiene dimensiones válidas.");
+
+        const scale = Math.min(1, MAX_SIDE / Math.max(width, height));
+        const newWidth = Math.max(1, Math.round(width * scale));
+        const newHeight = Math.max(1, Math.round(height * scale));
+
+        // Si ya cumple dimensión y peso, conservamos el archivo original.
+        if (scale === 1 && file.size <= TARGET_BYTES) {
+            return {
+                file,
+                width,
+                height,
+                changed: false
+            };
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        const ctx = canvas.getContext("2d", { alpha: false });
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, newWidth, newHeight);
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+        let quality = 0.86;
+        let blob = await canvasToBlob(canvas, quality);
+
+        while (blob && blob.size > TARGET_BYTES && quality > 0.60) {
+            quality -= 0.07;
+            blob = await canvasToBlob(canvas, quality);
+        }
+
+        if (!blob)
+            throw new Error("No se pudo optimizar la imagen.");
+
+        if (blob.size > HARD_BYTES)
+            throw new Error("La imagen sigue siendo demasiado pesada después de optimizarla.");
+
+        const baseName = file.name.replace(/\.[^.]+$/, "") || "documento";
+        const optimized = new File(
+            [blob],
+            `${baseName}.jpg`,
+            {
+                type: "image/jpeg",
+                lastModified: Date.now()
+            });
+
+        return {
+            file: optimized,
+            width: newWidth,
+            height: newHeight,
+            changed: true
+        };
+    }
+
+    document.querySelectorAll("[data-image-optimize]").forEach(input => {
+        input.addEventListener("change", async () => {
+            const status = document.querySelector(input.dataset.status);
+            const preview = document.querySelector(input.dataset.preview);
+
+            if (!input.files || input.files.length === 0) {
+                if (status) status.textContent = "";
+                if (preview) {
+                    preview.src = "";
+                    preview.classList.add("d-none");
+                }
+                return;
+            }
+
+            const original = input.files[0];
+
+            if (status)
+                status.textContent = "Optimizando imagen…";
+
+            input.disabled = true;
+
+            try {
+                const result = await optimizeFile(original);
+
+                if (result.changed) {
+                    const transfer = new DataTransfer();
+                    transfer.items.add(result.file);
+                    input.files = transfer.files;
+                }
+
+                const finalFile = input.files[0];
+
+                if (status) {
+                    status.textContent =
+                        `${result.changed ? "Optimizada" : "Lista"}: ` +
+                        `${result.width}×${result.height}px · ${formatBytes(finalFile.size)}`;
+                }
+
+                if (preview) {
+                    preview.src = URL.createObjectURL(finalFile);
+                    preview.classList.remove("d-none");
+                }
+            } catch (error) {
+                input.value = "";
+
+                if (status) {
+                    status.textContent =
+                        error?.message || "No fue posible procesar la imagen.";
+                }
+
+                if (preview) {
+                    preview.src = "";
+                    preview.classList.add("d-none");
+                }
+            } finally {
+                input.disabled = false;
+            }
+        });
+    });
+})();
+</script>
+}

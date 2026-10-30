@@ -1,0 +1,113 @@
+@page
+@model RIS_HRO.Pages.Loans.ReturnModel
+@{
+    ViewData["Title"] = "Registrar devolución";
+}
+
+<section class="page-heading">
+    <div>
+        <h1>Registrar devolución</h1>
+        <p>Finalizar préstamo activo del material físico</p>
+    </div>
+
+    <a asp-page="/Loans/Index" class="btn-ris-cancel">
+        <i class="bi bi-arrow-left"></i> Volver
+    </a>
+</section>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="ris-alert danger">
+        <i class="bi bi-exclamation-triangle"></i>
+        <div>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+            {
+                <div>@error.ErrorMessage</div>
+            }
+        </div>
+    </div>
+}
+
+<section class="ris-card">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <small class="text-muted">Paciente</small>
+            <div><strong>@Model.Loan.Paciente</strong></div>
+            <div class="small text-muted">@Model.Loan.IdPaciente</div>
+        </div>
+
+        <div class="col-md-6">
+            <small class="text-muted">Estudio</small>
+            <div><strong>@Model.Loan.NombrePrueba</strong></div>
+            <div class="small text-muted">
+                @(string.IsNullOrWhiteSpace(Model.Loan.IdInternoRadiologia)
+                    ? "ID interno pendiente"
+                    : Model.Loan.IdInternoRadiologia)
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <small class="text-muted">Prestatario</small>
+            <div><strong>@Model.Loan.Prestatario</strong></div>
+            <div class="small text-muted">@Model.Loan.IdPrestatario</div>
+        </div>
+
+        <div class="col-md-6">
+            <small class="text-muted">Prestado desde</small>
+            <div><strong>@Model.Loan.FechaHoraPrestamo.ToString("dd/MM/yyyy HH:mm")</strong></div>
+        </div>
+    </div>
+</section>
+
+<form method="post">
+    <input asp-for="LoanId" type="hidden" />
+
+    <section class="ris-card mt-3">
+        <header class="card-heading">
+            <i class="bi bi-box-arrow-in-left"></i>
+            <div>
+                <h2>Datos de devolución</h2>
+                <span>Los datos de la persona que devuelve son opcionales de momento</span>
+            </div>
+        </header>
+
+        <div class="row g-3">
+            <div class="col-md-6 form-group-ris">
+                <label asp-for="DocumentoIdentificacionDevuelve">
+                    ID de la persona que devuelve
+                </label>
+                <input asp-for="DocumentoIdentificacionDevuelve"
+                       maxlength="30" />
+            </div>
+
+            <div class="col-md-6 form-group-ris">
+                <label asp-for="NombrePersonaDevuelve">
+                    Nombre de la persona que devuelve
+                </label>
+                <input asp-for="NombrePersonaDevuelve"
+                       maxlength="150" />
+            </div>
+
+            <div class="col-12 form-group-ris">
+                <label asp-for="ObservacionesDevolucion">
+                    Observaciones de devolución
+                </label>
+                <textarea asp-for="ObservacionesDevolucion"
+                          rows="4"
+                          maxlength="500"></textarea>
+            </div>
+        </div>
+    </section>
+
+    <div class="d-flex gap-2 mt-3">
+        <button type="submit"
+                class="btn-ris-primary"
+                onclick="return confirm('¿Confirma que el material fue devuelto?');">
+            <i class="bi bi-check-circle"></i> Confirmar devolución
+        </button>
+
+        <a asp-page="/Loans/Index" class="btn-ris-cancel">
+            Cancelar
+        </a>
+    </div>
+</form>

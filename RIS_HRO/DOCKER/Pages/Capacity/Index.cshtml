@@ -1,0 +1,56 @@
+@page
+@model RIS_HRO.Pages.Capacity.IndexModel
+@{
+    ViewData["Title"] = "Capacidad";
+}
+
+<section class="page-heading">
+    <div>
+        <h1>Capacidad por estudio</h1>
+        <p>Configuración de cupos máximos para cada día de la semana</p>
+    </div>
+</section>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="ris-alert success"><i class="bi bi-check-circle"></i> @success</div>
+}
+
+<section class="ris-card">
+    <div class="capacity-config-note">
+        <i class="bi bi-info-circle"></i>
+        La capacidad se administra por examen específico. Un campo vacío significa que ese estudio no tiene atención configurada ese día.
+    </div>
+
+    <div class="table-responsive">
+        <table class="ris-table capacity-config-table">
+            <thead>
+            <tr>
+                <th>Estudio</th><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th><th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @for (var i = 0; i < Model.Rows.Count; i++)
+            {
+                var formId = $"capacity-{i}";
+                <tr>
+                    <td>
+                        <form id="@formId" method="post"></form>
+                        <input form="@formId" type="hidden" name="Edit.IdPrueba" value="@Model.Rows[i].IdPrueba" />
+                        <strong>@Model.Rows[i].IdPrueba</strong><br/>
+                        <span class="text-muted">@Model.Rows[i].NombrePrueba</span>
+                    </td>
+                    <td><input form="@formId" class="capacity-input" name="Edit.Lunes" value="@Model.Rows[i].Lunes" type="number" min="1" /></td>
+                    <td><input form="@formId" class="capacity-input" name="Edit.Martes" value="@Model.Rows[i].Martes" type="number" min="1" /></td>
+                    <td><input form="@formId" class="capacity-input" name="Edit.Miercoles" value="@Model.Rows[i].Miercoles" type="number" min="1" /></td>
+                    <td><input form="@formId" class="capacity-input" name="Edit.Jueves" value="@Model.Rows[i].Jueves" type="number" min="1" /></td>
+                    <td><input form="@formId" class="capacity-input" name="Edit.Viernes" value="@Model.Rows[i].Viernes" type="number" min="1" /></td>
+                    <td><input form="@formId" class="capacity-input" name="Edit.Sabado" value="@Model.Rows[i].Sabado" type="number" min="1" /></td>
+                    <td><input form="@formId" class="capacity-input" name="Edit.Domingo" value="@Model.Rows[i].Domingo" type="number" min="1" /></td>
+                    <td><button form="@formId" type="submit" class="btn-ris-small">Guardar</button></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

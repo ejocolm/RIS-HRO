@@ -24,28 +24,34 @@ public sealed class IndexModel : PageModel
     public string Title => Type switch
     {
         CatalogType.Medicos => "Catálogo de médicos",
+        CatalogType.MedicosInformantes => "Médicos informantes",
         CatalogType.Tecnicos => "Catálogo de técnicos radiólogos",
         CatalogType.Servicios => "Catálogo de servicios hospitalarios",
         CatalogType.Categorias => "Categorías de pruebas",
         CatalogType.Pruebas => "Catálogo de estudios",
+        CatalogType.PartesCuerpo => "Catálogo de partes del cuerpo",
         CatalogType.Roles => "Catálogo de roles",
         _ => "Catálogo"
     };
 
     public string Subtitle => Type switch
     {
+        CatalogType.MedicosInformantes => "Médicos del departamento de Imágenes autorizados para informar estudios",
         CatalogType.Pruebas => "Administración de estudios disponibles en el departamento",
         CatalogType.Categorias => "Clasificación de los estudios radiológicos",
+        CatalogType.PartesCuerpo => "Administración de las regiones anatómicas disponibles para los estudios",
         _ => "Administración de registros del sistema"
     };
 
     public string Icon => Type switch
     {
         CatalogType.Medicos => "bi bi-person-badge",
+        CatalogType.MedicosInformantes => "bi bi-person-vcard",
         CatalogType.Tecnicos => "bi bi-person-gear",
         CatalogType.Servicios => "bi bi-hospital",
         CatalogType.Categorias => "bi bi-folder2",
         CatalogType.Pruebas => "bi bi-file-earmark-medical",
+        CatalogType.PartesCuerpo => "bi bi-person-bounding-box",
         CatalogType.Roles => "bi bi-shield-lock",
         _ => "bi bi-folder"
     };
@@ -53,10 +59,12 @@ public sealed class IndexModel : PageModel
     public string IdLabel => Type switch
     {
         CatalogType.Medicos => "Código médico",
+        CatalogType.MedicosInformantes => "Código médico informante",
         CatalogType.Tecnicos => "Código técnico",
         CatalogType.Servicios => "Código servicio",
         CatalogType.Categorias => "Código categoría",
         CatalogType.Pruebas => "Código estudio",
+        CatalogType.PartesCuerpo => "Código parte",
         CatalogType.Roles => "ID rol",
         _ => "Código"
     };
@@ -64,10 +72,12 @@ public sealed class IndexModel : PageModel
     public string NameLabel => Type switch
     {
         CatalogType.Medicos => "Médico",
+        CatalogType.MedicosInformantes => "Médico informante",
         CatalogType.Tecnicos => "Técnico",
         CatalogType.Servicios => "Servicio",
         CatalogType.Categorias => "Categoría",
         CatalogType.Pruebas => "Estudio",
+        CatalogType.PartesCuerpo => "Parte del cuerpo",
         CatalogType.Roles => "Rol",
         _ => "Nombre"
     };
@@ -116,7 +126,7 @@ public sealed class IndexModel : PageModel
     {
         if (Type != CatalogType.Roles && string.IsNullOrWhiteSpace(Edit.Id)) ModelState.AddModelError("", "El código es obligatorio.");
         if (string.IsNullOrWhiteSpace(Edit.Nombre)) ModelState.AddModelError("", "El nombre es obligatorio.");
-        if ((Type == CatalogType.Medicos || Type == CatalogType.Tecnicos) && string.IsNullOrWhiteSpace(Edit.Extra1))
+        if ((Type == CatalogType.Medicos || Type == CatalogType.MedicosInformantes || Type == CatalogType.Tecnicos) && string.IsNullOrWhiteSpace(Edit.Extra1))
             ModelState.AddModelError("", "Los apellidos son obligatorios.");
         if (Type == CatalogType.Pruebas && string.IsNullOrWhiteSpace(Edit.Extra1))
             ModelState.AddModelError("", "Debe seleccionar una categoría.");

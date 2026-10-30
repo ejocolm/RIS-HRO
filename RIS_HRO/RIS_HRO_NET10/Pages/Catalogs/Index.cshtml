@@ -43,7 +43,7 @@
                 }
             </div>
 
-            @if (Model.Type == RIS_HRO.Models.CatalogType.Medicos || Model.Type == RIS_HRO.Models.CatalogType.Tecnicos)
+            @if (Model.Type == RIS_HRO.Models.CatalogType.Medicos || Model.Type == RIS_HRO.Models.CatalogType.MedicosInformantes || Model.Type == RIS_HRO.Models.CatalogType.Tecnicos)
             {
                 <div class="two-col">
                     <div class="form-group-ris">
@@ -81,7 +81,15 @@
                 </div>
             }
 
-            @if (Model.Type == RIS_HRO.Models.CatalogType.Medicos)
+            @if (Model.Type == RIS_HRO.Models.CatalogType.MedicosInformantes)
+            {
+                <div class="form-group-ris">
+                    <label>Puesto</label>
+                    <input asp-for="Edit.Descripcion" placeholder="Ej. Residente I, Médico radiólogo" />
+                </div>
+            }
+
+            @if (Model.Type == RIS_HRO.Models.CatalogType.Medicos || Model.Type == RIS_HRO.Models.CatalogType.MedicosInformantes)
             {
                 <div class="two-col">
                     <div class="form-group-ris"><label>No. colegiado</label><input asp-for="Edit.Extra2" /></div>
@@ -99,6 +107,7 @@
             }
 
             @if (Model.Type != RIS_HRO.Models.CatalogType.Medicos &&
+                 Model.Type != RIS_HRO.Models.CatalogType.MedicosInformantes &&
                  Model.Type != RIS_HRO.Models.CatalogType.Tecnicos)
             {
                 <div class="form-group-ris">

@@ -1,0 +1,469 @@
+@page
+@model RIS_HRO.Pages.Inventory.DetailModel
+@{
+    ViewData["Title"] = "Detalle de estudio";
+    var study = Model.Study;
+}
+
+<style>
+    .inventory-detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .inventory-detail-block {
+        border: 1px solid #e2e8ef;
+        border-radius: 12px;
+        padding: 18px;
+        background: #fff;
+    }
+
+    .inventory-detail-block h3 {
+        font-size: 1rem;
+        margin: 0 0 14px;
+        color: #0b4f8a;
+    }
+
+    .inventory-detail-row {
+        display: grid;
+        grid-template-columns: 155px 1fr;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid #eef2f5;
+    }
+
+    .inventory-detail-row:last-child {
+        border-bottom: 0;
+    }
+
+    .inventory-detail-row span:first-child {
+        color: #75808c;
+        font-size: .88rem;
+    }
+
+    .inventory-detail-row span:last-child {
+        font-weight: 600;
+    }
+
+    .detail-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .report-content {
+        line-height: 1.65;
+        color: #25384a;
+        overflow-wrap: anywhere;
+    }
+
+    .report-content p:last-child,
+    .report-content ul:last-child,
+    .report-content ol:last-child {
+        margin-bottom: 0;
+    }
+
+    .report-empty {
+        padding: 18px;
+        border: 1px dashed #ccd7e2;
+        border-radius: 10px;
+        color: #7b8794;
+        background: #fafcfe;
+    }
+
+    .resource-summary {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .resource-summary th,
+    .resource-summary td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #e7edf3;
+        text-align: left;
+    }
+
+    .resource-summary th {
+        background: #f4f8fc;
+        color: #164d91;
+        font-size: .83rem;
+    }
+
+    .resource-summary td {
+        font-size: .9rem;
+    }
+
+    .inventory-state {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: .8rem;
+        font-weight: 700;
+        background: #f5f7f9;
+        border: 1px solid #dfe5ea;
+    }
+
+    .inventory-state.finalizado {
+        background: #edf8f1;
+        border-color: #cfe9d8;
+        color: #247044;
+    }
+
+    .inventory-state.borrador {
+        background: #fff8e8;
+        border-color: #f2dfaa;
+        color: #8a6415;
+    }
+
+    @@media (max-width: 850px) {
+        .inventory-detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .inventory-detail-row {
+            grid-template-columns: 1fr;
+            gap: 3px;
+        }
+    }
+</style>
+
+<section class="page-heading">
+    <div>
+        <h1>Detalle del estudio</h1>
+        <p>
+            @study.IdPrueba - @study.NombrePrueba ·
+            @study.Paciente
+        </p>
+    </div>
+
+    <div class="detail-actions">
+        <a asp-page="/Inventory/Index" class="btn-ris-cancel">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+
+        @if (!string.IsNullOrWhiteSpace(study.IdInternoRadiologia))
+        {
+            <a
+                asp-page="/Loans/Index"
+                asp-route-internalId="@study.IdInternoRadiologia"
+                class="btn-ris-outline"
+            >
+
+                <i class="bi bi-clock-history"></i>
+
+                Historial de préstamos
+
+            </a>
+        }
+
+        @if (study.EstadoInforme == "SIN_INFORME")
+        {
+            <a asp-page="/StudyReports/Edit"
+               asp-route-detailId="@study.IdDetalleCita"
+               class="btn-ris-primary">
+                <i class="bi bi-file-earmark-plus"></i> Crear informe
+            </a>
+        }
+        else if (study.EstadoInforme == "BORRADOR")
+        {
+            <a asp-page="/StudyReports/Edit"
+               asp-route-detailId="@study.IdDetalleCita"
+               class="btn-ris-primary">
+                <i class="bi bi-pencil-square"></i> Continuar informe
+            </a>
+
+            @if (study.HasHistory)
+            {
+                <a asp-page="/StudyReports/History"
+                   asp-route-detailId="@study.IdDetalleCita"
+                   class="btn-ris-outline">
+                    <i class="bi bi-clock-history"></i> Historial
+                </a>
+            }
+        }
+        else if (study.EstadoInforme == "FINALIZADO")
+        {
+            <a asp-page="/StudyReports/Edit"
+               asp-route-detailId="@study.IdDetalleCita"
+               class="btn-ris-outline">
+                <i class="bi bi-file-earmark-medical"></i> Abrir informe
+            </a>
+
+            @if (study.HasHistory)
+            {
+                <a asp-page="/StudyReports/History"
+                   asp-route-detailId="@study.IdDetalleCita"
+                   class="btn-ris-outline">
+                    <i class="bi bi-clock-history"></i> Historial
+                </a>
+            }
+
+            <div class="dropdown">
+                <button type="button"
+                        class="btn-ris-outline dropdown-toggle"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    <i class="bi bi-printer"></i> Imprimir
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item"
+                           asp-page="/StudyReports/Edit"
+                           asp-page-handler="Print"
+                           asp-route-detailId="@study.IdDetalleCita"
+                           asp-route-withHeader="true"
+                           target="_blank">
+                            Con encabezado
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                           asp-page="/StudyReports/Edit"
+                           asp-page-handler="Print"
+                           asp-route-detailId="@study.IdDetalleCita"
+                           asp-route-withHeader="false"
+                           target="_blank">
+                            Sin encabezado
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <form method="post"
+                  asp-page-handler="StartCorrection"
+                  asp-route-detailId="@study.IdDetalleCita"
+                  onsubmit="return confirm('Se preservará la versión finalizada actual y se creará una nueva versión editable. ¿Desea continuar?');">
+                <button type="submit" class="btn-ris-primary">
+                    <i class="bi bi-pencil-square"></i> Corregir informe
+                </button>
+            </form>
+        }
+    </div>
+</section>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="ris-alert success">
+        <i class="bi bi-check-circle"></i>
+        @success
+    </div>
+}
+
+@if (TempData["Error"] is string error)
+{
+    <div class="ris-alert error">
+        <i class="bi bi-exclamation-triangle"></i>
+        @error
+    </div>
+}
+
+<div class="inventory-detail-grid">
+    <section class="inventory-detail-block">
+        <h3><i class="bi bi-person"></i> Paciente y cita</h3>
+
+        <div class="inventory-detail-row">
+            <span>Paciente</span>
+            <span>@study.Paciente</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>ID paciente</span>
+            <span>@study.IdPaciente</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Número de solicitud</span>
+            <span>@study.NumeroCita</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Fecha realización</span>
+            <span>@study.FechaRealizacion.ToString("dd/MM/yyyy HH:mm")</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Servicio</span>
+            <span>@study.Servicio</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Médico solicitante</span>
+            <span>@study.MedicoSolicitante</span>
+        </div>
+    </section>
+
+    <section class="inventory-detail-block">
+        <h3><i class="bi bi-file-earmark-medical"></i> Estudio</h3>
+
+        <div class="inventory-detail-row">
+            <span>Código</span>
+            <span>@study.IdPrueba</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Estudio</span>
+            <span>@study.NombrePrueba</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Categoría</span>
+            <span>@study.NombreCategoria</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Parte(s) del cuerpo</span>
+            <span>@(string.IsNullOrWhiteSpace(study.PartesCuerpo) ? "—" : study.PartesCuerpo)</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>ID interno</span>
+            <span>@(string.IsNullOrWhiteSpace(study.IdInternoRadiologia) ? "Pendiente" : study.IdInternoRadiologia)</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Estado informe</span>
+            <span>
+                <span class="inventory-state @(study.EstadoInforme == "FINALIZADO" ? "finalizado" : study.EstadoInforme == "BORRADOR" ? "borrador" : "")">
+                    @study.EstadoInformeTexto
+                </span>
+            </span>
+        </div>
+
+        @if (study.NumeroVersion > 0)
+        {
+            <div class="inventory-detail-row">
+                <span>Versión</span>
+                <span>@study.NumeroVersion</span>
+            </div>
+        }
+    </section>
+
+    <section class="inventory-detail-block">
+        <h3><i class="bi bi-people"></i> Personal de radiología</h3>
+
+        <div class="inventory-detail-row">
+            <span>Técnico que realizó</span>
+            <span>@(string.IsNullOrWhiteSpace(study.TecnicoRealiza) ? "Pendiente" : study.TecnicoRealiza)</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Técnico que posicionó</span>
+            <span>@(string.IsNullOrWhiteSpace(study.TecnicoPosiciona) ? "Pendiente" : study.TecnicoPosiciona)</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Médico informante</span>
+            <span>@(string.IsNullOrWhiteSpace(study.MedicoInformante) ? "Pendiente" : study.MedicoInformante)</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Puesto</span>
+            <span>@(string.IsNullOrWhiteSpace(study.PuestoMedicoInformante) ? "—" : study.PuestoMedicoInformante)</span>
+        </div>
+    </section>
+
+    <section class="inventory-detail-block">
+        <h3><i class="bi bi-clock-history"></i> Control del informe</h3>
+
+        <div class="inventory-detail-row">
+            <span>Fecha del informe</span>
+            <span>@(study.FechaHoraInforme.HasValue ? study.FechaHoraInforme.Value.ToString("dd/MM/yyyy HH:mm") : "Pendiente")</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Finalizado</span>
+            <span>@(study.FechaFinalizacion.HasValue ? study.FechaFinalizacion.Value.ToString("dd/MM/yyyy HH:mm") : "No")</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Observación cita</span>
+            <span>@(string.IsNullOrWhiteSpace(study.ObservacionesCita) ? "—" : study.ObservacionesCita)</span>
+        </div>
+        <div class="inventory-detail-row">
+            <span>Observación estudio</span>
+            <span>@(string.IsNullOrWhiteSpace(study.ObservacionesEstudio) ? "—" : study.ObservacionesEstudio)</span>
+        </div>
+    </section>
+</div>
+
+@if (study.EstadoInforme != "SIN_INFORME")
+{
+    <section class="ris-card mt-3">
+        <header class="card-heading">
+            <i class="bi bi-card-text"></i>
+            <div>
+                <h2>Informe radiológico</h2>
+                <span>Contenido de la versión vigente</span>
+            </div>
+        </header>
+
+        <div class="mb-4">
+            <h3 class="h6 text-primary">Hallazgos</h3>
+
+            @if (string.IsNullOrWhiteSpace(study.Hallazgos))
+            {
+                <div class="report-empty">
+                    No se han registrado hallazgos en esta versión.
+                </div>
+            }
+            else
+            {
+                <div class="report-content">
+                    @Html.Raw(study.Hallazgos)
+                </div>
+            }
+        </div>
+
+        <div>
+            <h3 class="h6 text-primary">Conclusiones</h3>
+
+            @if (string.IsNullOrWhiteSpace(study.Conclusiones))
+            {
+                <div class="report-empty">
+                    No se han registrado conclusiones en esta versión.
+                </div>
+            }
+            else
+            {
+                <div class="report-content">
+                    @Html.Raw(study.Conclusiones)
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="ris-card mt-3">
+        <header class="card-heading">
+            <i class="bi bi-images"></i>
+            <div>
+                <h2>Películas e imágenes</h2>
+                <span>Recursos registrados para control y estadísticas</span>
+            </div>
+        </header>
+
+        @if (study.Recursos.Count == 0)
+        {
+            <div class="report-empty">
+                No hay recursos registrados para este informe.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="resource-summary">
+                    <thead>
+                        <tr>
+                            <th>Tamaño de película</th>
+                            <th>Películas entregadas</th>
+                            <th>Imágenes digitales</th>
+                            <th>Sistema de adquisición CD/DR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var resource in study.Recursos)
+                        {
+                            <tr>
+                                <td><strong>@resource.TamanoPelicula</strong></td>
+                                <td>@resource.PeliculasEntregadas</td>
+                                <td>@resource.ImagenesDigitales</td>
+                                <td>@(string.IsNullOrWhiteSpace(resource.SistemaAdquisicionCDDR) ? "—" : resource.SistemaAdquisicionCDDR)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="small text-muted mt-2">
+                Esta información se conserva para reportes y estadísticas y no se incluye en el PDF clínico.
+            </div>
+        }
+    </section>
+}

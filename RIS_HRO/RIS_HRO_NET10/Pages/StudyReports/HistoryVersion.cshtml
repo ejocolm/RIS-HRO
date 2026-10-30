@@ -1,0 +1,136 @@
+@page
+@model RIS_HRO.Pages.StudyReports.HistoryVersionModel
+@{
+    ViewData["Title"] = $"Versión histórica {Model.Version.NumeroVersion}";
+}
+
+<style>
+.history-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.history-summary>div{padding:12px 14px;border:1px solid #e1e8f2;border-radius:10px;background:#f8fbff}
+.history-summary small{display:block;color:#728097;margin-bottom:3px}
+.history-summary strong{color:#173866}
+.history-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.history-rich{min-height:120px;border:1px solid #e1e8f2;border-radius:10px;padding:14px;background:#fafbfd;line-height:1.55}
+@@media(max-width:900px){.history-summary,.history-grid{grid-template-columns:1fr}}
+</style>
+
+<section class="page-heading">
+    <div>
+        <h1>Versión histórica @Model.Version.NumeroVersion</h1>
+        <p>@Model.Version.NumeroCita · @Model.Version.IdPrueba - @Model.Version.NombrePrueba</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <a asp-page="/StudyReports/History"
+           asp-route-detailId="@Model.Version.IdDetalleCita"
+           class="btn-ris-outline">
+            <i class="bi bi-clock-history"></i> Volver al historial
+        </a>
+        <a asp-page="/StudyReports/Edit"
+           asp-route-detailId="@Model.Version.IdDetalleCita"
+           class="btn-ris-cancel">
+            Versión vigente
+        </a>
+    </div>
+</section>
+
+<div class="ris-alert error">
+    <i class="bi bi-lock"></i>
+    <span>
+        Esta es una versión histórica. Es de solo lectura y no puede editarse ni imprimirse.
+        Archivada el @Model.Version.FechaArchivado.ToString("dd/MM/yyyy HH:mm")
+        por @Model.Version.ArchivadoPor.
+    </span>
+</div>
+
+<div class="d-grid gap-3">
+    <section class="ris-card">
+        <header class="card-heading">
+            <i class="bi bi-file-earmark-medical"></i>
+            <div>
+                <h2>Datos de la versión</h2>
+                <span>@Model.Version.EstadoInforme · Versión @Model.Version.NumeroVersion</span>
+            </div>
+        </header>
+
+        <div class="history-summary">
+            <div><small>Paciente</small><strong>@Model.Version.IdPaciente - @Model.Version.Paciente</strong></div>
+            <div><small>Estudio</small><strong>@Model.Version.IdPrueba - @Model.Version.NombrePrueba</strong></div>
+            <div><small>Parte(s) del cuerpo</small><strong>@Model.Version.PartesCuerpo</strong></div>
+            <div><small>ID interno</small><strong>@(Model.Version.IdInternoRadiologia ?? "-")</strong></div>
+        </div>
+    </section>
+
+    <section class="ris-card">
+        <header class="card-heading">
+            <i class="bi bi-person-badge"></i>
+            <div><h2>Responsables</h2><span>Información registrada en esta versión</span></div>
+        </header>
+
+        <div class="history-grid">
+            <div class="form-group-ris">
+                <label>Técnico que realizó</label>
+                <input value="@(Model.Version.TecnicoRealiza ?? "-")" readonly />
+            </div>
+            <div class="form-group-ris">
+                <label>Técnico que posicionó</label>
+                <input value="@(Model.Version.TecnicoPosiciona ?? "-")" readonly />
+            </div>
+            <div class="form-group-ris">
+                <label>Médico informante</label>
+                <input value="@(Model.Version.MedicoInformante ?? "-")" readonly />
+            </div>
+            <div class="form-group-ris">
+                <label>Fecha y hora del informe</label>
+                <input value="@(Model.Version.FechaHoraInforme?.ToString("dd/MM/yyyy HH:mm") ?? "-")" readonly />
+            </div>
+        </div>
+    </section>
+
+    <section class="ris-card">
+        <header class="card-heading">
+            <i class="bi bi-card-text"></i>
+            <div><h2>Redacción</h2><span>Contenido histórico</span></div>
+        </header>
+
+        <div class="form-group-ris">
+            <label>Hallazgos</label>
+            <div class="history-rich">@Html.Raw(Model.Version.Hallazgos ?? "-")</div>
+        </div>
+
+        <div class="form-group-ris mb-0">
+            <label>Conclusiones</label>
+            <div class="history-rich">@Html.Raw(Model.Version.Conclusiones ?? "-")</div>
+        </div>
+    </section>
+
+    <section class="ris-card">
+        <header class="card-heading">
+            <i class="bi bi-images"></i>
+            <div><h2>Películas e imágenes</h2><span>Datos de esta versión</span></div>
+        </header>
+
+        <div class="table-responsive">
+            <table class="ris-table">
+                <thead>
+                    <tr>
+                        <th>Tamaño de película</th>
+                        <th>Películas entregadas</th>
+                        <th>Imágenes digitales</th>
+                        <th>Sistema de adquisición CD/DR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model.Version.Recursos)
+                    {
+                        <tr>
+                            <td><strong>@row.TamanoPelicula</strong></td>
+                            <td>@row.PeliculasEntregadas</td>
+                            <td>@row.ImagenesDigitales</td>
+                            <td>@(row.SistemaAdquisicionCDDR ?? "-")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

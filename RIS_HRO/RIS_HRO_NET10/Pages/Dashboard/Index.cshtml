@@ -4,14 +4,14 @@
     ViewData["Title"] = "Dashboard";
 }
 <section class="page-heading dashboard-heading">
-    <div><h1>Dashboard</h1><p>Estado de cupos y citas del día</p></div>
-    <a asp-page="/Appointments/Create" class="btn-ris-primary page-action"><i class="bi bi-plus-lg"></i> Nueva cita</a>
+    <div><h1>Dashboard</h1><p>Estado de cupos y solicitudes del día</p></div>
+    <a asp-page="/Appointments/Create" class="btn-ris-primary page-action"><i class="bi bi-plus-lg"></i> Nueva solicitud</a>
 </section>
 
 <div class="summary-grid">
     <article class="summary-card">
         <div class="summary-icon blue"><i class="bi bi-calendar2-plus"></i></div>
-        <div><span>Citas de hoy</span><strong class="blue-text">@Model.Summary.CitasHoy</strong></div>
+        <div><span>Solicitudes de hoy</span><strong class="blue-text">@Model.Summary.CitasHoy</strong></div>
     </article>
     <article class="summary-card">
         <div class="summary-icon orange"><i class="bi bi-clock"></i></div>
@@ -62,14 +62,14 @@ else
 </div>
 
 <section class="appointments-card">
-    <header><h2><i class="bi bi-calendar2-week"></i> Próximas citas</h2></header>
+    <header><h2><i class="bi bi-calendar2-week"></i> Próximas solicitudes</h2></header>
     <div class="table-responsive">
         <table class="ris-table">
             <thead><tr><th>Hora</th><th>Paciente</th><th>Estudios</th><th>Estado</th></tr></thead>
             <tbody>
             @if (Model.Upcoming.Count == 0)
             {
-                <tr><td colspan="4" class="text-center py-4 text-muted">No hay citas para mostrar.</td></tr>
+                <tr><td colspan="4" class="text-center py-4 text-muted">No hay solicitudes para mostrar.</td></tr>
             }
             else
             {
