@@ -112,6 +112,82 @@ public sealed class AppointmentRepository
         return detail;
     }
 
+    public async Task<List<AppointmentResource>> GetAppointmentResourcesAsync(
+        int idCita,
+        CancellationToken ct = default)
+    {
+        var result = new List<AppointmentResource>();
+
+        await using var cn = _factory.Create();
+        await using var cmd = new SqlCommand("dbo.sp_CitaRecurso_Obtener", cn)
+        { CommandType = CommandType.StoredProcedure };
+        cmd.Parameters.Add("@IdCita", SqlDbType.Int).Value = idCita;
+
+        await cn.OpenAsync(ct);
+        await using var r = await cmd.ExecuteReaderAsync(ct);
+
+        while (await r.ReadAsync(ct))
+        {
+            result.Add(new AppointmentResource
+            {
+                TamanoPelicula = r.GetString(r.GetOrdinal("TamanoPelicula")),
+                PeliculasEntregadas = r.GetInt32(r.GetOrdinal("PeliculasEntregadas")),
+                ImagenesDigitales = r.GetInt32(r.GetOrdinal("ImagenesDigitales")),
+                SistemaAdquisicionCDDR = DbNullableString(r, "SistemaAdquisicionCDDR")
+            });
+        }
+
+        return result;
+    }
+
+    public async Task SaveAppointmentResourcesAsync(
+        int idCita,
+        IReadOnlyCollection<AppointmentResource> resources,
+        string userId,
+        CancellationToken ct = default)
+    {
+        var tvp = new DataTable();
+        tvp.Columns.Add("TamanoPelicula", typeof(string));
+        tvp.Columns.Add("PeliculasEntregadas", typeof(int));
+        tvp.Columns.Add("ImagenesDigitales", typeof(int));
+        tvp.Columns.Add("SistemaAdquisicionCDDR", typeof(string));
+
+        foreach (var size in new[] { "8x10", "10x14", "14x17" })
+        {
+            var item = resources.FirstOrDefault(x =>
+                string.Equals(x.TamanoPelicula, size, StringComparison.OrdinalIgnoreCase));
+
+            tvp.Rows.Add(
+                size,
+                item?.PeliculasEntregadas ?? 0,
+                item?.ImagenesDigitales ?? 0,
+                string.IsNullOrWhiteSpace(item?.SistemaAdquisicionCDDR)
+                    ? DBNull.Value
+                    : item!.SistemaAdquisicionCDDR!.Trim());
+        }
+
+        await using var cn = _factory.Create();
+        await using var cmd = new SqlCommand("dbo.sp_CitaRecurso_Guardar", cn)
+        { CommandType = CommandType.StoredProcedure };
+
+        cmd.Parameters.Add("@IdCita", SqlDbType.Int).Value = idCita;
+        cmd.Parameters.Add("@IdUsuario", SqlDbType.VarChar, 30).Value = userId;
+
+        var pResources = cmd.Parameters.AddWithValue("@Recursos", tvp);
+        pResources.SqlDbType = SqlDbType.Structured;
+        pResources.TypeName = "dbo.TVP_CitaRecurso";
+
+        await cn.OpenAsync(ct);
+        try
+        {
+            await cmd.ExecuteNonQueryAsync(ct);
+        }
+        catch (SqlException ex) when (ex.Number >= 50000)
+        {
+            throw new InvalidOperationException(ex.Message);
+        }
+    }
+
     public async Task<AvailabilityMonthResponse> GetMonthAvailabilityAsync(
         int year, int month, IReadOnlyCollection<string> studyIds,
         int? excludeAppointmentId = null,
@@ -452,19 +528,11 @@ public sealed class AppointmentRepository
         resources.Columns.Add("ImagenesDigitales", typeof(int));
         resources.Columns.Add("SistemaAdquisicionCDDR", typeof(string));
 
+        // Compatibilidad con el procedimiento actual de informes.
+        // Los recursos reales ya no pertenecen al estudio/informe: se guardan por solicitud
+        // mediante sp_CitaRecurso_Guardar. El TVP legado se envía vacío en valores.
         foreach (var size in new[] { "8x10", "10x14", "14x17" })
-        {
-            var item = input.Recursos.FirstOrDefault(x =>
-                string.Equals(x.TamanoPelicula, size, StringComparison.OrdinalIgnoreCase));
-
-            resources.Rows.Add(
-                size,
-                item?.PeliculasEntregadas ?? 0,
-                item?.ImagenesDigitales ?? 0,
-                string.IsNullOrWhiteSpace(item?.SistemaAdquisicionCDDR)
-                    ? DBNull.Value
-                    : item!.SistemaAdquisicionCDDR!.Trim());
-        }
+            resources.Rows.Add(size, 0, 0, DBNull.Value);
 
         await using var cn = _factory.Create();
         await using var cmd = new SqlCommand("dbo.sp_InformeEstudio_Guardar", cn)
@@ -914,20 +982,18 @@ public sealed class AppointmentRepository
             PuestoMedicoInformante = DbNullableString(r, "PuestoMedicoInformante")
         };
 
-        if (await r.NextResultAsync(ct))
+        // El segundo resultset legado de sp_Inventario_Estudio_Obtener puede contener
+        // recursos asociados al informe. A partir del requerimiento actual se ignora y
+        // se consultan los recursos únicos de la solicitud (CITA_RECURSO).
+        detail.Recursos.Clear();
+        var requestResources = await GetAppointmentResourcesAsync(detail.IdCita, ct);
+        detail.Recursos.AddRange(requestResources.Select(x => new InventoryResourceRow
         {
-            while (await r.ReadAsync(ct))
-            {
-                detail.Recursos.Add(new InventoryResourceRow
-                {
-                    TamanoPelicula = r.GetString(r.GetOrdinal("TamanoPelicula")),
-                    PeliculasEntregadas = r.GetInt32(r.GetOrdinal("PeliculasEntregadas")),
-                    ImagenesDigitales = r.GetInt32(r.GetOrdinal("ImagenesDigitales")),
-                    SistemaAdquisicionCDDR =
-                        DbNullableString(r, "SistemaAdquisicionCDDR")
-                });
-            }
-        }
+            TamanoPelicula = x.TamanoPelicula,
+            PeliculasEntregadas = x.PeliculasEntregadas,
+            ImagenesDigitales = x.ImagenesDigitales,
+            SistemaAdquisicionCDDR = x.SistemaAdquisicionCDDR
+        }));
 
         return detail;
     }

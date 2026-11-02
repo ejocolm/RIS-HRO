@@ -13,19 +13,24 @@ namespace RIS_HRO.Pages.StudyReports;
 public sealed class EditModel : PageModel
 {
     private readonly AppointmentRepository _appointments;
+    private readonly ReportTemplateRepository _reportTemplates;
     private readonly PdfService _pdf;
 
     public EditModel(
         AppointmentRepository appointments,
+        ReportTemplateRepository reportTemplates,
         PdfService pdf)
     {
         _appointments = appointments;
+        _reportTemplates = reportTemplates;
         _pdf = pdf;
     }
 
     public StudyReportContext Context { get; private set; } = new();
     public List<TechnicianItem> Technicians { get; private set; } = [];
     public List<InformingDoctorItem> InformingDoctors { get; private set; } = [];
+    public List<ReportTemplateItem> FindingsTemplates { get; private set; } = [];
+    public List<ReportTemplateItem> ConclusionsTemplates { get; private set; } = [];
 
     [BindProperty]
     public StudyReportInput Input { get; set; } = new();
@@ -228,7 +233,10 @@ public sealed class EditModel : PageModel
         await LoadListsAsync(ct);
 
         if (initializeInput)
+        {
             Input = ToInput(context);
+            await ApplyDefaultTemplatesAsync(ct);
+        }
 
         return true;
     }
@@ -250,6 +258,36 @@ public sealed class EditModel : PageModel
     {
         Technicians = await _appointments.GetActiveTechniciansAsync(ct);
         InformingDoctors = await _appointments.GetActiveInformingDoctorsAsync(ct);
+        FindingsTemplates = await _reportTemplates.GetActiveByTypeAsync(ReportTemplateTypes.Hallazgos, ct);
+        ConclusionsTemplates = await _reportTemplates.GetActiveByTypeAsync(ReportTemplateTypes.Conclusiones, ct);
+    }
+
+    private async Task ApplyDefaultTemplatesAsync(CancellationToken ct)
+    {
+        // Los predeterminados solo se aplican al crear un informe nuevo.
+        // Nunca sobrescriben un informe en estado BORRADOR ya guardado ni una corrección existente.
+        if (Context.IdInforme.HasValue)
+            return;
+
+        if (!RichTextSanitizer.HasVisibleText(Input.Hallazgos))
+        {
+            var template = await _reportTemplates.GetDefaultForStudyAsync(
+                Context.IdPrueba,
+                ReportTemplateTypes.Hallazgos,
+                ct);
+            if (template is not null)
+                Input.Hallazgos = template.ContenidoHtml;
+        }
+
+        if (!RichTextSanitizer.HasVisibleText(Input.Conclusiones))
+        {
+            var template = await _reportTemplates.GetDefaultForStudyAsync(
+                Context.IdPrueba,
+                ReportTemplateTypes.Conclusiones,
+                ct);
+            if (template is not null)
+                Input.Conclusiones = template.ContenidoHtml;
+        }
     }
 
     private bool CanWriteCurrentContext() =>
@@ -274,30 +312,6 @@ public sealed class EditModel : PageModel
 
     private void NormalizeInput()
     {
-        Input.Recursos ??= [];
-        var fixedRows = new List<StudyReportResource>();
-
-        foreach (var size in new[] { "8x10", "10x14", "14x17" })
-        {
-            var row = Input.Recursos.FirstOrDefault(x =>
-                string.Equals(
-                    x.TamanoPelicula,
-                    size,
-                    StringComparison.OrdinalIgnoreCase));
-
-            fixedRows.Add(new StudyReportResource
-            {
-                TamanoPelicula = size,
-                PeliculasEntregadas = row?.PeliculasEntregadas ?? 0,
-                ImagenesDigitales = row?.ImagenesDigitales ?? 0,
-                SistemaAdquisicionCDDR =
-                    string.IsNullOrWhiteSpace(row?.SistemaAdquisicionCDDR)
-                        ? null
-                        : row!.SistemaAdquisicionCDDR!.Trim()
-            });
-        }
-
-        Input.Recursos = fixedRows;
         Input.IdInternoRadiologia = NullIfWhite(Input.IdInternoRadiologia);
         Input.IdTecnicoRealiza = NullIfWhite(Input.IdTecnicoRealiza);
         Input.IdTecnicoPosiciona = NullIfWhite(Input.IdTecnicoPosiciona);
@@ -341,25 +355,6 @@ public sealed class EditModel : PageModel
                 "",
                 "La fecha y hora del informe son obligatorias.");
 
-        foreach (var row in Input.Recursos)
-        {
-            if (row.PeliculasEntregadas < 0 ||
-                row.ImagenesDigitales < 0)
-            {
-                ModelState.AddModelError(
-                    "",
-                    "Las cantidades de películas e imágenes no pueden ser negativas.");
-            }
-
-            if ((row.PeliculasEntregadas > 0 ||
-                 row.ImagenesDigitales > 0) &&
-                string.IsNullOrWhiteSpace(row.SistemaAdquisicionCDDR))
-            {
-                ModelState.AddModelError(
-                    "",
-                    $"Complete el sistema de adquisición CD/DR para el tamaño {row.TamanoPelicula}.");
-            }
-        }
     }
 
     private static StudyReportInput ToInput(StudyReportContext context)
@@ -375,24 +370,8 @@ public sealed class EditModel : PageModel
             IdMedicoInformante = context.IdMedicoInformante,
             FechaHoraInforme = context.IdInforme.HasValue
                 ? context.FechaHoraInforme
-                : DateTime.Now,
-            Recursos = EnsureResources(context.Recursos)
+                : DateTime.Now
         };
-    }
-
-    private static List<StudyReportResource> EnsureResources(
-        IEnumerable<StudyReportResource> resources)
-    {
-        var source = resources.ToList();
-
-        return new[] { "8x10", "10x14", "14x17" }
-            .Select(size =>
-                source.FirstOrDefault(x => x.TamanoPelicula == size)
-                ?? new StudyReportResource
-                {
-                    TamanoPelicula = size
-                })
-            .ToList();
     }
 
     private string? GetUserId() =>

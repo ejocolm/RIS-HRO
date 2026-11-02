@@ -1,0 +1,197 @@
+@page
+@model RIS_HRO.Pages.Catalogs.ReportTemplatesModel
+@using RIS_HRO.Models
+@{
+    ViewData["Title"] = "Plantillas de informe";
+}
+
+<style>
+.template-layout{display:grid;grid-template-columns:minmax(420px,.9fr) minmax(0,1.35fr);gap:22px;align-items:start}
+.rich-editor{border:1px solid var(--ris-border);border-radius:10px;overflow:hidden;background:#fff}
+.rich-toolbar{display:flex;flex-wrap:wrap;gap:5px;padding:8px;border-bottom:1px solid #e1e8f2;background:#f7f9fc}
+.rich-toolbar button{width:34px;height:32px;border:1px solid #d8e0eb;border-radius:6px;background:#fff;color:#164d91;cursor:pointer}
+.rich-toolbar button:hover{background:#eef5ff}
+.rich-content{min-height:230px;padding:14px;outline:none;line-height:1.55}
+.template-preview{max-height:110px;overflow:auto;padding:8px 10px;border:1px solid #e2e8f1;border-radius:8px;background:#fafcff;min-width:280px}
+.template-type{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:.75rem;font-weight:600;background:#eaf3ff;color:#0754bb}
+.template-type.conclusions{background:#e9f8f4;color:#087f6a}.table-action{border:0;cursor:pointer}
+@@media(max-width:1050px){.template-layout{grid-template-columns:1fr}.template-preview{min-width:0}}
+</style>
+
+<section class="page-heading">
+    <div>
+        <h1>Plantillas de informe</h1>
+        <p>Plantillas reutilizables para Hallazgos y Conclusiones de los informes radiológicos.</p>
+    </div>
+</section>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="ris-alert success"><i class="bi bi-check-circle"></i> @success</div>
+}
+@if (TempData["Error"] is string tempError)
+{
+    <div class="ris-alert error"><i class="bi bi-exclamation-triangle"></i> @tempError</div>
+}
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="ris-alert error"><i class="bi bi-exclamation-triangle"></i> @Model.ErrorMessage</div>
+}
+
+<div class="template-layout">
+    <section class="ris-card">
+        <header class="card-heading">
+            <i class="bi bi-file-earmark-richtext"></i>
+            <div>
+                <h2>@(Model.IsEditing ? "Editar plantilla" : "Nueva plantilla")</h2>
+                <span>El formato guardado se conservará al utilizar la plantilla.</span>
+            </div>
+        </header>
+
+        <form method="post" id="templateForm">
+            <input type="hidden" asp-for="Edit.IdPlantilla" />
+            <input type="hidden" asp-for="Edit.ContenidoHtml" id="templateContentHidden" />
+
+            <div class="form-group-ris">
+                <label asp-for="Edit.Nombre">Nombre de la plantilla</label>
+                <input asp-for="Edit.Nombre" maxlength="150" placeholder="Ej. Tórax normal" />
+            </div>
+
+            <div class="form-group-ris">
+                <label asp-for="Edit.Tipo">Tipo de contenido</label>
+                <select asp-for="Edit.Tipo">
+                    <option value="HALLAZGOS">Hallazgos</option>
+                    <option value="CONCLUSIONES">Conclusiones</option>
+                </select>
+            </div>
+
+            <div class="form-group-ris">
+                <label>Contenido</label>
+                <div class="rich-editor">
+                    <div class="rich-toolbar" data-editor="templateEditor">
+                        <button type="button" data-cmd="bold" title="Negrita"><strong>B</strong></button>
+                        <button type="button" data-cmd="italic" title="Cursiva"><em>I</em></button>
+                        <button type="button" data-cmd="underline" title="Subrayado"><u>U</u></button>
+                        <button type="button" data-cmd="insertUnorderedList" title="Lista"><i class="bi bi-list-ul"></i></button>
+                        <button type="button" data-cmd="insertOrderedList" title="Lista numerada"><i class="bi bi-list-ol"></i></button>
+                        <button type="button" data-cmd="justifyLeft" title="Alinear izquierda"><i class="bi bi-text-left"></i></button>
+                        <button type="button" data-cmd="justifyCenter" title="Centrar"><i class="bi bi-text-center"></i></button>
+                        <button type="button" data-cmd="justifyRight" title="Alinear derecha"><i class="bi bi-text-right"></i></button>
+                    </div>
+                    <div id="templateEditor" class="rich-content" contenteditable="true">@Html.Raw(Model.Edit.ContenidoHtml ?? "")</div>
+                </div>
+            </div>
+
+            <div class="check-row">
+                <input asp-for="Edit.Activo" />
+                <label asp-for="Edit.Activo">Plantilla activa</label>
+            </div>
+            <div class="field-message mb-3">
+                Al deshabilitar una plantilla se elimina automáticamente cualquier asignación predeterminada que la utilice.
+            </div>
+
+            <div class="form-bottom-actions">
+                <a asp-page="/Catalogs/ReportTemplates" class="btn-ris-cancel">Limpiar</a>
+                <button type="submit" class="btn-ris-primary"><i class="bi bi-check-lg"></i> Guardar</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="ris-card">
+        <header class="card-heading">
+            <i class="bi bi-list-ul"></i>
+            <div><h2>Plantillas registradas</h2><span>Edite o deshabilite plantillas existentes.</span></div>
+        </header>
+
+        <form method="get" class="search-inline mb-3">
+            <input name="q" value="@Model.Query" placeholder="Buscar por nombre..." />
+            <select name="typeFilter" style="max-width:190px">
+                <option value="">Todos los tipos</option>
+                @if (Model.TypeFilter == "HALLAZGOS")
+                {
+                    <option value="HALLAZGOS" selected>Hallazgos</option>
+                }
+                else
+                {
+                    <option value="HALLAZGOS">Hallazgos</option>
+                }
+                @if (Model.TypeFilter == "CONCLUSIONES")
+                {
+                    <option value="CONCLUSIONES" selected>Conclusiones</option>
+                }
+                else
+                {
+                    <option value="CONCLUSIONES">Conclusiones</option>
+                }
+            </select>
+            <button class="btn-ris-outline" type="submit"><i class="bi bi-search"></i> Buscar</button>
+        </form>
+
+        <div class="table-responsive">
+            <table class="ris-table">
+                <thead>
+                    <tr><th>Nombre</th><th>Tipo</th><th>Vista previa</th><th>Estado</th><th></th></tr>
+                </thead>
+                <tbody>
+                @if (Model.Rows.Count == 0)
+                {
+                    <tr><td colspan="5" class="text-center text-muted py-4">No hay plantillas registradas.</td></tr>
+                }
+                @foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        <td><strong>@row.Nombre</strong></td>
+                        <td>
+                            <span class="template-type @(row.Tipo == "CONCLUSIONES" ? "conclusions" : "")">
+                                @(row.Tipo == "HALLAZGOS" ? "Hallazgos" : "Conclusiones")
+                            </span>
+                        </td>
+                        <td><div class="template-preview">@Html.Raw(row.ContenidoHtml)</div></td>
+                        <td>@(row.Activo ? "Activo" : "Inactivo")</td>
+                        <td>
+                            <div class="d-flex gap-1 align-items-center">
+                                <a asp-page="/Catalogs/ReportTemplates" asp-route-edit="@row.IdPlantilla" class="table-action" title="Editar">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <form method="post" asp-page-handler="Toggle" asp-route-id="@row.IdPlantilla" class="m-0">
+                                    <button type="submit" class="table-action" title="@(row.Activo ? "Deshabilitar" : "Habilitar")"
+                                            onclick="return confirm('@(row.Activo ? "¿Desea deshabilitar esta plantilla?" : "¿Desea habilitar esta plantilla?")');">
+                                        <i class="bi @(row.Activo ? "bi-slash-circle" : "bi-check-circle")"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+<script>
+(() => {
+    'use strict';
+    const form = document.getElementById('templateForm');
+    const editor = document.getElementById('templateEditor');
+    const hidden = document.getElementById('templateContentHidden');
+
+    document.querySelectorAll('.rich-toolbar button[data-cmd]').forEach(button => {
+        button.addEventListener('click', () => {
+            editor?.focus();
+            document.execCommand(button.dataset.cmd, false, null);
+            sync();
+        });
+    });
+
+    function sync() {
+        if (editor && hidden) hidden.value = editor.innerHTML;
+    }
+
+    editor?.addEventListener('input', sync);
+    form?.addEventListener('submit', sync);
+    sync();
+})();
+</script>
+}

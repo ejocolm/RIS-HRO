@@ -1,0 +1,15 @@
+wwwroot\css\site.css
+wwwroot\images\login-hero.png
+wwwroot\images\login-hero_old.png
+wwwroot\images\login-hero_old2.png
+wwwroot\images\ris-logo.png
+wwwroot\images\ris-logo_old.png
+wwwroot\js\appointments-create.js
+wwwroot\js\appointments-create_old.js
+wwwroot\manuales\Manual_Administrador.pdf
+wwwroot\manuales\Manual_Bodega.pdf
+wwwroot\manuales\Manual_Informes.pdf
+wwwroot\manuales\Manual_Solicitudes.pdf
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\DOCKER\wwwroot\css\site.css
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\DOCKER\wwwroot\js\appointments-create.js
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\DOCKER\wwwroot\js\appointments-create_old.js

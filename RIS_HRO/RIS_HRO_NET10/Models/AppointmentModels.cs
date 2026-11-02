@@ -1,5 +1,14 @@
 namespace RIS_HRO.Models;
 
+
+public sealed class AppointmentResource
+{
+    public string TamanoPelicula { get; set; } = "";
+    public int PeliculasEntregadas { get; set; }
+    public int ImagenesDigitales { get; set; }
+    public string? SistemaAdquisicionCDDR { get; set; }
+}
+
 public sealed class AppointmentDetailItem
 {
     public int IdDetalleCita { get; set; }

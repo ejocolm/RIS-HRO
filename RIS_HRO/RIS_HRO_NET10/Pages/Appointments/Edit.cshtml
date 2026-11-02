@@ -102,6 +102,7 @@
 }
 .appointment-layout.request-mode { grid-template-columns: minmax(0, 1fr) !important; }
 @@media (max-width: 700px) { .registration-type-grid { grid-template-columns: 1fr; } }
+.resource-table input { min-width: 90px; }
 </style>
 
 <section class="page-heading">
@@ -477,6 +478,65 @@
                     </div>
                 }
             </section>
+
+            @if (Model.Status == "ATENDIDA")
+            {
+                <section class="ris-card">
+                    <header class="card-heading">
+                        <i class="bi bi-images"></i>
+                        <div>
+                            <h2>Películas e imágenes</h2>
+                            <span>Recursos utilizados en la solicitud completa</span>
+                        </div>
+                    </header>
+
+                    <fieldset disabled="@(!Model.CanManageResources)" style="border:0;padding:0;margin:0;min-width:0;">
+                        <div class="table-responsive">
+                            <table class="ris-table resource-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tamaño de película</th>
+                                        <th>Películas entregadas</th>
+                                        <th>Imágenes digitales</th>
+                                        <th>Sistema de adquisición CD/DR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (var i = 0; i < Model.Resources.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@Model.Resources[i].TamanoPelicula</strong>
+                                                <input type="hidden" asp-for="Resources[i].TamanoPelicula" />
+                                            </td>
+                                            <td><input asp-for="Resources[i].PeliculasEntregadas" type="number" min="0" /></td>
+                                            <td><input asp-for="Resources[i].ImagenesDigitales" type="number" min="0" /></td>
+                                            <td><input asp-for="Resources[i].SistemaAdquisicionCDDR" maxlength="100" placeholder="Ej. CR / DR" /></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+
+                    <div class="capacity-note mt-3">
+                        <i class="bi bi-info-circle"></i>
+                        Estos datos pertenecen a la solicitud completa y no a un estudio individual.
+                    </div>
+
+                    @if (Model.CanManageResources)
+                    {
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit"
+                                    class="btn-ris-primary"
+                                    formaction="?handler=SaveResources&id=@Model.Id"
+                                    formmethod="post">
+                                <i class="bi bi-save"></i> Guardar películas e imágenes
+                            </button>
+                        </div>
+                    }
+                </section>
+            }
         </div>
 
         @if (Model.CanEditAppointment)

@@ -1,5 +1,6 @@
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\bin\Debug\net10.0\appsettings.Development.json
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\bin\Debug\net10.0\appsettings.json
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\bin\Debug\net10.0\dotnet-tools.json
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\bin\Debug\net10.0\RIS_HRO.staticwebassets.runtime.json
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\bin\Debug\net10.0\RIS_HRO.staticwebassets.endpoints.json
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\bin\Debug\net10.0\RIS_HRO.exe
@@ -77,4 +78,3 @@ C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Se
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\RIS_HRO.pdb
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\RIS_HRO.genruntimeconfig.cache
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\ref\RIS_HRO.dll
-C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\bin\Debug\net10.0\dotnet-tools.json

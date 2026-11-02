@@ -6,7 +6,7 @@
 }
 
 <style>
-.report-shell{display:grid;gap:18px}.report-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.report-summary>div{padding:12px 14px;border:1px solid #e1e8f2;border-radius:10px;background:#f8fbff}.report-summary small{display:block;color:#728097;margin-bottom:3px}.report-summary strong{color:#173866}.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.rich-editor{border:1px solid var(--ris-border);border-radius:10px;overflow:hidden;background:#fff}.rich-toolbar{display:flex;flex-wrap:wrap;gap:5px;padding:8px;border-bottom:1px solid #e1e8f2;background:#f7f9fc}.rich-toolbar button{width:34px;height:32px;border:1px solid #d8e0eb;border-radius:6px;background:#fff;color:#164d91}.rich-content{min-height:180px;padding:14px;outline:none;line-height:1.55}.rich-content[contenteditable="false"]{background:#fafbfd}.resource-table input{min-width:90px}.report-state{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.report-actions{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px}@@media(max-width:900px){.report-summary,.report-grid{grid-template-columns:1fr}}
+.report-shell{display:grid;gap:18px}.report-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.report-summary>div{padding:12px 14px;border:1px solid #e1e8f2;border-radius:10px;background:#f8fbff}.report-summary small{display:block;color:#728097;margin-bottom:3px}.report-summary strong{color:#173866}.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.rich-editor{border:1px solid var(--ris-border);border-radius:10px;overflow:hidden;background:#fff}.rich-toolbar{display:flex;flex-wrap:wrap;gap:5px;padding:8px;border-bottom:1px solid #e1e8f2;background:#f7f9fc}.rich-toolbar button{width:34px;height:32px;border:1px solid #d8e0eb;border-radius:6px;background:#fff;color:#164d91}.rich-content{min-height:180px;padding:14px;outline:none;line-height:1.55}.rich-content[contenteditable="false"]{background:#fafbfd}.resource-table input{min-width:90px}.report-state{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.report-actions{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px}.editor-label-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}.editor-label-row label{margin:0}.template-picker-list{display:grid;gap:10px}.template-picker-card{border:1px solid #dde6f1;border-radius:10px;padding:12px;background:#fff}.template-picker-card h6{margin:0;color:#123d79}.template-picker-preview{margin-top:8px;padding:9px 11px;background:#f8fbff;border:1px solid #e5ebf4;border-radius:8px;max-height:130px;overflow:auto;font-size:.9rem}.template-picker-empty{padding:20px;text-align:center;color:#728097}@@media(max-width:900px){.report-summary,.report-grid{grid-template-columns:1fr}}
 </style>
 
 <section class="page-heading">
@@ -217,7 +217,15 @@
             </header>
 
             <div class="form-group-ris">
-                <label>Hallazgos</label>
+                <div class="editor-label-row">
+                    <label>Hallazgos</label>
+                    @if (!readOnly)
+                    {
+                        <button type="button" class="btn-ris-outline" data-bs-toggle="modal" data-bs-target="#hallazgosTemplatesModal">
+                            <i class="bi bi-search"></i> Buscar plantilla
+                        </button>
+                    }
+                </div>
                 <div class="rich-editor">
                     @if (!readOnly)
                     {
@@ -237,7 +245,15 @@
             </div>
 
             <div class="form-group-ris mb-0">
-                <label>Conclusiones</label>
+                <div class="editor-label-row">
+                    <label>Conclusiones</label>
+                    @if (!readOnly)
+                    {
+                        <button type="button" class="btn-ris-outline" data-bs-toggle="modal" data-bs-target="#conclusionesTemplatesModal">
+                            <i class="bi bi-search"></i> Buscar plantilla
+                        </button>
+                    }
+                </div>
                 <div class="rich-editor">
                     @if (!readOnly)
                     {
@@ -259,38 +275,9 @@
 
         <section class="ris-card">
             <header class="card-heading">
-                <i class="bi bi-images"></i>
-                <div><h2>Películas e imágenes</h2><span>Registro de recursos utilizados</span></div>
+                <i class="bi bi-check2-circle"></i>
+                <div><h2>Acciones del informe</h2><span>Guardar, finalizar, imprimir o corregir</span></div>
             </header>
-
-            <fieldset disabled="@readOnly" style="border:0;padding:0;margin:0;min-width:0;">
-                <div class="table-responsive">
-                    <table class="ris-table resource-table">
-                        <thead>
-                            <tr>
-                                <th>Tamaño de película</th>
-                                <th>Películas entregadas</th>
-                                <th>Imágenes digitales</th>
-                                <th>Sistema de adquisición CD/DR</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (var i = 0; i < Model.Input.Recursos.Count; i++)
-                            {
-                                <tr>
-                                    <td>
-                                        <strong>@Model.Input.Recursos[i].TamanoPelicula</strong>
-                                        <input type="hidden" asp-for="Input.Recursos[i].TamanoPelicula" />
-                                    </td>
-                                    <td><input asp-for="Input.Recursos[i].PeliculasEntregadas" type="number" min="0" /></td>
-                                    <td><input asp-for="Input.Recursos[i].ImagenesDigitales" type="number" min="0" /></td>
-                                    <td><input asp-for="Input.Recursos[i].SistemaAdquisicionCDDR" maxlength="100" placeholder="Ej. CR / DR" /></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </fieldset>
 
             <div class="report-actions">
                 <a asp-page="/Appointments/Edit" asp-route-id="@Model.Context.IdCita" class="btn-ris-cancel">Volver</a>
@@ -360,6 +347,75 @@
     </form>
 </div>
 
+@if (!readOnly)
+{
+    <div class="modal fade" id="hallazgosTemplatesModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div><h5 class="modal-title">Plantillas de Hallazgos</h5><div class="small text-muted">Seleccione el texto que desea utilizar.</div></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="search" class="form-control mb-3 template-search" data-list="findingsTemplateList" placeholder="Buscar plantilla por nombre..." />
+                    <div id="findingsTemplateList" class="template-picker-list">
+                        @if (Model.FindingsTemplates.Count == 0)
+                        {
+                            <div class="template-picker-empty">No existen plantillas activas de Hallazgos.</div>
+                        }
+                        @foreach (var template in Model.FindingsTemplates)
+                        {
+                            <article class="template-picker-card" data-template-name="@template.Nombre.ToLowerInvariant()">
+                                <div class="d-flex justify-content-between align-items-start gap-3">
+                                    <div class="flex-grow-1">
+                                        <h6>@template.Nombre</h6>
+                                        <div class="template-picker-preview">@Html.Raw(template.ContenidoHtml)</div>
+                                        <template id="findings-template-@template.IdPlantilla">@Html.Raw(template.ContenidoHtml)</template>
+                                    </div>
+                                    <button type="button" class="btn-ris-small apply-template" data-editor="hallazgosEditor" data-source="findings-template-@template.IdPlantilla" data-modal="hallazgosTemplatesModal">Usar</button>
+                                </div>
+                            </article>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="conclusionesTemplatesModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div><h5 class="modal-title">Plantillas de Conclusiones</h5><div class="small text-muted">Seleccione el texto que desea utilizar.</div></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="search" class="form-control mb-3 template-search" data-list="conclusionsTemplateList" placeholder="Buscar plantilla por nombre..." />
+                    <div id="conclusionsTemplateList" class="template-picker-list">
+                        @if (Model.ConclusionsTemplates.Count == 0)
+                        {
+                            <div class="template-picker-empty">No existen plantillas activas de Conclusiones.</div>
+                        }
+                        @foreach (var template in Model.ConclusionsTemplates)
+                        {
+                            <article class="template-picker-card" data-template-name="@template.Nombre.ToLowerInvariant()">
+                                <div class="d-flex justify-content-between align-items-start gap-3">
+                                    <div class="flex-grow-1">
+                                        <h6>@template.Nombre</h6>
+                                        <div class="template-picker-preview">@Html.Raw(template.ContenidoHtml)</div>
+                                        <template id="conclusions-template-@template.IdPlantilla">@Html.Raw(template.ContenidoHtml)</template>
+                                    </div>
+                                    <button type="button" class="btn-ris-small apply-template" data-editor="conclusionesEditor" data-source="conclusions-template-@template.IdPlantilla" data-modal="conclusionesTemplatesModal">Usar</button>
+                                </div>
+                            </article>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @section Scripts {
 @if (!readOnly)
 {
@@ -394,6 +450,36 @@
             if (editor && hidden) hidden.value = editor.innerHTML;
         });
     }
+
+    document.querySelectorAll('.template-search').forEach(input => {
+        input.addEventListener('input', () => {
+            const q = input.value.trim().toLowerCase();
+            const list = document.getElementById(input.dataset.list || '');
+            list?.querySelectorAll('.template-picker-card').forEach(card => {
+                const name = card.dataset.templateName || '';
+                card.style.display = !q || name.includes(q) ? '' : 'none';
+            });
+        });
+    });
+
+    document.querySelectorAll('.apply-template').forEach(button => {
+        button.addEventListener('click', () => {
+            const editor = document.getElementById(button.dataset.editor || '');
+            const source = document.getElementById(button.dataset.source || '');
+            if (!editor || !source) return;
+
+            const hasText = editor.innerText.trim().length > 0;
+            if (hasText && !confirm('El texto actual será reemplazado por la plantilla seleccionada. ¿Desea continuar?'))
+                return;
+
+            editor.innerHTML = source.innerHTML;
+            sync();
+
+            const modalElement = document.getElementById(button.dataset.modal || '');
+            if (modalElement && window.bootstrap)
+                bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+        });
+    });
 
     form?.addEventListener('submit', sync);
     sync();

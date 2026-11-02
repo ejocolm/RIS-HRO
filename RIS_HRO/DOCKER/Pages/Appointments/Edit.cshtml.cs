@@ -40,6 +40,7 @@ public sealed class EditModel : PageModel
 
     [BindProperty] public string StudyIdsCsv { get; set; } = "";
     [BindProperty] public string StudyBodyPartsJson { get; set; } = "[]";
+    [BindProperty] public List<AppointmentResource> Resources { get; set; } = [];
 
     public string Status { get; private set; } = "";
     public string? ErrorMessage { get; private set; }
@@ -47,6 +48,10 @@ public sealed class EditModel : PageModel
     public bool CanEditAppointment => Status == "PROGRAMADA";
     public bool CanCorrectStudyStatus => Status == "ATENDIDA";
     public bool CanManageReports => User.IsInRole("ADMINISTRADOR") || User.IsInRole("USUARIO_INFORMES");
+    public bool CanManageResources =>
+        User.IsInRole("ADMINISTRADOR") ||
+        User.IsInRole("USUARIO_CITAS") ||
+        User.IsInRole("USUARIO_INFORMES");
 
     public List<DoctorItem> Doctors { get; private set; } = [];
     public List<HospitalServiceItem> Services { get; private set; } = [];
@@ -224,6 +229,67 @@ public sealed class EditModel : PageModel
         return RedirectToPage("/Appointments/Edit", new { id });
     }
 
+    public async Task<IActionResult> OnPostSaveResourcesAsync(
+        int id,
+        CancellationToken ct)
+    {
+        if (!CanManageResources)
+            return Forbid();
+
+        var current = await _appointments.GetAsync(id, ct);
+        if (current is null)
+            return NotFound();
+
+        if (!string.Equals(current.Estado, "ATENDIDA", StringComparison.OrdinalIgnoreCase))
+        {
+            TempData["Error"] =
+                "Las películas e imágenes se registran cuando la solicitud está ATENDIDA.";
+            return RedirectToPage("/Appointments/Edit", new { id });
+        }
+
+        var normalized = NormalizeResources(Resources);
+
+        foreach (var row in normalized)
+        {
+            if (row.PeliculasEntregadas < 0 || row.ImagenesDigitales < 0)
+            {
+                TempData["Error"] =
+                    "Las cantidades de películas e imágenes no pueden ser negativas.";
+                return RedirectToPage("/Appointments/Edit", new { id });
+            }
+
+            if ((row.PeliculasEntregadas > 0 || row.ImagenesDigitales > 0) &&
+                string.IsNullOrWhiteSpace(row.SistemaAdquisicionCDDR))
+            {
+                TempData["Error"] =
+                    $"Complete el sistema de adquisición CD/DR para el tamaño {row.TamanoPelicula}.";
+                return RedirectToPage("/Appointments/Edit", new { id });
+            }
+        }
+
+        var userId = GetUserId();
+        if (userId is null)
+            return Challenge();
+
+        try
+        {
+            await _appointments.SaveAppointmentResourcesAsync(
+                id,
+                normalized,
+                userId,
+                ct);
+
+            TempData["Success"] =
+                "Películas e imágenes de la solicitud guardadas correctamente.";
+        }
+        catch (InvalidOperationException ex)
+        {
+            TempData["Error"] = ex.Message;
+        }
+
+        return RedirectToPage("/Appointments/Edit", new { id });
+    }
+
     public async Task<IActionResult> OnPostChangeStudyStatusAsync(
         int id,
         int detailId,
@@ -309,6 +375,7 @@ public sealed class EditModel : PageModel
         Observations = detail.Observaciones;
         Status = detail.Estado;
         AppointmentStudies = detail.Estudios;
+        Resources = NormalizeResources(await _appointments.GetAppointmentResourcesAsync(id, ct));
 
         await LoadCatalogsAsync(ct);
 
@@ -382,6 +449,30 @@ public sealed class EditModel : PageModel
         User.IsInRole("ADMINISTRADOR") ||
         User.IsInRole("USUARIO_CITAS") ||
         User.IsInRole("USUARIO_INFORMES");
+
+    private static List<AppointmentResource> NormalizeResources(
+        IEnumerable<AppointmentResource>? resources)
+    {
+        var source = resources?.ToList() ?? [];
+
+        return new[] { "8x10", "10x14", "14x17" }
+            .Select(size =>
+            {
+                var row = source.FirstOrDefault(x =>
+                    string.Equals(x.TamanoPelicula, size, StringComparison.OrdinalIgnoreCase));
+
+                return new AppointmentResource
+                {
+                    TamanoPelicula = size,
+                    PeliculasEntregadas = row?.PeliculasEntregadas ?? 0,
+                    ImagenesDigitales = row?.ImagenesDigitales ?? 0,
+                    SistemaAdquisicionCDDR = string.IsNullOrWhiteSpace(row?.SistemaAdquisicionCDDR)
+                        ? null
+                        : row!.SistemaAdquisicionCDDR!.Trim()
+                };
+            })
+            .ToList();
+    }
 
     private static List<StudyBodyPartSelection> ParseStudyBodyParts(string? json)
     {

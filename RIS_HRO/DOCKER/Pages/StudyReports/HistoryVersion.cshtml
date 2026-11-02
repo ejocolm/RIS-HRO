@@ -103,34 +103,5 @@
         </div>
     </section>
 
-    <section class="ris-card">
-        <header class="card-heading">
-            <i class="bi bi-images"></i>
-            <div><h2>Películas e imágenes</h2><span>Datos de esta versión</span></div>
-        </header>
-
-        <div class="table-responsive">
-            <table class="ris-table">
-                <thead>
-                    <tr>
-                        <th>Tamaño de película</th>
-                        <th>Películas entregadas</th>
-                        <th>Imágenes digitales</th>
-                        <th>Sistema de adquisición CD/DR</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var row in Model.Version.Recursos)
-                    {
-                        <tr>
-                            <td><strong>@row.TamanoPelicula</strong></td>
-                            <td>@row.PeliculasEntregadas</td>
-                            <td>@row.ImagenesDigitales</td>
-                            <td>@(row.SistemaAdquisicionCDDR ?? "-")</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </section>
+    
 </div>

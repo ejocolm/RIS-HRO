@@ -59,6 +59,7 @@ builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<DashboardRepository>();
 builder.Services.AddScoped<PatientRepository>();
 builder.Services.AddScoped<CatalogRepository>();
+builder.Services.AddScoped<ReportTemplateRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<CapacityRepository>();
 builder.Services.AddScoped<AppointmentRepository>();

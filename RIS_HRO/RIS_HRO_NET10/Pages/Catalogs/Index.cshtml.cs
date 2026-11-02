@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,13 +11,24 @@ namespace RIS_HRO.Pages.Catalogs;
 public sealed class IndexModel : PageModel
 {
     private readonly CatalogRepository _catalogs;
-    public IndexModel(CatalogRepository catalogs) => _catalogs = catalogs;
+    private readonly ReportTemplateRepository _reportTemplates;
+
+    public IndexModel(CatalogRepository catalogs, ReportTemplateRepository reportTemplates)
+    {
+        _catalogs = catalogs;
+        _reportTemplates = reportTemplates;
+    }
 
     [BindProperty(SupportsGet = true)] public CatalogType Type { get; set; } = CatalogType.Medicos;
     [BindProperty] public CatalogEditModel Edit { get; set; } = new();
 
     public List<CatalogRow> Rows { get; private set; } = [];
     public List<CategoryItem> Categories { get; private set; } = [];
+    public List<ReportTemplateItem> FindingsTemplates { get; private set; } = [];
+    public List<ReportTemplateItem> ConclusionsTemplates { get; private set; } = [];
+
+    [BindProperty] public int? DefaultFindingsTemplateId { get; set; }
+    [BindProperty] public int? DefaultConclusionsTemplateId { get; set; }
     public string? Query { get; private set; }
     public string? ErrorMessage { get; private set; }
     public bool IsEditing { get; private set; }
@@ -94,6 +106,13 @@ public sealed class IndexModel : PageModel
             {
                 Edit = item;
                 IsEditing = true;
+
+                if (Type == CatalogType.Pruebas)
+                {
+                    var defaults = await _reportTemplates.GetStudyDefaultsAsync(edit, ct);
+                    DefaultFindingsTemplateId = defaults.IdPlantillaHallazgos;
+                    DefaultConclusionsTemplateId = defaults.IdPlantillaConclusiones;
+                }
             }
         }
     }
@@ -111,6 +130,21 @@ public sealed class IndexModel : PageModel
             }
 
             await _catalogs.SaveAsync(Type, Edit, ct);
+
+            if (Type == CatalogType.Pruebas)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrWhiteSpace(userId))
+                    return Challenge();
+
+                await _reportTemplates.SaveStudyDefaultsAsync(
+                    Edit.Id.Trim(),
+                    DefaultFindingsTemplateId,
+                    DefaultConclusionsTemplateId,
+                    userId,
+                    ct);
+            }
+
             TempData["Success"] = "Registro guardado correctamente.";
             return RedirectToPage("/Catalogs/Index", new { type = Type });
         }
@@ -136,6 +170,10 @@ public sealed class IndexModel : PageModel
     {
         Rows = await _catalogs.ListAsync(Type, q, ct);
         if (Type == CatalogType.Pruebas)
+        {
             Categories = await _catalogs.GetCategoriesAsync(ct);
+            FindingsTemplates = await _reportTemplates.GetActiveByTypeAsync(ReportTemplateTypes.Hallazgos, ct);
+            ConclusionsTemplates = await _reportTemplates.GetActiveByTypeAsync(ReportTemplateTypes.Conclusiones, ct);
+        }
     }
 }

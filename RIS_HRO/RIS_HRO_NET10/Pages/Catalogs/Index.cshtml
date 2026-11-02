@@ -81,6 +81,39 @@
                 </div>
             }
 
+            @if (Model.Type == RIS_HRO.Models.CatalogType.Pruebas)
+            {
+                <div class="ris-alert info" style="margin-top:14px">
+                    <i class="bi bi-file-earmark-richtext"></i>
+                    <div>
+                        <strong>Plantillas predeterminadas del informe</strong>
+                        <div class="small">Al crear un informe nuevo, estos textos se cargarán automáticamente si están configurados.</div>
+                    </div>
+                </div>
+                <div class="two-col">
+                    <div class="form-group-ris">
+                        <label>Plantilla predeterminada de Hallazgos</label>
+                        <select asp-for="DefaultFindingsTemplateId">
+                            <option value="">Sin predeterminado</option>
+                            @foreach (var template in Model.FindingsTemplates)
+                            {
+                                <option value="@template.IdPlantilla">@template.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group-ris">
+                        <label>Plantilla predeterminada de Conclusiones</label>
+                        <select asp-for="DefaultConclusionsTemplateId">
+                            <option value="">Sin predeterminado</option>
+                            @foreach (var template in Model.ConclusionsTemplates)
+                            {
+                                <option value="@template.IdPlantilla">@template.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+
             @if (Model.Type == RIS_HRO.Models.CatalogType.MedicosInformantes)
             {
                 <div class="form-group-ris">
