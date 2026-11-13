@@ -24,6 +24,7 @@
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/about-system.css" asp-append-version="true" />
 
     @if (isWarehouse)
     {
@@ -333,13 +334,17 @@
     <main class="main-content">
         <header class="top-userbar">
             <div></div>
-            <div class="user-chip">
-                <span class="user-avatar"><i class="bi bi-person-fill"></i></span>
-                <div>
-                    <small>Usuario</small>
-                    <strong>@userId</strong>
+            <div class="d-flex align-items-center gap-2">
+                <partial name="_ManualButton" />
+
+                <div class="user-chip">
+                    <span class="user-avatar"><i class="bi bi-person-fill"></i></span>
+                    <div>
+                        <small>Usuario</small>
+                        <strong>@userId</strong>
+                    </div>
+                    <i class="bi bi-chevron-down"></i>
                 </div>
-                <i class="bi bi-chevron-down"></i>
             </div>
         </header>
 

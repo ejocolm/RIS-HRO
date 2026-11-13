@@ -78,3 +78,4 @@ C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Se
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\RIS_HRO.pdb
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\RIS_HRO.genruntimeconfig.cache
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\ref\RIS_HRO.dll
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\obj\Debug\net10.0\compressed\ggfxlyor5l-{0}-u74wtrwb2p-u74wtrwb2p.gz

@@ -1,3 +1,4 @@
+wwwroot\css\about-system.css
 wwwroot\css\site.css
 wwwroot\images\login-hero.png
 wwwroot\images\login-hero_old.png
@@ -10,6 +11,7 @@ wwwroot\manuales\Manual_Administrador.pdf
 wwwroot\manuales\Manual_Bodega.pdf
 wwwroot\manuales\Manual_Informes.pdf
 wwwroot\manuales\Manual_Solicitudes.pdf
-C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\wwwroot\js\appointments-create_old.js
-C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\wwwroot\js\appointments-create.js
 C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\wwwroot\css\site.css
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\wwwroot\js\appointments-create.js
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\wwwroot\js\appointments-create_old.js
+C:\Users\ejocol\Mi unidad\Universidad Edgar\Universidad Mariano Galvez\Decimo Semestre II\RIS\RIS_HRO\RIS_HRO_NET10\wwwroot\css\about-system.css

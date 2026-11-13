@@ -1,0 +1,208 @@
+/* Complemento visual para el enlace superior y el modal «Acerca del sistema».
+   Compatible con el _Layout.cshtml y Bootstrap 5.3.x del proyecto. */
+
+.about-system-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+    min-width: 0;
+}
+
+.about-system-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid #ccdef3;
+    border-radius: 50%;
+    background: #ebf4ff;
+    color: #075bb7;
+    font-size: 1.27rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.about-system-trigger:hover {
+    background: #d9eaff;
+    border-color: #8db8ea;
+    color: #004786;
+    transform: translateY(-1px);
+}
+
+.about-system-trigger:focus-visible {
+    outline: 3px solid #0b71c9;
+    outline-offset: 3px;
+}
+
+.about-system-divider {
+    width: 1px;
+    height: 30px;
+    flex: 0 0 1px;
+    background: #d6e0ed;
+}
+
+.about-system-dialog { max-width: 550px; }
+
+.about-system-modal {
+    border: none;
+    border-radius: 17px;
+    overflow: hidden;
+    box-shadow: 0 18px 55px rgba(7, 36, 82, .22);
+    font-family: 'Poppins', system-ui, sans-serif;
+}
+
+.about-system-header {
+    padding: 16px 22px;
+    background: linear-gradient(110deg, #034982 0%, #0c64a9 100%);
+    color: #fff;
+    border-bottom: 0;
+}
+
+.about-system-header .modal-title {
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.about-system-body {
+    padding: 28px 35px 23px;
+    text-align: center;
+    color: #153456;
+}
+
+.about-system-emblem {
+    width: 82px;
+    height: 82px;
+    margin: 0 auto 17px;
+    border-radius: 22px;
+    display: grid;
+    place-items: center;
+    background: #e8f3ff;
+    color: #075cae;
+    font-size: 2.6rem;
+}
+
+.about-system-name {
+    max-width: 415px;
+    margin: 0 auto 10px;
+    font-size: clamp(1.1rem, 2vw, 1.42rem);
+    line-height: 1.35;
+    color: #0a315a;
+    font-weight: 700;
+}
+
+.about-system-version {
+    display: inline-block;
+    padding: 5px 16px;
+    border-radius: 100px;
+    background: #e3f1ff;
+    color: #075cad;
+    font-size: .84rem;
+    font-weight: 600;
+}
+
+.about-system-separator {
+    height: 1px;
+    margin: 23px 0;
+    background: #dce6ef;
+}
+
+.about-system-label {
+    font-size: .85rem;
+    color: #52728f;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.about-system-developer {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #093e78;
+    margin: 0 0 7px;
+}
+
+.about-system-role {
+    font-size: .91rem;
+    color: #36516b;
+    margin: 0 0 10px;
+}
+
+.about-system-academic {
+    font-size: .88rem;
+    line-height: 1.65;
+    margin: 0;
+    color: #37526b;
+}
+
+.about-system-hospital {
+    font-size: .96rem;
+    color: #0a437c;
+    font-weight: 600;
+}
+
+.about-system-hospital-note,
+.about-system-year {
+    font-size: .83rem;
+    color: #61738a;
+}
+
+.about-system-footer {
+    padding: 13px 21px;
+    background: #f8fbfe;
+    border-top: 1px solid #e1eaf3;
+}
+
+.about-system-close {
+    min-width: 110px;
+    padding: 8px 21px;
+    background: #075bab;
+    color: #fff;
+    border-radius: 9px;
+    font-weight: 600;
+}
+
+.about-system-close:hover,
+.about-system-close:focus-visible {
+    background: #084781;
+    color: #fff;
+}
+
+/* site.css oculta .top-userbar en pantallas pequeñas. Lo mantenemos
+   visible para que el enlace informativo sea accesible también en móvil. */
+@media (max-width: 820px) {
+    .top-userbar {
+        display: flex !important;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+    }
+
+    .about-system-actions {
+        gap: 10px;
+    }
+
+    .about-system-actions .user-chip > div {
+        display: none;
+    }
+
+    .about-system-divider {
+        height: 25px;
+    }
+}
+
+@media (max-width: 520px) {
+    .about-system-dialog {
+        margin: 12px;
+    }
+
+    .about-system-body {
+        padding: 22px 20px 18px;
+    }
+
+    .about-system-name {
+        font-size: 1.1rem;
+    }
+}
